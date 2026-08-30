@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getSettings, getDestinations } from '../../lib/content';
+
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const destinations = db ? await getDestinations(db) : [];
+---
+<Layout title="Destinations" settings={settings}>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Destinations</span>
+      <h1>Where students go with us</h1>
+      <div class="grid-3" style="margin-top:44px;">
+        {destinations.map((d: any) => (
+          <a href={`/destinations/${d.slug}`} class="card">
+            <h3>{d.flag_emoji} {d.country_name}</h3>
+            <p>{d.summary}</p>
+          </a>
+        ))}
+        {destinations.length === 0 && <div class="card"><p>No destinations added yet — add them from the admin panel.</p></div>}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getSettings, getPostBySlug } from '../../lib/content';
+
+const { slug } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const post = db && slug ? await getPostBySlug(db, slug) : null;
+
+if (!post) return Astro.redirect('/blog');
+---
+<Layout title={post.title} settings={settings}>
+  <section class="section">
+    <div class="container narrow">
+      <span class="eyebrow">Blog</span>
+      <h1>{post.title}</h1>
+      {post.cover_image_url && <img src={post.cover_image_url} alt={post.title} class="cover" />}
+      <div class="prose" set:html={post.body_html}></div>
+    </div>
+  </section>
+</Layout>
+<style>
+  .narrow { max-width: 740px; }
+  .cover { border-radius: var(--radius); margin: 24px 0; aspect-ratio: 16/9; object-fit: cover; }
+  .prose :global(p) { font-size: 1.05rem; margin-bottom: 1.2em; }
+  .prose :global(h2) { margin-top: 1.6em; }
+</style>

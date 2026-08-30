@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSettings } from '../lib/content';
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+---
+<Layout title="About Us" settings={settings}>
+  <section class="section">
+    <div class="container narrow">
+      <span class="eyebrow">About Us</span>
+      <h1>{settings.company_name || 'Visa & Migration'}</h1>
+      <p class="lead">
+        {settings.about_text || 'We help students and professionals take the next step of their lives abroad — with honest advice, careful paperwork, and a team that treats every case like it matters, because it does.'}
+      </p>
+    </div>
+  </section>
+</Layout>
+<style>
+  .narrow { max-width: 720px; }
+  .lead { font-size: 1.1rem; color: var(--text-muted); margin-top: 16px; }
+</style>

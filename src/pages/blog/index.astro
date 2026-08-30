@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getSettings, getPublishedPosts } from '../../lib/content';
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const posts = db ? await getPublishedPosts(db) : [];
+---
+<Layout title="Blog" settings={settings}>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Blog</span>
+      <h1>News &amp; guidance</h1>
+      <div class="grid-3" style="margin-top:44px;">
+        {posts.map((p: any) => (
+          <a href={`/blog/${p.slug}`} class="card">
+            {p.cover_image_url && <img src={p.cover_image_url} alt={p.title} class="post-cover" />}
+            <h3>{p.title}</h3>
+            <p>{p.excerpt}</p>
+          </a>
+        ))}
+        {posts.length === 0 && <div class="card"><p>No posts published yet.</p></div>}
+      </div>
+    </div>
+  </section>
+</Layout>
+<style>
+  .post-cover { border-radius: var(--radius); aspect-ratio: 16/9; object-fit: cover; margin-bottom: 16px; }
+</style>

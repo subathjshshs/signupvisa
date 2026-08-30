@@ -1,0 +1,28 @@
+---
+import '../../styles/global.css';
+import AdminNav from '../../components/AdminNav.astro';
+
+const db = Astro.locals.runtime.env.DB;
+const [servicesCount, destCount, leadsCount, newLeadsCount] = await Promise.all([
+  db.prepare('SELECT COUNT(*) as c FROM services').first(),
+  db.prepare('SELECT COUNT(*) as c FROM destinations').first(),
+  db.prepare('SELECT COUNT(*) as c FROM leads').first(),
+  db.prepare("SELECT COUNT(*) as c FROM leads WHERE status='new'").first(),
+]);
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Admin Dashboard</title></head>
+<body class="admin-shell">
+  <AdminNav active="" />
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display); margin-bottom:24px;">Dashboard</h1>
+    <div class="grid-3">
+      <div class="card"><span class="eyebrow">Services</span><h2>{(servicesCount as any)?.c ?? 0}</h2></div>
+      <div class="card"><span class="eyebrow">Destinations</span><h2>{(destCount as any)?.c ?? 0}</h2></div>
+      <div class="card"><span class="eyebrow">New Leads</span><h2>{(newLeadsCount as any)?.c ?? 0} <span style="font-size:1rem; color:var(--text-muted);">/ {(leadsCount as any)?.c ?? 0} total</span></h2></div>
+    </div>
+    <p style="margin-top:32px; color:var(--text-muted);">Use the nav above to manage services, destinations, testimonials, blog posts, leads, and site-wide settings (logo, hero image, contact info).</p>
+  </div>
+</body>
+</html>

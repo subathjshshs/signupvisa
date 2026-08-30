@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSettings } from '../lib/content';
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+---
+<Layout title="Book a Consultation" settings={settings}>
+  <section class="section">
+    <div class="container narrow">
+      <span class="eyebrow">Get in touch</span>
+      <h1>Book a free consultation</h1>
+      <p class="lead">Tell us a bit about your plans and we'll get back to you within one business day.</p>
+
+      <form id="lead-form" class="card form-card">
+        <div class="form-field">
+          <label for="full_name">Full name</label>
+          <input type="text" id="full_name" name="full_name" required />
+        </div>
+        <div class="form-field">
+          <label for="phone">Phone / WhatsApp</label>
+          <input type="tel" id="phone" name="phone" required />
+        </div>
+        <div class="form-field">
+          <label for="email">Email (optional)</label>
+          <input type="email" id="email" name="email" />
+        </div>
+        <div class="form-field">
+          <label for="interested_service">I'm interested in</label>
+          <select id="interested_service" name="interested_service">
+            <option value="Student Visa">Student Visa</option>
+            <option value="Work Visa">Work Visa</option>
+            <option value="Skilled Migration">Skilled Migration</option>
+            <option value="Visit Visa">Visit Visa</option>
+            <option value="Not sure yet">Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="message">Message (optional)</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Request</button>
+        <p id="form-status" class="form-status"></p>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .narrow { max-width: 620px; }
+  .lead { color: var(--text-muted); margin: 12px 0 32px; }
+  .form-card { padding: 36px; }
+  .form-status { margin-top: 14px; font-size: 0.9rem; }
+  .form-status.success { color: var(--success); }
+  .form-status.error { color: #9B3B2E; }
+</style>
+
+<script>
+  const form = document.getElementById('lead-form') as HTMLFormElement;
+  const status = document.getElementById('form-status') as HTMLParagraphElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = 'Sending...';
+    status.className = 'form-status';
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Request failed');
+      status.textContent = "Thanks — we've received your request and will contact you soon.";
+      status.className = 'form-status success';
+      form.reset();
+    } catch {
+      status.textContent = 'Something went wrong. Please try again or call us directly.';
+      status.className = 'form-status error';
+    }
+  });
+</script>

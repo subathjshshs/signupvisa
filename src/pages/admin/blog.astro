@@ -1,0 +1,94 @@
+---
+import '../../styles/global.css';
+import AdminNav from '../../components/AdminNav.astro';
+import ImageUploadField from '../../components/ImageUploadField.astro';
+
+const db = Astro.locals.runtime.env.DB;
+const editId = Astro.url.searchParams.get('edit');
+const editing = editId ? await db.prepare('SELECT * FROM blog_posts WHERE id=?').bind(editId).first() : null;
+const { results: posts } = await db.prepare('SELECT * FROM blog_posts ORDER BY created_at DESC').all();
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Manage Blog</title></head>
+<body class="admin-shell">
+  <AdminNav active="blog" />
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display);">Blog</h1>
+
+    <table class="admin-table" style="margin-bottom:32px;">
+      <thead><tr><th>Title</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {posts.map((p: any) => (
+          <tr>
+            <td>{p.title}</td>
+            <td>{p.status}</td>
+            <td>
+              <a href={`/admin/blog?edit=${p.id}`}>Edit</a> ·
+              <button class="delete-btn" data-id={p.id} style="background:none; border:none; color:#9B3B2E; cursor:pointer; padding:0;">Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <h2 style="font-family:var(--font-display); font-size:1.2rem;">{editing ? `Edit: ${(editing as any).title}` : 'Add new post'}</h2>
+    <form id="post-form" class="card" data-id={editing ? (editing as any).id : ''} style="max-width:680px;">
+      <div class="form-field">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value={editing ? (editing as any).title : ''} required />
+      </div>
+      <div class="form-field">
+        <label for="slug">URL slug {editing && '— cannot be changed once created'}</label>
+        <input type="text" id="slug" name="slug" value={editing ? (editing as any).slug : ''} disabled={!!editing} required />
+      </div>
+      <div class="form-field">
+        <label for="excerpt">Short excerpt</label>
+        <input type="text" id="excerpt" name="excerpt" value={editing ? (editing as any).excerpt : ''} />
+      </div>
+      <ImageUploadField name="cover_image_url" label="Cover image" value={editing ? (editing as any).cover_image_url : ''} />
+      <div class="form-field">
+        <label for="body_html">Body (HTML allowed — paragraphs, headings, bold, links)</label>
+        <textarea id="body_html" name="body_html" rows="10">{editing ? (editing as any).body_html : ''}</textarea>
+      </div>
+      <div class="form-field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="draft" selected={!editing || (editing as any).status === 'draft'}>Draft</option>
+          <option value="published" selected={editing && (editing as any).status === 'published'}>Published</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">{editing ? 'Save Changes' : 'Add Post'}</button>
+      {editing && <a href="/admin/blog" style="margin-left:12px; font-size:0.9rem;">Cancel edit</a>}
+      <p class="form-status"></p>
+    </form>
+  </div>
+
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this post?')) return;
+        await fetch(`/api/admin/blog/${btn.dataset.id}`, { method: 'DELETE' });
+        window.location.reload();
+      });
+    });
+
+    const form = document.getElementById('post-form') as HTMLFormElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = form.dataset.id;
+      const fd = new FormData(form);
+      const body = Object.fromEntries(fd.entries());
+      const status = form.querySelector('.form-status') as HTMLElement;
+      status.textContent = 'Saving...';
+      const res = await fetch(id ? `/api/admin/blog/${id}` : '/api/admin/blog', {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) window.location.href = '/admin/blog';
+      else status.textContent = 'Something went wrong — check the slug is unique.';
+    });
+  </script>
+</body>
+</html>

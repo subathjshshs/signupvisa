@@ -1,0 +1,101 @@
+---
+import '../../styles/global.css';
+import AdminNav from '../../components/AdminNav.astro';
+import ImageUploadField from '../../components/ImageUploadField.astro';
+
+const db = Astro.locals.runtime.env.DB;
+const editId = Astro.url.searchParams.get('edit');
+const editing = editId ? await db.prepare('SELECT * FROM services WHERE id=?').bind(editId).first() : null;
+const { results: services } = await db.prepare('SELECT * FROM services ORDER BY sort_order ASC').all();
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Manage Services</title></head>
+<body class="admin-shell">
+  <AdminNav active="services" />
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display);">Services</h1>
+    <p style="color:var(--text-muted); margin-bottom:24px;">Add "Work Visa", "Skilled Migration", "Visit Visa" here whenever you're ready to expand — each becomes a live page automatically.</p>
+
+    <table class="admin-table" style="margin-bottom:32px;">
+      <thead><tr><th>Name</th><th>Slug</th><th>Active</th><th>Featured</th><th></th></tr></thead>
+      <tbody>
+        {services.map((s: any) => (
+          <tr>
+            <td>{s.name}</td>
+            <td>/services/{s.slug}</td>
+            <td>{s.is_active ? 'Yes' : 'Hidden'}</td>
+            <td>{s.is_featured ? 'Yes' : '—'}</td>
+            <td>
+              <a href={`/admin/services?edit=${s.id}`}>Edit</a> ·
+              <button class="delete-btn" data-id={s.id} style="background:none; border:none; color:#9B3B2E; cursor:pointer; padding:0;">Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <h2 style="font-family:var(--font-display); font-size:1.2rem;">{editing ? `Edit: ${(editing as any).name}` : 'Add new service'}</h2>
+    <form id="service-form" class="card" data-id={editing ? (editing as any).id : ''} style="max-width:640px;">
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value={editing ? (editing as any).name : ''} required />
+      </div>
+      <div class="form-field">
+        <label for="slug">URL slug (e.g. work-visa) {editing && '— cannot be changed once created'}</label>
+        <input type="text" id="slug" name="slug" value={editing ? (editing as any).slug : ''} disabled={!!editing} required />
+      </div>
+      <div class="form-field">
+        <label for="tagline">Short tagline</label>
+        <input type="text" id="tagline" name="tagline" value={editing ? (editing as any).tagline : ''} />
+      </div>
+      <div class="form-field">
+        <label for="description">Full description</label>
+        <textarea id="description" name="description" rows="5">{editing ? (editing as any).description : ''}</textarea>
+      </div>
+      <ImageUploadField name="image_url" label="Service image" value={editing ? (editing as any).image_url : ''} />
+      <div class="form-field">
+        <label><input type="checkbox" name="is_featured" checked={editing ? !!(editing as any).is_featured : false} style="width:auto; display:inline-block; margin-right:8px;" /> Feature on homepage</label>
+      </div>
+      <div class="form-field">
+        <label><input type="checkbox" name="is_active" checked={editing ? !!(editing as any).is_active : true} style="width:auto; display:inline-block; margin-right:8px;" /> Active (visible on site)</label>
+      </div>
+      <button type="submit" class="btn btn-primary">{editing ? 'Save Changes' : 'Add Service'}</button>
+      {editing && <a href="/admin/services" style="margin-left:12px; font-size:0.9rem;">Cancel edit</a>}
+      <p class="form-status"></p>
+    </form>
+  </div>
+
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this service? This cannot be undone.')) return;
+        await fetch(`/api/admin/services/${btn.dataset.id}`, { method: 'DELETE' });
+        window.location.reload();
+      });
+    });
+
+    const form = document.getElementById('service-form') as HTMLFormElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = form.dataset.id;
+      const fd = new FormData(form);
+      const body: Record<string, any> = Object.fromEntries(fd.entries());
+      body.is_featured = fd.has('is_featured');
+      body.is_active = fd.has('is_active');
+      const status = form.querySelector('.form-status') as HTMLElement;
+      status.textContent = 'Saving...';
+      const res = await fetch(id ? `/api/admin/services/${id}` : '/api/admin/services', {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        window.location.href = '/admin/services';
+      } else {
+        status.textContent = 'Something went wrong — check the slug is unique.';
+      }
+    });
+  </script>
+</body>
+</html>

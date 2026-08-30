@@ -1,0 +1,50 @@
+---
+import '../../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+</head>
+<body class="admin-shell">
+  <div class="login-wrap">
+    <form id="login-form" class="card login-card">
+      <h1 class="login-title">Admin Login</h1>
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autofocus />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Log In</button>
+      <p id="login-error" class="alert alert-error" style="display:none; margin-top:16px;"></p>
+    </form>
+  </div>
+
+  <style>
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-card { width: 340px; }
+    .login-title { font-family: var(--font-display); margin-bottom: 24px; }
+  </style>
+
+  <script>
+    const form = document.getElementById('login-form') as HTMLFormElement;
+    const errorBox = document.getElementById('login-error') as HTMLParagraphElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = (document.getElementById('password') as HTMLInputElement).value;
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        window.location.href = '/admin';
+      } else {
+        errorBox.textContent = 'Incorrect password.';
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

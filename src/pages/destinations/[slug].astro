@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getSettings, getDestinationBySlug } from '../../lib/content';
+
+const { slug } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const destination = db && slug ? await getDestinationBySlug(db, slug) : null;
+
+if (!destination) {
+  return Astro.redirect('/destinations');
+}
+---
+<Layout title={destination.country_name} settings={settings}>
+  <section class="section">
+    <div class="container narrow">
+      <span class="eyebrow">Destination</span>
+      <h1>{destination.flag_emoji} {destination.country_name}</h1>
+      <p class="tagline">{destination.summary}</p>
+      {destination.image_url && <img src={destination.image_url} alt={destination.country_name} class="hero-img" />}
+      <div class="prose"><p>{destination.description}</p></div>
+      <a href="/contact" class="btn btn-primary" style="margin-top:24px;">Ask About This Destination</a>
+    </div>
+  </section>
+</Layout>
+<style>
+  .narrow { max-width: 760px; }
+  .tagline { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; }
+  .hero-img { border-radius: var(--radius); margin: 28px 0; aspect-ratio: 16/9; object-fit: cover; }
+</style>

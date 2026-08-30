@@ -1,0 +1,81 @@
+---
+import '../../styles/global.css';
+import AdminNav from '../../components/AdminNav.astro';
+import ImageUploadField from '../../components/ImageUploadField.astro';
+
+const db = Astro.locals.runtime.env.DB;
+const { results } = await db.prepare('SELECT key, value FROM settings').all();
+const s: Record<string, string> = {};
+for (const row of results as any[]) s[row.key] = row.value ?? '';
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Site Settings</title></head>
+<body class="admin-shell">
+  <AdminNav active="settings" />
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display);">Site Settings</h1>
+    <p style="color:var(--text-muted); margin-bottom:24px;">These control text and images shown across the whole site.</p>
+
+    <form id="settings-form" class="card" style="max-width:680px;">
+      <div class="form-field">
+        <label for="company_name">Company name</label>
+        <input type="text" id="company_name" name="company_name" value={s.company_name || ''} />
+      </div>
+      <div class="form-field">
+        <label for="tagline">Homepage tagline</label>
+        <input type="text" id="tagline" name="tagline" value={s.tagline || ''} />
+      </div>
+      <ImageUploadField name="logo_url" label="Logo" value={s.logo_url || ''} />
+      <ImageUploadField name="hero_image_url" label="Homepage hero image" value={s.hero_image_url || ''} />
+      <div class="form-field">
+        <label for="about_text">About Us page text</label>
+        <textarea id="about_text" name="about_text" rows="5">{s.about_text || ''}</textarea>
+      </div>
+      <div class="form-field">
+        <label for="phone">Phone number</label>
+        <input type="text" id="phone" name="phone" value={s.phone || ''} />
+      </div>
+      <div class="form-field">
+        <label for="whatsapp">WhatsApp number</label>
+        <input type="text" id="whatsapp" name="whatsapp" value={s.whatsapp || ''} />
+      </div>
+      <div class="form-field">
+        <label for="email">Contact email</label>
+        <input type="email" id="email" name="email" value={s.email || ''} />
+      </div>
+      <div class="form-field">
+        <label for="address">Office address</label>
+        <input type="text" id="address" name="address" value={s.address || ''} />
+      </div>
+      <div class="form-field">
+        <label for="facebook_url">Facebook URL</label>
+        <input type="text" id="facebook_url" name="facebook_url" value={s.facebook_url || ''} />
+      </div>
+      <div class="form-field">
+        <label for="instagram_url">Instagram URL</label>
+        <input type="text" id="instagram_url" name="instagram_url" value={s.instagram_url || ''} />
+      </div>
+      <button type="submit" class="btn btn-primary">Save Settings</button>
+      <p class="form-status"></p>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('settings-form') as HTMLFormElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const body = Object.fromEntries(fd.entries());
+      const status = form.querySelector('.form-status') as HTMLElement;
+      status.textContent = 'Saving...';
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      status.textContent = res.ok ? 'Saved ✓' : 'Something went wrong.';
+    });
+  </script>
+</body>
+</html>

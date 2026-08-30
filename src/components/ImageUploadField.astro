@@ -1,0 +1,60 @@
+---
+interface Props { name: string; label: string; value?: string }
+const { name, label, value = '' } = Astro.props;
+const uid = `img-${name}-${Math.random().toString(36).slice(2, 8)}`;
+---
+<div class="form-field image-upload-field" data-name={name}>
+  <label for={uid}>{label}</label>
+  <input type="hidden" name={name} class="url-input" value={value} />
+  <div class="preview-row">
+    {value
+      ? <img class="preview-img" src={value} alt="" />
+      : <div class="preview-empty">No image</div>}
+    <div class="upload-controls">
+      <input type="file" id={uid} class="file-input" accept="image/*" />
+      <span class="upload-status"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .preview-row { display: flex; align-items: center; gap: 16px; }
+  .preview-img { width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
+  .preview-empty { width: 90px; height: 90px; display:flex; align-items:center; justify-content:center; background: var(--paper-dim); border: 1px dashed var(--line); font-size: 0.7rem; color: var(--text-muted); text-align:center; border-radius: var(--radius); }
+  .upload-status { font-size: 0.8rem; color: var(--text-muted); margin-left: 10px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.image-upload-field').forEach((field) => {
+    const fileInput = field.querySelector<HTMLInputElement>('.file-input');
+    const urlInput = field.querySelector<HTMLInputElement>('.url-input');
+    const status = field.querySelector<HTMLSpanElement>('.upload-status');
+
+    fileInput?.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file || !urlInput) return;
+      if (status) status.textContent = 'Uploading...';
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Upload failed');
+        urlInput.value = data.url;
+        if (status) status.textContent = 'Uploaded ✓';
+        const row = field.querySelector('.preview-row');
+        let img = row?.querySelector('img.preview-img') as HTMLImageElement | null;
+        if (!img && row) {
+          const empty = row.querySelector('.preview-empty');
+          empty?.remove();
+          img = document.createElement('img');
+          img.className = 'preview-img';
+          row.prepend(img);
+        }
+        if (img) img.src = data.url;
+      } catch (err: any) {
+        if (status) status.textContent = err.message || 'Upload failed';
+      }
+    });
+  });
+</script>

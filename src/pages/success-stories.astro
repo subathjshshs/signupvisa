@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSettings, getTestimonials } from '../lib/content';
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const testimonials = db ? await getTestimonials(db, 50) : [];
+---
+<Layout title="Success Stories" settings={settings}>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Success Stories</span>
+      <h1>Real students, real journeys</h1>
+      <div class="grid-3" style="margin-top:44px;">
+        {testimonials.map((t: any) => (
+          <div class="card">
+            <p class="quote">"{t.quote}"</p>
+            <strong>{t.student_name}</strong>
+            {t.destination && <span class="quote-dest"> — {t.destination}</span>}
+          </div>
+        ))}
+        {testimonials.length === 0 && <div class="card"><p>Testimonials will appear here once added from the admin panel.</p></div>}
+      </div>
+    </div>
+  </section>
+</Layout>
+<style>
+  .quote { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 14px; }
+  .quote-dest { color: var(--text-muted); font-size: 0.9rem; }
+</style>
