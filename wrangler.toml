@@ -1,7 +1,7 @@
 name = "signupvisa"
 compatibility_date = "2026-08-30"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "./dist"
+assets = "./dist"
 
 # D1 database binding — name must match what you created in Cloudflare (D1: "signupvisa")
 # Find the real database_id by running: npx wrangler d1 list
