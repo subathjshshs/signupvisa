@@ -1,18 +1,15 @@
 name = "signupvisa"
-compatibility_date = "2026-08-30"
+compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "./dist"
 
-# D1 database binding — name must match what you created in Cloudflare (D1: "signupvisa")
-# Find the real database_id by running: npx wrangler d1 list
 [[d1_databases]]
 binding = "DB"
 database_name = "signupvisa"
 database_id = "c16be9de-6e85-488e-bf55-1af2f2c55e64"
 
-# R2 bucket binding — replace bucket_name with the exact bucket name you created in Cloudflare
 [[r2_buckets]]
 binding = "MEDIA"
 bucket_name = "signupvisa"
