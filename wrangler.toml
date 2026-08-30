@@ -13,3 +13,7 @@ database_id = "c16be9de-6e85-488e-bf55-1af2f2c55e64"
 [[r2_buckets]]
 binding = "MEDIA"
 bucket_name = "signupvisa"
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "107ad02b978d48d0babc9844f681b86f"
