@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getSettings } from '../lib/content';
-const db = Astro.locals.runtime?.env?.DB;
+const db = Astro.locals.runtime?.DB;
 const settings = db ? await getSettings(db) : {};
 ---
 <Layout title="Book a Consultation" settings={settings}>

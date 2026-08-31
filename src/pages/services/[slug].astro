@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getSettings, getServiceBySlug } from '../../lib/content';
 
 const { slug } = Astro.params;
-const db = Astro.locals.runtime?.env?.DB;
+const db = Astro.locals.runtime?.DB;
 const settings = db ? await getSettings(db) : {};
 const service = db && slug ? await getServiceBySlug(db, slug) : null;
 

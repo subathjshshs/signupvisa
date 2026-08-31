@@ -5,7 +5,7 @@ import type { APIRoute } from 'astro';
 // https://media.yourdomain.com or the r2.dev URL you enable for this bucket.
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const env = locals.runtime?.env ?? locals.runtime;
+  const env = locals.runtime ?? locals.runtime;
   const bucket = env.MEDIA;
   if (!bucket) return new Response(JSON.stringify({ error: 'Storage not configured' }), { status: 500 });
 

@@ -7,7 +7,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const isAdminApi = pathname.startsWith('/api/admin');
 
   if (isAdminPage || isAdminApi) {
-    const secret = context.locals.runtime?.env?.SESSION_SECRET || 'dev-secret-change-me';
+    const secret = context.locals.runtime?.SESSION_SECRET || 'dev-secret-change-me';
     const cookie = context.cookies.get('admin_session')?.value;
     const valid = await isValidSession(cookie, secret);
     if (!valid) {
