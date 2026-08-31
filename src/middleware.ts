@@ -13,6 +13,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const cookie = context.cookies.get('admin_session')?.value;
     const valid = await isValidSession(cookie, secret);
 
+    console.log(`[Auth Check] Path: ${pathname} | Cookie Present: ${!!cookie} | Valid: ${valid}`);
+
     if (!valid) {
       if (isAdminApi) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
