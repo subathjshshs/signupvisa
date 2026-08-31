@@ -1,11 +1,9 @@
 ---
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
+import { env } from 'cloudflare:workers';
 
-// Safely access runtime env across Astro 5 & Cloudflare versions
-const runtime = (Astro.locals as any)?.runtime || {};
-const env = runtime.env || {};
-const db = env.DB || runtime.DB;
+const db = (env as any).DB;
 
 let servicesCount = 0;
 let destCount = 0;
@@ -15,10 +13,10 @@ let newLeadsCount = 0;
 if (db) {
   try {
     const [s, d, l, nl] = await Promise.all([
-      db.prepare('SELECT COUNT(*) as c FROM services').first(),
-      db.prepare('SELECT COUNT(*) as c FROM destinations').first(),
-      db.prepare('SELECT COUNT(*) as c FROM leads').first(),
-      db.prepare("SELECT COUNT(*) as c FROM leads WHERE status='new'").first(),
+      db.prepare('SELECT COUNT(*) as c FROM services').first().catch(() => null),
+      db.prepare('SELECT COUNT(*) as c FROM destinations').first().catch(() => null),
+      db.prepare('SELECT COUNT(*) as c FROM leads').first().catch(() => null),
+      db.prepare("SELECT COUNT(*) as c FROM leads WHERE status='new'").first().catch(() => null),
     ]);
 
     servicesCount = (s as any)?.c ?? 0;
