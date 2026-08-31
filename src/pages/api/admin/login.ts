@@ -14,7 +14,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const value = await makeSessionCookieValue(secret);
   const maxAge = 60 * 60 * 24 * 7; // 7 days
 
-  // Standard Astro cookie set
   cookies.set('admin_session', value, {
     path: '/',
     httpOnly: true,
@@ -23,7 +22,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     maxAge,
   });
 
-  // Explicit HTTP header to guarantee cookie delivery in Cloudflare/Astro 5
   const cookieHeader = `admin_session=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
 
   return new Response(JSON.stringify({ ok: true }), {
