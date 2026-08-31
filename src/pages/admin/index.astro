@@ -2,9 +2,10 @@
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 
-// Safely retrieve D1 binding across Astro 5 & Cloudflare Page versions
+// Safely access runtime env across Astro 5 & Cloudflare versions
 const runtime = (Astro.locals as any)?.runtime || {};
-const db = runtime.env?.DB || runtime.DB;
+const env = runtime.env || {};
+const db = env.DB || runtime.DB;
 
 let servicesCount = 0;
 let destCount = 0;
