@@ -3,7 +3,7 @@ import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 import ImageUploadField from '../../components/ImageUploadField.astro';
 
-const db = Astro.locals.runtime.env.DB;
+const db = (Astro.locals.runtime?.env?.DB ?? Astro.locals.runtime?.DB);
 const { results } = await db.prepare('SELECT key, value FROM settings').all();
 const s: Record<string, string> = {};
 for (const row of results as any[]) s[row.key] = row.value ?? '';

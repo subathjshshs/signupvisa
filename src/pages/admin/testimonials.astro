@@ -3,7 +3,7 @@ import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 import ImageUploadField from '../../components/ImageUploadField.astro';
 
-const db = Astro.locals.runtime.env.DB;
+const db = (Astro.locals.runtime?.env?.DB ?? Astro.locals.runtime?.DB);
 const { results: testimonials } = await db.prepare('SELECT * FROM testimonials ORDER BY sort_order ASC').all();
 ---
 <!doctype html>

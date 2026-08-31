@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   const { results } = await db.prepare('SELECT key, value FROM settings').all();
   const map: Record<string, string> = {};
   for (const row of results as any[]) map[row.key] = row.value ?? '';
@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ locals }) => {
 };
 
 export const PUT: APIRoute = async ({ request, locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   const b = await request.json().catch(() => null);
   if (!b) return new Response(JSON.stringify({ error: 'Invalid body' }), { status: 400 });
 

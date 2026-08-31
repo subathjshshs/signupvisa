@@ -3,7 +3,7 @@ import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 import ImageUploadField from '../../components/ImageUploadField.astro';
 
-const db = Astro.locals.runtime.env.DB;
+const db = (Astro.locals.runtime?.env?.DB ?? Astro.locals.runtime?.DB);
 const editId = Astro.url.searchParams.get('edit');
 const editing = editId ? await db.prepare('SELECT * FROM blog_posts WHERE id=?').bind(editId).first() : null;
 const { results: posts } = await db.prepare('SELECT * FROM blog_posts ORDER BY created_at DESC').all();

@@ -2,7 +2,7 @@
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 
-const db = Astro.locals.runtime.env.DB;
+const db = (Astro.locals.runtime?.env?.DB ?? Astro.locals.runtime?.DB);
 const [servicesCount, destCount, leadsCount, newLeadsCount] = await Promise.all([
   db.prepare('SELECT COUNT(*) as c FROM services').first(),
   db.prepare('SELECT COUNT(*) as c FROM destinations').first(),

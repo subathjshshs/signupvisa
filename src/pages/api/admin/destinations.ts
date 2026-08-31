@@ -1,13 +1,13 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   const { results } = await db.prepare('SELECT * FROM destinations ORDER BY sort_order ASC').all();
   return new Response(JSON.stringify(results), { status: 200 });
 };
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   const b = await request.json().catch(() => null);
   if (!b?.slug || !b?.country_name) return new Response(JSON.stringify({ error: 'slug and country_name required' }), { status: 400 });
 
