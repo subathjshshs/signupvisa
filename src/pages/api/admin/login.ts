@@ -1,36 +1,36 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
+import { makeSessionCookieValue } from '../../../lib/auth';
 
-export const POST: APIRoute = async (context) => {
-  try {
-    const body = await context.request.json().catch(() => ({}));
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const cfEnv = env as any;
+  const body = await request.json().catch(() => null);
 
-    // Safe retrieval of Cloudflare env in Astro 5
-    const locals = (context.locals as any) || {};
-    const runtime = locals.runtime || {};
-    const env = runtime.env || {};
-
-    return new Response(
-      JSON.stringify({
-        status: 'debug_ok',
-        receivedPassword: body?.password || null,
-        adminPasswordExists: !!env.ADMIN_PASSWORD,
-        envKeys: Object.keys(env),
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-  } catch (err: any) {
-    return new Response(
-      JSON.stringify({
-        error: 'Runtime Error',
-        message: err?.message || String(err),
-      }),
-      {
-        status: 200, // Return 200 so DevTools can display the error details
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+  if (!body?.password || !cfEnv.ADMIN_PASSWORD || body.password !== cfEnv.ADMIN_PASSWORD) {
+    return new Response(JSON.stringify({ error: 'Invalid password' }), { status: 401 });
   }
+
+  const secret = cfEnv.SESSION_SECRET || 'dev-secret-change-me';
+  const value = await makeSessionCookieValue(secret);
+  const maxAge = 60 * 60 * 24 * 7; // 7 days
+
+  // Standard Astro cookie set
+  cookies.set('admin_session', value, {
+    path: '/',
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    maxAge,
+  });
+
+  // Explicit HTTP header to guarantee cookie delivery in Cloudflare/Astro 5
+  const cookieHeader = `admin_session=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Set-Cookie': cookieHeader,
+    },
+  });
 };
