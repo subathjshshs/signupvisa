@@ -4,10 +4,12 @@ import { isValidSession } from './lib/auth';
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
   const isAdminPage = pathname.startsWith('/admin') && pathname !== '/admin/login';
-  const isAdminApi = pathname.startsWith('/api/admin');
+  const isAdminApi = pathname.startsWith('/api/admin') && pathname !== '/api/admin/login';
 
   if (isAdminPage || isAdminApi) {
-    const secret = context.locals.runtime?.SESSION_SECRET || 'dev-secret-change-me';
+    const runtime = context.locals.runtime || {};
+    const env = runtime.env || {};
+    const secret = env.SESSION_SECRET || 'dev-secret-change-me';
     const cookie = context.cookies.get('admin_session')?.value;
     const valid = await isValidSession(cookie, secret);
     if (!valid) {
