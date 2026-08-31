@@ -1,78 +1,17 @@
 ---
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
-import ImageUploadField from '../../components/ImageUploadField.astro';
+import { env } from 'cloudflare:workers';
 
-const db = Astro.locals.runtime?.DB;
-const { results: testimonials } = await db.prepare('SELECT * FROM testimonials ORDER BY sort_order ASC').all();
+const db = (env as any).DB;
+let testimonials: any[] = [];
+
+if (db) {
+  try {
+    const res = await db.prepare('SELECT * FROM testimonials ORDER BY created_at DESC').all();
+    testimonials = res.results || [];
+  } catch (err) {
+    console.error('Failed to fetch testimonials:', err);
+  }
+}
 ---
-<!doctype html>
-<html lang="en">
-<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Manage Testimonials</title></head>
-<body class="admin-shell">
-  <AdminNav active="testimonials" />
-  <div class="admin-body">
-    <h1 style="font-family:var(--font-display);">Testimonials</h1>
-    <p style="color:var(--text-muted); margin-bottom:24px;">Success stories shown on the homepage and the Success Stories page.</p>
-
-    <table class="admin-table" style="margin-bottom:32px;">
-      <thead><tr><th>Student</th><th>Destination</th><th>Quote</th><th></th></tr></thead>
-      <tbody>
-        {testimonials.map((t: any) => (
-          <tr>
-            <td>{t.student_name}</td>
-            <td>{t.destination}</td>
-            <td style="max-width:280px;">{t.quote}</td>
-            <td><button class="delete-btn" data-id={t.id} style="background:none; border:none; color:#9B3B2E; cursor:pointer; padding:0;">Delete</button></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-
-    <h2 style="font-family:var(--font-display); font-size:1.2rem;">Add new testimonial</h2>
-    <form id="testimonial-form" class="card" style="max-width:640px;">
-      <div class="form-field">
-        <label for="student_name">Student name</label>
-        <input type="text" id="student_name" name="student_name" required />
-      </div>
-      <div class="form-field">
-        <label for="destination">Destination (optional)</label>
-        <input type="text" id="destination" name="destination" placeholder="e.g. Studying in Canada" />
-      </div>
-      <div class="form-field">
-        <label for="quote">Quote</label>
-        <textarea id="quote" name="quote" rows="4" required></textarea>
-      </div>
-      <ImageUploadField name="photo_url" label="Student photo (optional)" />
-      <button type="submit" class="btn btn-primary">Add Testimonial</button>
-      <p class="form-status"></p>
-    </form>
-  </div>
-
-  <script>
-    document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        if (!confirm('Delete this testimonial?')) return;
-        await fetch(`/api/admin/testimonials/${btn.dataset.id}`, { method: 'DELETE' });
-        window.location.reload();
-      });
-    });
-
-    const form = document.getElementById('testimonial-form') as HTMLFormElement;
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(form);
-      const body = Object.fromEntries(fd.entries());
-      const status = form.querySelector('.form-status') as HTMLElement;
-      status.textContent = 'Saving...';
-      const res = await fetch('/api/admin/testimonials', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (res.ok) window.location.reload();
-      else status.textContent = 'Something went wrong.';
-    });
-  </script>
-</body>
-</html>
