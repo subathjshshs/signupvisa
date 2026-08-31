@@ -3,25 +3,8 @@ import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 import { env } from 'cloudflare:workers';
 
-// Safely grab the database from Cloudflare
 const db = (env as any)?.DB || (Astro.locals as any)?.runtime?.env?.DB;
-let services: any[] = [];
 
-// Only run query if database is ready
-if (db) {
-  try {
-    const res = await db.prepare('SELECT * FROM services ORDER BY created_at DESC').all();
-    services = res.results || [];
-  } catch (err) {
-    console.error('Database query error:', err);
-  }
-}
----
-import '../../styles/global.css';
-import AdminNav from '../../components/AdminNav.astro';
-import { env } from 'cloudflare:workers';
-
-const db = (env as any).DB;
 let settings: any = {};
 
 if (db) {
@@ -37,3 +20,21 @@ if (db) {
   }
 }
 ---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Settings</title>
+</head>
+<body class="admin-shell">
+  <AdminNav active="settings" />
+  <main class="admin-body">
+    <h1>Settings</h1>
+    {!db && (
+      <p style="color: red; font-weight: bold;">⚠️ D1 Database binding "DB" is not connected.</p>
+    )}
+    <pre>{JSON.stringify(settings, null, 2)}</pre>
+  </main>
+</body>
+</html>
