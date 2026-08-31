@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 export const PUT: APIRoute = async ({ params, request, locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   const b = await request.json().catch(() => null);
   if (!b) return new Response(JSON.stringify({ error: 'Invalid body' }), { status: 400 });
 
@@ -18,7 +18,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
 };
 
 export const DELETE: APIRoute = async ({ params, locals }) => {
-  const db = locals.runtime.env.DB;
+  const db = (locals.runtime?.env?.DB ?? locals.runtime?.DB);
   await db.prepare('DELETE FROM blog_posts WHERE id=?').bind(params.id).run();
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 };
