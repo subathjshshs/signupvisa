@@ -2,8 +2,7 @@ import type { APIRoute } from 'astro';
 import { makeSessionCookieValue } from '../../../lib/auth';
 
 export const POST: APIRoute = async ({ request, cookies, locals }) => {
-  const env = locals.runtime?.env || {};
-  const body = await request.json().catch(() => null);
+const env = locals.runtime?.env || {};  const body = await request.json().catch(() => null);
 
   if (!body?.password || !env?.ADMIN_PASSWORD || body.password !== env.ADMIN_PASSWORD) {
     return new Response(JSON.stringify({ error: 'Invalid password' }), { status: 401 });
