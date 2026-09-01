@@ -1,40 +1,115 @@
 ---
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
-import { env } from 'cloudflare:workers';
+import ImageUploadField from '../../components/ImageUploadField.astro';
 
-const db = (env as any)?.DB || (Astro.locals as any)?.runtime?.env?.DB;
-
-let settings: any = {};
-
+const db = Astro.locals.runtime?.env?.DB;
+let s: Record<string, string> = {};
 if (db) {
   try {
-    const res = await db.prepare('SELECT * FROM settings').all();
-    const rows = res.results || [];
-    settings = rows.reduce((acc: any, row: any) => {
-      acc[row.key] = row.value;
-      return acc;
-    }, {});
-  } catch (err) {
-    console.error('Failed to fetch settings:', err);
-  }
+    const { results } = await db.prepare('SELECT key, value FROM settings').all();
+    for (const row of results as any[]) s[row.key] = row.value ?? '';
+  } catch (e) {}
 }
 ---
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Settings</title>
-</head>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Site Settings</title></head>
 <body class="admin-shell">
   <AdminNav active="settings" />
-  <main class="admin-body">
-    <h1>Settings</h1>
-    {!db && (
-      <p style="color: red; font-weight: bold;">⚠️ D1 Database binding "DB" is not connected.</p>
-    )}
-    <pre>{JSON.stringify(settings, null, 2)}</pre>
-  </main>
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display); margin-bottom:6px;">Site Settings</h1>
+    <p style="color:var(--text-muted); margin-bottom:28px;">Control your logo, hero image, contact info and more. Save after every change.</p>
+
+    <div id="save-banner" style="display:none; background:#E6F0EA; color:#2F6D4F; padding:12px 16px; border-radius:3px; margin-bottom:18px;">✓ Settings saved successfully.</div>
+    <div id="error-banner" style="display:none; background:#FBE9E7; color:#9B3B2E; padding:12px 16px; border-radius:3px; margin-bottom:18px;">Something went wrong. Please try again.</div>
+
+    <form id="settings-form" style="max-width:680px;">
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">Brand</h3>
+        <div class="form-field">
+          <label>Company name</label>
+          <input type="text" name="company_name" value={s.company_name || 'Signup Visa & Migration'} />
+        </div>
+        <div class="form-field">
+          <label>Homepage tagline</label>
+          <input type="text" name="tagline" value={s.tagline || 'Your trusted pathway to studying and working abroad'} />
+        </div>
+        <ImageUploadField name="logo_url" label="Logo image" value={s.logo_url || ''} />
+        <ImageUploadField name="hero_image_url" label="Homepage hero image (large banner photo)" value={s.hero_image_url || ''} />
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">Contact Info</h3>
+        <div class="form-field">
+          <label>Phone number</label>
+          <input type="text" name="phone" value={s.phone || ''} placeholder="+880 1XXX-XXXXXX" />
+        </div>
+        <div class="form-field">
+          <label>WhatsApp number</label>
+          <input type="text" name="whatsapp" value={s.whatsapp || ''} placeholder="+880 1XXX-XXXXXX" />
+        </div>
+        <div class="form-field">
+          <label>Contact email</label>
+          <input type="email" name="email" value={s.email || ''} placeholder="info@signupvisa.com" />
+        </div>
+        <div class="form-field">
+          <label>Office address</label>
+          <input type="text" name="address" value={s.address || ''} placeholder="Your office address, Dhaka, Bangladesh" />
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">Social Media</h3>
+        <div class="form-field">
+          <label>Facebook URL</label>
+          <input type="text" name="facebook_url" value={s.facebook_url || ''} placeholder="https://facebook.com/yourpage" />
+        </div>
+        <div class="form-field">
+          <label>Instagram URL</label>
+          <input type="text" name="instagram_url" value={s.instagram_url || ''} placeholder="https://instagram.com/yourpage" />
+        </div>
+        <div class="form-field">
+          <label>YouTube URL</label>
+          <input type="text" name="youtube_url" value={s.youtube_url || ''} placeholder="https://youtube.com/@yourchannel" />
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">About Us page text</h3>
+        <div class="form-field">
+          <textarea name="about_text" rows="6" placeholder="Write about your company here...">{s.about_text || ''}</textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:1rem;">Save All Settings</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('settings-form') as HTMLFormElement;
+    const saveBanner = document.getElementById('save-banner') as HTMLElement;
+    const errorBanner = document.getElementById('error-banner') as HTMLElement;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      saveBanner.style.display = 'none';
+      errorBanner.style.display = 'none';
+      const fd = new FormData(form);
+      const body = Object.fromEntries(fd.entries());
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        saveBanner.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        errorBanner.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
