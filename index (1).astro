@@ -1,0 +1,25 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import GlowSearch from '../../components/GlowSearch.astro';
+import CountryCard from '../../components/CountryCard.astro';
+import { getSettings, getDestinations } from '../../lib/content';
+
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const destinations = db ? await getDestinations(db) : [];
+---
+<SiteLayout title="Destinations" settings={settings}>
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+    <div class="text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Destinations</span>
+      <h1 class="mt-3 text-3xl font-extrabold sm:text-4xl">Where students go with us</h1>
+      <div class="mt-6"><GlowSearch placeholder="Filter countries..." /></div>
+    </div>
+    <div class="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      {destinations.map((d: any) => (
+        <CountryCard slug={d.slug} name={d.country_name} flag={d.flag_emoji} summary={d.summary} imageUrl={d.image_url} />
+      ))}
+      {destinations.length === 0 && <p class="col-span-full text-center text-sm text-brand-muted">No destinations added yet.</p>}
+    </div>
+  </section>
+</SiteLayout>

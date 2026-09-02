@@ -1,0 +1,33 @@
+---
+import '../styles/brand.css';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  settings?: Record<string, string>;
+}
+const { title, description = 'Your trusted pathway to studying and working abroad.', settings = {} } = Astro.props;
+const companyName = settings.company_name || 'Signup Visa & Migration';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | {companyName}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} | ${companyName}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="font-sans antialiased">
+    <SiteNav settings={settings} />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter settings={settings} />
+  </body>
+</html>

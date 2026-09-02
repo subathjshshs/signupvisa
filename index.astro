@@ -1,0 +1,24 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import FlipServiceCard from '../../components/FlipServiceCard.astro';
+import { getSettings, getServices } from '../../lib/content';
+
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const services = db ? await getServices(db) : [];
+---
+<SiteLayout title="Services" settings={settings}>
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+    <div class="text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Services</span>
+      <h1 class="mt-3 text-3xl font-extrabold sm:text-4xl">How we help you get there</h1>
+      <p class="mx-auto mt-3 max-w-xl text-sm text-brand-muted">We currently focus on student visa processing, with work visas, skilled migration, and visit visas coming soon.</p>
+    </div>
+    <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {services.map((s: any) => (
+        <FlipServiceCard slug={s.slug} name={s.name} tagline={s.tagline} description={s.description} />
+      ))}
+      {services.length === 0 && <p class="text-center text-sm text-brand-muted sm:col-span-2">No services added yet.</p>}
+    </div>
+  </section>
+</SiteLayout>
