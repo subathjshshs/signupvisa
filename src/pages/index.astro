@@ -1,133 +1,148 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import ServiceCard from '../components/ServiceCard.astro';
-import DestinationCard from '../components/DestinationCard.astro';
-import TestimonialCard from '../components/TestimonialCard.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import GlowSearch from '../components/GlowSearch.astro';
+import CountryCard from '../components/CountryCard.astro';
+import FlipServiceCard from '../components/FlipServiceCard.astro';
+import { getSettings, getServices, getDestinations, getTestimonials } from '../lib/content';
 
-// Fallback Mock Data for Local Preview
-const fallbackServices = [
-  {
-    id: 1,
-    title: "Student Visa Assistance",
-    slug: "student-visa",
-    short_description: "End-to-end guidance for university applications, offer letters, and student visa lodgement.",
-    icon: "academic-cap",
-    image_url: "/images/services/service-student-visa.webp"
-  },
-  {
-    id: 2,
-    title: "Skilled & Work Migration",
-    slug: "work-visa",
-    short_description: "Expert point assessment and documentation support for skilled worker visas.",
-    icon: "briefcase",
-    image_url: "/images/services/service-work-visa.webp"
-  },
-  {
-    id: 3,
-    title: "PR & Permanent Residency",
-    slug: "pr-residency",
-    short_description: "Strategic pathways to secure permanent residency and family reunification abroad.",
-    icon: "globe-alt",
-    image_url: "/images/services/service-skilled-migration.webp"
-  }
+const db = Astro.locals.runtime?.env?.DB;
+const settings = db ? await getSettings(db) : {};
+const services = db ? await getServices(db) : [];
+const destinations = db ? await getDestinations(db) : [];
+const testimonials = db ? await getTestimonials(db, 3) : [];
+
+const stats = [
+  ['500+', 'Students placed'],
+  ['98%', 'Visa success rate'],
+  ['12+', 'Countries'],
+  ['5★', 'Student rating'],
 ];
 
-const fallbackDestinations = [
-  { id: 1, name: "United Kingdom", slug: "uk", flag_code: "gb", image_url: "/images/destinations/dest-uk.webp", popular_courses: "Business, Tech, Nursing" },
-  { id: 2, name: "Australia", slug: "australia", flag_code: "au", image_url: "/images/destinations/dest-australia.webp", popular_courses: "Engineering, IT, Public Health" },
-  { id: 3, name: "Canada", slug: "canada", flag_code: "ca", image_url: "/images/destinations/dest-canada.webp", popular_courses: "Data Science, Management, Hospitality" },
-  { id: 4, name: "United States", slug: "usa", flag_code: "us", image_url: "/images/destinations/dest-usa.webp", popular_courses: "STEM, Finance, Biotechnology" }
+const steps = [
+  ['01', 'Free Consultation', 'We assess your profile, goals, and budget.'],
+  ['02', 'University Selection', 'Shortlist the best matched universities.'],
+  ['03', 'Visa Application', 'Full documentation prep and visa lodgement.'],
+  ['04', 'Departure Ready', 'Pre-departure briefing — and off you go.'],
 ];
-
-const fallbackTestimonials = [
-  {
-    id: 1,
-    client_name: "Rahim Ahmed",
-    visa_type: "Student Visa (Subclass 500)",
-    country: "Australia",
-    quote: "Signup Visa made my Australian student visa process completely stress-free. From document preparation to lodgement, everything was smooth.",
-    avatar_url: "/images/team/student-01.webp"
-  },
-  {
-    id: 2,
-    client_name: "Tanjina Akter",
-    visa_type: "Student Route Visa",
-    country: "United Kingdom",
-    quote: "Got my CAS letter and visa approval within record time! Exceptional guidance throughout the university shortlisting process.",
-    avatar_url: "/images/team/student-02.webp"
-  },
-  {
-    id: 3,
-    client_name: "Mahmud Hasan",
-    visa_type: "Skilled Worker Visa",
-    country: "Canada",
-    quote: "The team analyzed my profile carefully and helped me secure my work permit hassle-free. Highly recommended consultancy!",
-    avatar_url: "/images/team/student-03.webp"
-  }
-];
-
-// Combine DB results with fallbacks
-let services = [];
-let destinations = [];
-let testimonials = [];
-
-try {
-  // Dynamic Cloudflare D1 fetch logic executes here in production
-} catch (e) {
-  // Default to fallbacks on error or empty local DB
-}
-
-if (!services || services.length === 0) services = fallbackServices;
-if (!destinations || destinations.length === 0) destinations = fallbackDestinations;
-if (!testimonials || testimonials.length === 0) testimonials = fallbackTestimonials;
 ---
+<SiteLayout title="Home" settings={settings}>
 
-<Layout title="Home">
-  <Hero />
-  
-  <!-- Services Grid Section -->
-  <section class="py-16 bg-slate-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-slate-900">Our Core Visa Services</h2>
-        <p class="mt-4 text-slate-600">Tailored migration solutions managed by certified immigration advisors.</p>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-brand-surface pt-16 pb-10 sm:pt-24">
+    <div class="pointer-events-none absolute -top-32 left-1/2 h-96 w-[60rem] -translate-x-1/2 rounded-full bg-gradient-brand opacity-20 blur-3xl"></div>
+    <div class="relative mx-auto max-w-3xl px-5 text-center">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-accent-text/20 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand-accent-text">
+        🎓 Bangladesh's trusted study abroad partner
+      </span>
+      <h1 class="mt-6 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
+        Your journey to <span class="text-gradient">study abroad</span> starts here
+      </h1>
+      <p class="mx-auto mt-5 max-w-xl text-base text-brand-muted sm:text-lg">
+        {settings.tagline || 'From university shortlisting to visa approval — we handle every step so you arrive confident and prepared.'}
+      </p>
+
+      <div class="mt-8">
+        <GlowSearch />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {services.map((service) => (
-          <ServiceCard service={service} />
+
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:-translate-y-0.5">Book Free Consultation</a>
+        <a href="/destinations" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-semibold text-brand-ink transition-colors hover:border-brand-blue">Explore Countries</a>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="relative mt-14 flex flex-wrap justify-center gap-x-10 gap-y-4">
+      {stats.map(([num, label]) => (
+        <div class="text-center">
+          <div class="text-2xl font-extrabold text-gradient">{num}</div>
+          <div class="text-xs text-brand-muted">{label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Destinations</span>
+      <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Where will you study?</h2>
+      <p class="mx-auto mt-2 max-w-md text-sm text-brand-muted">Choose from top study destinations — hover each card to explore</p>
+    </div>
+
+    {destinations.length > 0 ? (
+      <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {destinations.map((d: any) => (
+          <CountryCard slug={d.slug} name={d.country_name} flag={d.flag_emoji} summary={d.summary} imageUrl={d.image_url} />
+        ))}
+      </div>
+    ) : (
+      <p class="mt-10 text-center text-sm text-brand-muted">Add destinations from the admin panel — they'll appear here automatically.</p>
+    )}
+  </section>
+
+  <!-- PROCESS -->
+  <section class="border-y border-brand-line bg-white py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="text-center">
+        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">How it works</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">4 steps to your student visa</h2>
+      </div>
+      <div class="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
+        {steps.map(([num, title, desc], i) => (
+          <div class="relative text-center">
+            <div class="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-gradient-brand text-lg font-bold text-white">{i + 1}</div>
+            <span class="mt-3 block font-mono text-[11px] font-semibold text-brand-accent-text">STEP {num}</span>
+            <h3 class="mt-1 text-sm font-bold">{title}</h3>
+            <p class="mt-1 text-xs text-brand-muted">{desc}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Destinations Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-slate-900">Top Study & Work Destinations</h2>
-        <p class="mt-4 text-slate-600">Explore global opportunities across leading international hubs.</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {destinations.map((dest) => (
-          <DestinationCard destination={dest} />
-        ))}
-      </div>
+  <!-- SERVICES -->
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Services</span>
+      <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">What we offer</h2>
+    </div>
+    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {services.length > 0 ? services.map((s: any) => (
+        <FlipServiceCard slug={s.slug} name={s.name} tagline={s.tagline} description={s.description} />
+      )) : (
+        <p class="text-center text-sm text-brand-muted sm:col-span-2">Add services from the admin panel — they'll appear here automatically.</p>
+      )}
     </div>
   </section>
 
-  <!-- Testimonials Section -->
-  <section class="py-16 bg-slate-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-white">Success Stories</h2>
-        <p class="mt-4 text-slate-400">Hear from our clients who successfully moved abroad.</p>
+  <!-- TESTIMONIALS -->
+  {testimonials.length > 0 && (
+    <section class="bg-white py-16 sm:py-20 border-t border-brand-line">
+      <div class="mx-auto max-w-6xl px-5">
+        <div class="text-center">
+          <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Success Stories</span>
+          <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">What our students say</h2>
+        </div>
+        <div class="mt-10 grid gap-5 sm:grid-cols-3">
+          {testimonials.map((t: any) => (
+            <div class="rounded-2xl border border-brand-line bg-brand-surface p-6">
+              <p class="text-sm text-brand-ink">"{t.quote}"</p>
+              <div class="mt-4 text-sm font-bold">{t.student_name}</div>
+              {t.destination && <div class="text-xs text-brand-muted">{t.destination}</div>}
+            </div>
+          ))}
+        </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-900">
-        {testimonials.map((item) => (
-          <TestimonialCard testimonial={item} />
-        ))}
-      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="px-5 py-16">
+    <div class="mx-auto max-w-5xl rounded-3xl bg-gradient-brand px-8 py-14 text-center text-white">
+      <h2 class="text-2xl font-extrabold sm:text-3xl">Ready to start your journey?</h2>
+      <p class="mx-auto mt-2 max-w-md text-sm text-white/80">Get a free consultation today — no commitment, just clarity on your next step abroad.</p>
+      <a href="/contact" class="mt-6 inline-block rounded-full bg-white px-8 py-3 text-sm font-bold text-brand-blue">Book Free Consultation →</a>
     </div>
   </section>
-</Layout>
+</SiteLayout>
