@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getSettings, getDestinationBySlug } from '../../lib/content';
-
+import { env } from 'cloudflare:workers';
 const { slug } = Astro.params;
-const db = Astro.locals.runtime?.DB;
+const db = (env as any).DB;
 const settings = db ? await getSettings(db) : {};
 const destination = db && slug ? await getDestinationBySlug(db, slug) : null;
 
