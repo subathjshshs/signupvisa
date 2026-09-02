@@ -22,7 +22,7 @@ if (db) {
   <AdminNav active="destinations" />
   <div class="admin-body">
     <h1 style="font-family:var(--font-display); margin-bottom:6px;">Destinations</h1>
-    <p style="color:var(--text-muted); margin-bottom:24px;">Add countries here — each gets its own page automatically. Add more countries anytime.</p>
+    <p style="color:var(--text-muted); margin-bottom:24px;">Add countries here — each gets its own page automatically.</p>
 
     {destinations.length > 0 && (
       <table class="admin-table" style="margin-bottom:32px;">
@@ -57,7 +57,7 @@ if (db) {
           <input type="text" name="country_name" value={editing ? editing.country_name : ''} required placeholder="e.g. Australia" />
         </div>
         <div class="form-field">
-          <label>URL slug * {editing ? '(cannot change)' : '— use lowercase, no spaces (e.g. australia)'}</label>
+          <label>URL slug * {editing ? '(cannot change)' : '— lowercase, no spaces (e.g. australia)'}</label>
           <input type="text" name="slug" value={editing ? editing.slug : ''} disabled={!!editing} required placeholder="australia" />
         </div>
         <div class="form-field">
@@ -69,7 +69,7 @@ if (db) {
           <input type="text" name="summary" value={editing ? editing.summary : ''} placeholder="Top universities, post-study work rights" />
         </div>
         <div class="form-field">
-          <label>Full description (shown on the country's page)</label>
+          <label>Full description</label>
           <textarea name="description" rows="5" placeholder="Write about studying in this country...">{editing ? editing.description : ''}</textarea>
         </div>
         <ImageUploadField name="image_url" label="Country image" value={editing ? editing.image_url : ''} />
@@ -90,7 +90,7 @@ if (db) {
   <script>
     document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Delete this destination? This cannot be undone.')) return;
+        if (!confirm('Delete this destination?')) return;
         await fetch(`/api/admin/destinations/${btn.dataset.id}`, { method: 'DELETE' });
         window.location.reload();
       });
