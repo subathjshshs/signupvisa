@@ -56,23 +56,23 @@ if (db) {
           <input type="text" name="title" value={editing ? editing.title : ''} required placeholder="e.g. How to Apply for an Australian Student Visa in 2026" />
         </div>
         <div class="form-field">
-          <label>URL slug * {editing ? '(cannot change)' : '— lowercase, use hyphens (e.g. australia-student-visa-guide)'}</label>
+          <label>URL slug * {editing ? '(cannot change)' : '— lowercase, use hyphens'}</label>
           <input type="text" name="slug" value={editing ? editing.slug : ''} disabled={!!editing} required placeholder="australia-student-visa-guide" />
         </div>
         <div class="form-field">
           <label>Short excerpt (shown in listings)</label>
-          <input type="text" name="excerpt" value={editing ? editing.excerpt : ''} placeholder="Brief 1-2 sentence summary of the post" />
+          <input type="text" name="excerpt" value={editing ? editing.excerpt : ''} placeholder="Brief 1-2 sentence summary" />
         </div>
         <ImageUploadField name="cover_image_url" label="Cover image" value={editing ? editing.cover_image_url : ''} />
         <div class="form-field">
-          <label>Body (you can use HTML tags like &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;ul&gt;&lt;li&gt;)</label>
+          <label>Body (HTML tags like &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt; allowed)</label>
           <textarea name="body_html" rows="12" placeholder="<p>Write your full article here...</p>">{editing ? editing.body_html : ''}</textarea>
         </div>
         <div class="form-field">
           <label>Status</label>
           <select name="status">
-            <option value="draft" selected={!editing || editing.status === 'draft'}>Draft (not visible on site)</option>
-            <option value="published" selected={editing && editing.status === 'published'}>Published (live on site)</option>
+            <option value="draft" selected={!editing || editing.status === 'draft'}>Draft</option>
+            <option value="published" selected={editing && editing.status === 'published'}>Published</option>
           </select>
         </div>
         <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
