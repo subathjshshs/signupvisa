@@ -19,13 +19,12 @@ if (db) {
   <AdminNav active="settings" />
   <div class="admin-body">
     <h1 style="font-family:var(--font-display); margin-bottom:6px;">Site Settings</h1>
-    <p style="color:var(--text-muted); margin-bottom:28px;">Control your logo, hero image, contact info and more. Save after every change.</p>
+    <p style="color:var(--text-muted); margin-bottom:28px;">These control text and images shown across the whole site. Save after every change.</p>
 
-    <div id="save-banner" style="display:none; background:#E6F0EA; color:#2F6D4F; padding:12px 16px; border-radius:3px; margin-bottom:18px;">✓ Settings saved successfully.</div>
-    <div id="error-banner" style="display:none; background:#FBE9E7; color:#9B3B2E; padding:12px 16px; border-radius:3px; margin-bottom:18px;">Something went wrong. Please try again.</div>
+    <div id="save-banner" style="display:none; background:#E6F0EA; color:#2F6D4F; padding:12px 16px; border-radius:3px; margin-bottom:18px; font-size:0.9rem;">✓ Settings saved successfully.</div>
+    <div id="error-banner" style="display:none; background:#FBE9E7; color:#9B3B2E; padding:12px 16px; border-radius:3px; margin-bottom:18px; font-size:0.9rem;">Something went wrong. Please try again.</div>
 
     <form id="settings-form" style="max-width:680px;">
-
       <div class="card" style="margin-bottom:24px;">
         <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">Brand</h3>
         <div class="form-field">
@@ -56,12 +55,16 @@ if (db) {
         </div>
         <div class="form-field">
           <label>Office address</label>
-          <input type="text" name="address" value={s.address || ''} placeholder="Your office address, Dhaka, Bangladesh" />
+          <input type="text" name="address" value={s.address || ''} placeholder="Your office address" />
         </div>
       </div>
 
       <div class="card" style="margin-bottom:24px;">
         <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:20px;">Social Media</h3>
+        <div class="form-field">
+          <label>LinkedIn URL</label>
+          <input type="text" name="linkedin_url" value={s.linkedin_url || ''} placeholder="https://www.linkedin.com/company/yourpage" />
+        </div>
         <div class="form-field">
           <label>Facebook URL</label>
           <input type="text" name="facebook_url" value={s.facebook_url || ''} placeholder="https://facebook.com/yourpage" />
@@ -71,9 +74,24 @@ if (db) {
           <input type="text" name="instagram_url" value={s.instagram_url || ''} placeholder="https://instagram.com/yourpage" />
         </div>
         <div class="form-field">
-          <label>YouTube URL</label>
-          <input type="text" name="youtube_url" value={s.youtube_url || ''} placeholder="https://youtube.com/@yourchannel" />
+          <label>Blog URL</label>
+          <input type="text" name="blog_url" value={s.blog_url || ''} placeholder="https://yourblog.blogspot.com/" />
         </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3 style="font-family:var(--font-display); font-size:1.1rem; margin-bottom:8px;">Department Emails</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:16px;">Shown in the footer's "Reach the right team" grid.</p>
+        <div class="form-field"><label>Support</label><input type="email" name="email_support" value={s.email_support || ''} placeholder="support@signupvisa.com" /></div>
+        <div class="form-field"><label>General Info</label><input type="email" name="email_info" value={s.email_info || ''} placeholder="info@signupvisa.com" /></div>
+        <div class="form-field"><label>Admissions</label><input type="email" name="email_admissions" value={s.email_admissions || ''} placeholder="admissions@signupvisa.com" /></div>
+        <div class="form-field"><label>Processing</label><input type="email" name="email_processing" value={s.email_processing || ''} placeholder="processing@signupvisa.com" /></div>
+        <div class="form-field"><label>Moulvibazar Desk</label><input type="email" name="email_moulvibazar" value={s.email_moulvibazar || ''} placeholder="moulvibazar@signupvisa.com" /></div>
+        <div class="form-field"><label>Media</label><input type="email" name="email_media" value={s.email_media || ''} placeholder="media@signupvisa.com" /></div>
+        <div class="form-field"><label>Fly / Travel</label><input type="email" name="email_fly" value={s.email_fly || ''} placeholder="fly@signupvisa.com" /></div>
+        <div class="form-field"><label>Partners</label><input type="email" name="email_partners" value={s.email_partners || ''} placeholder="partners@signupvisa.com" /></div>
+        <div class="form-field"><label>Careers</label><input type="email" name="email_careers" value={s.email_careers || ''} placeholder="careers@signupvisa.com" /></div>
+        <div class="form-field"><label>Admin</label><input type="email" name="email_admin" value={s.email_admin || ''} placeholder="admin@signupvisa.com" /></div>
       </div>
 
       <div class="card" style="margin-bottom:24px;">
