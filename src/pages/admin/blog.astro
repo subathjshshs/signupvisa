@@ -1,40 +1,117 @@
 ---
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
-import { env } from 'cloudflare:workers';
+import ImageUploadField from '../../components/ImageUploadField.astro';
 
-const db = (env as any)?.DB || (Astro.locals as any)?.runtime?.env?.DB;
-
+const db = Astro.locals.runtime?.env?.DB;
+const editId = Astro.url.searchParams.get('edit');
+let editing: any = null;
 let posts: any[] = [];
-
 if (db) {
   try {
-    const res = await db.prepare('SELECT * FROM posts ORDER BY created_at DESC').all();
-    posts = res.results || [];
-  } catch (err) {
-    console.error('Failed to fetch blog posts:', err);
-  }
+    if (editId) editing = await db.prepare('SELECT * FROM blog_posts WHERE id=?').bind(editId).first();
+    const r = await db.prepare('SELECT * FROM blog_posts ORDER BY created_at DESC').all();
+    posts = r.results as any[];
+  } catch(e) {}
 }
 ---
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Blog Posts</title>
-</head>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Blog</title></head>
 <body class="admin-shell">
   <AdminNav active="blog" />
-  <main class="admin-body">
-    <h1>Blog Posts</h1>
-    {!db && (
-      <p style="color: red; font-weight: bold;">⚠️ D1 Database binding "DB" is not connected.</p>
+  <div class="admin-body">
+    <h1 style="font-family:var(--font-display); margin-bottom:6px;">Blog</h1>
+    <p style="color:var(--text-muted); margin-bottom:24px;">Write guides and news about visa processes, country requirements, and student tips.</p>
+
+    {posts.length > 0 && (
+      <table class="admin-table" style="margin-bottom:32px;">
+        <thead><tr><th>Title</th><th>Status</th><th>Date</th><th></th></tr></thead>
+        <tbody>
+          {posts.map((p: any) => (
+            <tr>
+              <td>{p.title}</td>
+              <td><span style={`background:${p.status === 'published' ? '#E6F0EA' : '#FBE9E7'};color:${p.status === 'published' ? '#2F6D4F' : '#9B3B2E'};padding:2px 8px;border-radius:20px;font-size:0.8rem;`}>{p.status}</span></td>
+              <td style="font-size:0.82rem;color:var(--text-muted);">{p.created_at?.slice(0,10)}</td>
+              <td>
+                <a href={`/admin/blog?edit=${p.id}`} style="margin-right:10px;">Edit</a>
+                <button class="delete-btn" data-id={p.id} style="background:none;border:none;color:#9B3B2E;cursor:pointer;padding:0;">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     )}
-    <ul>
-      {posts.map((item) => (
-        <li>{item.title || JSON.stringify(item)}</li>
-      ))}
-    </ul>
-  </main>
+
+    <div class="card" style="max-width:700px;">
+      <h2 style="font-family:var(--font-display); font-size:1.15rem; margin-bottom:20px;">
+        {editing ? `Editing: ${editing.title}` : '+ Write new post'}
+      </h2>
+      <div id="form-success" style="display:none; background:#E6F0EA; color:#2F6D4F; padding:12px; border-radius:3px; margin-bottom:16px;">✓ Saved!</div>
+      <div id="form-error" style="display:none; background:#FBE9E7; color:#9B3B2E; padding:12px; border-radius:3px; margin-bottom:16px;">Error — check the slug is unique.</div>
+
+      <form id="post-form" data-id={editing ? editing.id : ''}>
+        <div class="form-field">
+          <label>Post title *</label>
+          <input type="text" name="title" value={editing ? editing.title : ''} required placeholder="e.g. How to Apply for an Australian Student Visa in 2026" />
+        </div>
+        <div class="form-field">
+          <label>URL slug * {editing ? '(cannot change)' : '— lowercase, use hyphens (e.g. australia-student-visa-guide)'}</label>
+          <input type="text" name="slug" value={editing ? editing.slug : ''} disabled={!!editing} required placeholder="australia-student-visa-guide" />
+        </div>
+        <div class="form-field">
+          <label>Short excerpt (shown in listings)</label>
+          <input type="text" name="excerpt" value={editing ? editing.excerpt : ''} placeholder="Brief 1-2 sentence summary of the post" />
+        </div>
+        <ImageUploadField name="cover_image_url" label="Cover image" value={editing ? editing.cover_image_url : ''} />
+        <div class="form-field">
+          <label>Body (you can use HTML tags like &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;ul&gt;&lt;li&gt;)</label>
+          <textarea name="body_html" rows="12" placeholder="<p>Write your full article here...</p>">{editing ? editing.body_html : ''}</textarea>
+        </div>
+        <div class="form-field">
+          <label>Status</label>
+          <select name="status">
+            <option value="draft" selected={!editing || editing.status === 'draft'}>Draft (not visible on site)</option>
+            <option value="published" selected={editing && editing.status === 'published'}>Published (live on site)</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
+          <button type="submit" class="btn btn-primary">{editing ? 'Save Changes' : 'Save Post'}</button>
+          {editing && <a href="/admin/blog">Cancel</a>}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this post?')) return;
+        await fetch(`/api/admin/blog/${btn.dataset.id}`, { method: 'DELETE' });
+        window.location.reload();
+      });
+    });
+
+    const form = document.getElementById('post-form') as HTMLFormElement;
+    const success = document.getElementById('form-success') as HTMLElement;
+    const error = document.getElementById('form-error') as HTMLElement;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      success.style.display = 'none'; error.style.display = 'none';
+      const id = form.dataset.id;
+      const fd = new FormData(form);
+      const body = Object.fromEntries(fd.entries());
+      const res = await fetch(id ? `/api/admin/blog/${id}` : '/api/admin/blog', {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        if (id) { success.style.display = 'block'; window.scrollTo({top:0,behavior:'smooth'}); }
+        else window.location.href = '/admin/blog';
+      } else error.style.display = 'block';
+    });
+  </script>
 </body>
 </html>
