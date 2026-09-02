@@ -2,8 +2,9 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import FlipServiceCard from '../../components/FlipServiceCard.astro';
 import { getSettings, getServices } from '../../lib/content';
+import { env } from 'cloudflare:workers';
 
-const db = Astro.locals.runtime?.env?.DB;
+const db = (env as any).DB;
 const settings = db ? await getSettings(db) : {};
 const services = db ? await getServices(db) : [];
 ---
