@@ -2,8 +2,9 @@
 import '../../styles/global.css';
 import AdminNav from '../../components/AdminNav.astro';
 import ImageUploadField from '../../components/ImageUploadField.astro';
+import { env } from 'cloudflare:workers';
 
-const db = Astro.locals.runtime?.env?.DB;
+const db = (env as any).DB;
 const editId = Astro.url.searchParams.get('edit');
 let editing: any = null;
 let services: any[] = [];
