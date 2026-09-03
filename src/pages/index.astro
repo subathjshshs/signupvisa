@@ -1,12 +1,11 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { getSettings, getServices, getDestinations } from '../lib/content';
+import { services } from '../data/services';
+import { destinations } from '../data/destinations';
+import { getSiteSettings } from '../data/site-config';
 import { HERO_IMAGE, SERVICE_IMAGES } from '../lib/images';
 
-const settings = getSettings();
-const services = getServices();
-const destinations = getDestinations();
-
+const settings = getSiteSettings();
 const serviceHighlights = services.slice(0, 4);
 const destinationHighlights = destinations.slice(0, 5);
 
@@ -23,173 +22,33 @@ const process = [
   description="SIGNUP Visa & Migration provides structured guidance for student visas, work permits, skilled migration and visit visas across leading international destinations."
   settings={settings}
 >
-  <!-- HERO -->
   <section class="relative isolate min-h-[680px] overflow-hidden bg-brand-ink text-white sm:min-h-[720px]">
-    <img
-      src={HERO_IMAGE}
-      alt=""
-      class="absolute inset-0 -z-20 h-full w-full object-cover"
-      fetchpriority="high"
-      decoding="async"
-      onerror="this.style.display='none'"
-    />
+    <img src={HERO_IMAGE} alt="" class="absolute inset-0 -z-20 h-full w-full object-cover" fetchpriority="high" decoding="async" />
     <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,12,25,.96)_0%,rgba(5,12,25,.82)_48%,rgba(5,12,25,.35)_100%)]"></div>
     <div class="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgba(5,12,25,.72)_0%,transparent_45%)]"></div>
-
     <div class="mx-auto flex min-h-[680px] max-w-7xl items-center px-5 py-24 sm:min-h-[720px] sm:px-8 lg:px-10">
       <div class="max-w-3xl">
-        <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[.16em] text-white/90 backdrop-blur-md">
-          <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
-          Visa & Migration Specialists
-        </div>
-
-        <h1 class="mt-7 max-w-3xl text-4xl font-extrabold leading-[1.04] tracking-[-.035em] sm:text-6xl lg:text-7xl">
-          Your next chapter
-          <span class="block text-white/65">starts beyond borders.</span>
-        </h1>
-
-        <p class="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
-          Clear, structured guidance for studying, working, visiting and building a future abroad — from your first consultation to your next step.
-        </p>
-
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[.16em] text-white/90 backdrop-blur-md"><span class="h-1.5 w-1.5 rounded-full bg-white"></span>Visa & Migration Specialists</div>
+        <h1 class="mt-7 max-w-3xl text-4xl font-extrabold leading-[1.04] tracking-[-.035em] sm:text-6xl lg:text-7xl">Your next chapter <span class="block text-white/65">starts beyond borders.</span></h1>
+        <p class="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">Clear, structured guidance for studying, working, visiting and building a future abroad — from your first consultation to your next step.</p>
         <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-          <a href="/contact" class="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-ink shadow-xl transition hover:-translate-y-0.5 hover:bg-white/90">
-            Book a free consultation
-            <span class="ml-2">→</span>
-          </a>
-          <a href="/services" class="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/10">
-            Explore our services
-          </a>
+          <a href="/contact" class="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-ink shadow-xl transition hover:-translate-y-0.5 hover:bg-white/90">Book a free consultation <span class="ml-2">→</span></a>
+          <a href="/services" class="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/10">Explore our services</a>
         </div>
-
-        <div class="mt-12 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/15 pt-6 text-xs text-white/60 sm:text-sm">
-          <span>Student Visa</span>
-          <span>Work Permit</span>
-          <span>Skilled Migration</span>
-          <span>Visit Visa</span>
-        </div>
+        <div class="mt-12 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/15 pt-6 text-xs text-white/60 sm:text-sm"><span>Student Visa</span><span>Work Permit</span><span>Skilled Migration</span><span>Visit Visa</span></div>
       </div>
     </div>
   </section>
 
-  <!-- INTRO / TRUST -->
-  <section class="border-b border-brand-line bg-white">
-    <div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.2fr_.8fr] lg:items-center lg:px-10">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">A clearer way forward</p>
-        <h2 class="mt-3 max-w-3xl text-2xl font-extrabold tracking-tight sm:text-4xl">One trusted partner for your international journey.</h2>
-      </div>
-      <p class="text-sm leading-7 text-brand-muted sm:text-base">
-        Every applicant has a different goal. We focus on understanding yours first, then helping you choose a suitable destination, service and application path without unnecessary complexity.
-      </p>
-    </div>
-  </section>
+  <section class="border-b border-brand-line bg-white"><div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.2fr_.8fr] lg:items-center lg:px-10"><div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">A clearer way forward</p><h2 class="mt-3 max-w-3xl text-2xl font-extrabold tracking-tight sm:text-4xl">One trusted partner for your international journey.</h2></div><p class="text-sm leading-7 text-brand-muted sm:text-base">Every applicant has a different goal. We focus on understanding yours first, then helping you choose a suitable destination, service and application path without unnecessary complexity.</p></div></section>
 
-  <!-- SERVICES -->
-  <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
-    <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Our services</p>
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Support built around your goal.</h2>
-      </div>
-      <a href="/services" class="text-sm font-bold text-brand-blue hover:underline">View all services →</a>
-    </div>
+  <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10"><div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Our services</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Support built around your goal.</h2></div><a href="/services" class="text-sm font-bold text-brand-blue hover:underline">View all services →</a></div><div class="mt-10 grid gap-5 md:grid-cols-2">{serviceHighlights.map((service, index) => (<a href={`/services/${service.slug}`} class="group relative min-h-[285px] overflow-hidden rounded-3xl bg-brand-ink text-white shadow-sm ring-1 ring-black/5"><img src={service.imageUrl} alt={service.name} class="absolute inset-0 h-full w-full object-cover opacity-60 transition duration-700 group-hover:scale-105 group-hover:opacity-70" loading="lazy" decoding="async" /><div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,12,25,.08),rgba(5,12,25,.94))]"></div><div class="relative flex min-h-[285px] flex-col justify-end p-7 sm:p-8"><span class="text-xs font-semibold uppercase tracking-[.16em] text-white/55">0{index + 1}</span><h3 class="mt-2 text-2xl font-extrabold">{service.name}</h3><p class="mt-2 max-w-md text-sm leading-6 text-white/70">{service.tagline}</p><span class="mt-5 text-sm font-bold text-white">Explore service <span class="inline-block transition-transform group-hover:translate-x-1">→</span></span></div></a>))}</div></section>
 
-    <div class="mt-10 grid gap-5 md:grid-cols-2">
-      {serviceHighlights.map((service, index) => (
-        <a href={`/services/${service.slug}`} class="group relative min-h-[285px] overflow-hidden rounded-3xl bg-brand-ink text-white shadow-sm ring-1 ring-black/5">
-          <img src={service.imageUrl} alt="" class="absolute inset-0 h-full w-full object-cover opacity-60 transition duration-700 group-hover:scale-105 group-hover:opacity-70" loading="lazy" decoding="async" />
-          <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,12,25,.08),rgba(5,12,25,.94))]"></div>
-          <div class="relative flex min-h-[285px] flex-col justify-end p-7 sm:p-8">
-            <span class="text-xs font-semibold uppercase tracking-[.16em] text-white/55">0{index + 1}</span>
-            <h3 class="mt-2 text-2xl font-extrabold">{service.name}</h3>
-            <p class="mt-2 max-w-md text-sm leading-6 text-white/70">{service.tagline}</p>
-            <span class="mt-5 text-sm font-bold text-white">Explore service <span class="inline-block transition-transform group-hover:translate-x-1">→</span></span>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
+  <section class="bg-brand-surface"><div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10"><div class="text-center"><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Destinations</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Where could your journey take you?</h2><p class="mx-auto mt-4 max-w-2xl text-sm leading-6 text-brand-muted sm:text-base">Explore leading destinations and find the pathway that best matches your plans.</p></div><div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{destinationHighlights.map((destination) => (<a href={`/destinations/${destination.slug}`} class="group relative min-h-[300px] overflow-hidden rounded-2xl bg-brand-ink text-white shadow-sm"><img src={destination.imageUrl} alt={`${destination.name} destination`} class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" decoding="async" /><div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,12,25,.05),rgba(5,12,25,.88))]"></div><div class="relative flex h-full min-h-[300px] flex-col justify-end p-5"><span class="text-2xl" aria-hidden="true">{destination.flag}</span><h3 class="mt-2 text-lg font-extrabold">{destination.name}</h3><p class="mt-1 text-xs leading-5 text-white/65">{destination.summary}</p><span class="mt-4 text-xs font-bold uppercase tracking-wider text-white/90">Explore →</span></div></a>))}</div><div class="mt-8 text-center"><a href="/destinations" class="inline-flex rounded-full border border-brand-line bg-white px-6 py-3 text-sm font-bold text-brand-ink transition hover:border-brand-blue">Explore all destinations</a></div></div></section>
 
-  <!-- DESTINATIONS -->
-  <section class="bg-brand-surface">
-    <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
-      <div class="text-center">
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Destinations</p>
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Where could your journey take you?</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-sm leading-6 text-brand-muted sm:text-base">Explore leading destinations and find the pathway that best matches your plans.</p>
-      </div>
+  <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10"><div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr]"><div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">How we work</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Simple process.<br />Clear next steps.</h2><p class="mt-5 max-w-md text-sm leading-7 text-brand-muted">We break an international application into practical stages so you know what happens next and what needs your attention.</p><a href="/contact" class="mt-7 inline-flex rounded-full bg-brand-ink px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">Talk to our team →</a></div><div class="divide-y divide-brand-line rounded-3xl border border-brand-line bg-white">{process.map((item) => (<div class="grid gap-4 px-6 py-7 sm:grid-cols-[70px_1fr] sm:px-8"><span class="font-mono text-xs font-semibold text-brand-accent-text">{item.number}</span><div><h3 class="text-lg font-bold">{item.title}</h3><p class="mt-1.5 max-w-xl text-sm leading-6 text-brand-muted">{item.text}</p></div></div>))}</div></div></section>
 
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {destinationHighlights.map((destination) => (
-          <a href={`/destinations/${destination.slug}`} class="group relative min-h-[300px] overflow-hidden rounded-2xl bg-brand-ink text-white shadow-sm">
-            <img src={destination.imageUrl} alt={`${destination.name} destination`} class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
-            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,12,25,.05),rgba(5,12,25,.88))]"></div>
-            <div class="relative flex h-full min-h-[300px] flex-col justify-end p-5">
-              <span class="text-2xl" aria-hidden="true">{destination.flag}</span>
-              <h3 class="mt-2 text-lg font-extrabold">{destination.name}</h3>
-              <p class="mt-1 text-xs leading-5 text-white/65">{destination.summary}</p>
-              <span class="mt-4 text-xs font-bold uppercase tracking-wider text-white/90">Explore →</span>
-            </div>
-          </a>
-        ))}
-      </div>
+  <section class="px-5 pb-20 sm:px-8 sm:pb-24 lg:px-10"><div class="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-brand-ink text-white lg:grid-cols-[.9fr_1.1fr]"><div class="relative min-h-[340px] lg:min-h-[430px]"><img src={SERVICE_IMAGES['student-visa']} alt="Student visa guidance" class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" /></div><div class="flex flex-col justify-center p-8 sm:p-12 lg:p-14"><p class="text-xs font-bold uppercase tracking-[.18em] text-white/55">From application to arrival</p><h2 class="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">Make your next move with a plan.</h2><p class="mt-5 max-w-xl text-sm leading-7 text-white/65 sm:text-base">Whether your goal is education, employment, migration or a short visit, start with a conversation about your options and requirements.</p><div class="mt-8"><a href="/contact" class="inline-flex rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-ink transition hover:bg-white/90">Get started →</a></div></div></div></section>
 
-      <div class="mt-8 text-center">
-        <a href="/destinations" class="inline-flex rounded-full border border-brand-line bg-white px-6 py-3 text-sm font-bold text-brand-ink transition hover:border-brand-blue">Explore all destinations</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESS -->
-  <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
-    <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr]">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">How we work</p>
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Simple process.<br />Clear next steps.</h2>
-        <p class="mt-5 max-w-md text-sm leading-7 text-brand-muted">We break an international application into practical stages so you know what happens next and what needs your attention.</p>
-        <a href="/contact" class="mt-7 inline-flex rounded-full bg-brand-ink px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">Talk to our team →</a>
-      </div>
-
-      <div class="divide-y divide-brand-line rounded-3xl border border-brand-line bg-white">
-        {process.map((item) => (
-          <div class="grid gap-4 px-6 py-7 sm:grid-cols-[70px_1fr] sm:px-8">
-            <span class="font-mono text-xs font-semibold text-brand-accent-text">{item.number}</span>
-            <div>
-              <h3 class="text-lg font-bold">{item.title}</h3>
-              <p class="mt-1.5 max-w-xl text-sm leading-6 text-brand-muted">{item.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- STUDENT / APPLICATION FEATURE -->
-  <section class="px-5 pb-20 sm:px-8 sm:pb-24 lg:px-10">
-    <div class="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-brand-ink text-white lg:grid-cols-[.9fr_1.1fr]">
-      <div class="relative min-h-[340px] lg:min-h-[430px]">
-        <img src={SERVICE_IMAGES['student-visa']} alt="Student visa guidance" class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-brand-ink/20"></div>
-      </div>
-      <div class="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-white/55">From application to arrival</p>
-        <h2 class="mt-3 max-w-xl text-3xl font-extrabold tracking-tight sm:text-4xl">Make your next move with a plan.</h2>
-        <p class="mt-5 max-w-xl text-sm leading-7 text-white/65 sm:text-base">Whether your goal is education, employment, migration or a short visit, start with a conversation about your options and requirements.</p>
-        <div class="mt-8">
-          <a href="/contact" class="inline-flex rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-ink transition hover:bg-white/90">Get started →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="border-t border-brand-line bg-white">
-    <div class="mx-auto max-w-5xl px-5 py-20 text-center sm:px-8 sm:py-24">
-      <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Your journey starts here</p>
-      <h2 class="mx-auto mt-3 max-w-3xl text-3xl font-extrabold tracking-tight sm:text-5xl">Have a destination in mind?</h2>
-      <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-brand-muted sm:text-base">Tell us what you want to achieve abroad. We’ll help you understand the available pathway and the next practical step.</p>
-      <a href="/contact" class="mt-8 inline-flex rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Book your free consultation →</a>
-    </div>
-  </section>
+  <section class="border-t border-brand-line bg-white"><div class="mx-auto max-w-5xl px-5 py-20 text-center sm:px-8 sm:py-24"><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Your journey starts here</p><h2 class="mx-auto mt-3 max-w-3xl text-3xl font-extrabold tracking-tight sm:text-5xl">Have a destination in mind?</h2><p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-brand-muted sm:text-base">Tell us what you want to achieve abroad. We’ll help you understand the available pathway and the next practical step.</p><a href="/contact" class="mt-8 inline-flex rounded-full bg-gradient-brand px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Book your free consultation →</a></div></section>
 </SiteLayout>
