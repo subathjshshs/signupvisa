@@ -1,25 +1,46 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import FlipServiceCard from '../../components/FlipServiceCard.astro';
-import { getSettings, getServices } from '../../lib/content';
+import { services } from '../../data/services';
+import { getSiteSettings } from '../../data/site-config';
 
-import { env } from 'cloudflare:workers';
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
-const services = db ? await getServices(db) : [];
+const settings = getSiteSettings();
 ---
-<SiteLayout title="Services" settings={settings}>
-  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-    <div class="text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Services</span>
-      <h1 class="mt-3 text-3xl font-extrabold sm:text-4xl">How we help you get there</h1>
-      <p class="mx-auto mt-3 max-w-xl text-sm text-brand-muted">We currently focus on student visa processing, with work visas, skilled migration, and visit visas coming soon.</p>
+<SiteLayout title="Visa & Migration Services" description="Explore student visa, work permit, skilled migration and visit visa services from SIGNUP Visa & Migration." settings={settings}>
+  <section class="relative overflow-hidden bg-brand-surface py-16 sm:py-24">
+    <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-accent-bg blur-3xl"></div>
+    <div class="relative mx-auto max-w-5xl px-5 text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Our Services</span>
+      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Clear guidance for your <span class="text-gradient">next move abroad</span></h1>
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-brand-muted sm:text-lg">Choose the pathway that fits your goals. We help you understand requirements, prepare your application and move forward with greater clarity.</p>
     </div>
-    <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
-      {services.map((s: any) => (
-        <FlipServiceCard slug={s.slug} name={s.name} tagline={s.tagline} description={s.description} />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="grid gap-6 sm:grid-cols-2">
+      {services.map((service) => (
+        <a href={`/services/${service.slug}`} class="group overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="relative aspect-[16/9] overflow-hidden bg-brand-surface">
+            <img src={service.imageUrl} alt={service.name} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <span class="absolute bottom-4 left-5 text-3xl" aria-hidden="true">{service.icon}</span>
+          </div>
+          <div class="p-6 sm:p-7">
+            <h2 class="text-xl font-extrabold">{service.name}</h2>
+            <p class="mt-2 font-medium text-brand-accent-text">{service.tagline}</p>
+            <p class="mt-3 text-sm leading-6 text-brand-muted">{service.description}</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-blue">Explore service <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+          </div>
+        </a>
       ))}
-      {services.length === 0 && <p class="text-center text-sm text-brand-muted sm:col-span-2">No services added yet.</p>}
+    </div>
+  </section>
+
+  <section class="border-y border-brand-line bg-white py-16 sm:py-20">
+    <div class="mx-auto max-w-5xl px-5 text-center">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Start with clarity</span>
+      <h2 class="mt-4 text-2xl font-extrabold sm:text-3xl">Not sure which pathway fits?</h2>
+      <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">Tell us about your goals, background and preferred destination. We can help you identify the most relevant service to explore.</p>
+      <a href="/contact" class="mt-7 inline-flex rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20">Book a Consultation →</a>
     </div>
   </section>
 </SiteLayout>
