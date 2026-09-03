@@ -2,58 +2,104 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getSiteSettings } from '../data/site-config';
 import { services } from '../data/services';
+import { destinations } from '../data/destinations';
 
 const settings = getSiteSettings();
 ---
 <SiteLayout title="Contact SIGNUP Visa & Migration" description="Contact SIGNUP Visa & Migration for student visa, work permit, skilled migration and visit visa guidance." settings={settings}>
-  <section class="relative overflow-hidden bg-brand-surface py-16 sm:py-20">
-    <div class="absolute -left-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-brand-accent-bg blur-3xl"></div>
-    <div class="relative mx-auto max-w-5xl px-5 text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Get in touch</span>
-      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Let's discuss your <span class="text-gradient">next step</span></h1>
-      <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-brand-muted">Share your goals and preferred destination. We'll use your information to understand which pathway may be relevant.</p>
+  <section class="relative overflow-hidden bg-brand-ink text-white">
+    <div class="absolute -left-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-brand-blue/20 blur-3xl"></div>
+    <div class="relative mx-auto max-w-7xl px-5 py-20 sm:py-24">
+      <span class="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[.16em] text-white/80">Get in touch</span>
+      <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">Let's make your <span class="text-gradient">next step clearer.</span></h1>
+      <p class="mt-5 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">Tell us what you want to achieve, where you want to go and which pathway you are considering. We'll use your enquiry to understand what you need next.</p>
     </div>
   </section>
 
-  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+  <section class="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+    <div class="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-start">
       <div class="space-y-5">
-        <div class="rounded-3xl border border-brand-line bg-white p-6 shadow-sm">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Contact</span>
-          <h2 class="mt-3 text-xl font-extrabold">SIGNUP Visa & Migration</h2>
-          <p class="mt-2 text-sm leading-6 text-brand-muted">{settings.address || 'Moulvibazar, Sylhet Division, Bangladesh'}</p>
-          <div class="mt-5 space-y-3 text-sm">
-            <a href="mailto:info@signupvisa.com" class="block font-semibold text-brand-accent-text">info@signupvisa.com</a>
-            <a href="mailto:support@signupvisa.com" class="block font-semibold text-brand-accent-text">support@signupvisa.com</a>
-            <a href="mailto:moulvibazar@signupvisa.com" class="block font-semibold text-brand-accent-text">moulvibazar@signupvisa.com</a>
+        <div class="rounded-3xl border border-brand-line bg-white p-7 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Contact SIGNUP</span>
+          <h2 class="mt-3 text-2xl font-black">Choose the right channel.</h2>
+          <p class="mt-3 text-sm leading-6 text-brand-muted">For general applicant enquiries, start with our main information or support inboxes.</p>
+          <div class="mt-6 space-y-3">
+            <a href="mailto:info@signupvisa.com" class="flex items-center justify-between rounded-2xl bg-brand-surface px-4 py-3 text-sm font-bold transition hover:bg-brand-accent-bg"><span>General enquiries</span><span class="text-brand-blue">info@signupvisa.com</span></a>
+            <a href="mailto:support@signupvisa.com" class="flex items-center justify-between rounded-2xl bg-brand-surface px-4 py-3 text-sm font-bold transition hover:bg-brand-accent-bg"><span>Support</span><span class="text-brand-blue">support@signupvisa.com</span></a>
+            <a href="mailto:admissions@signupvisa.com" class="flex items-center justify-between rounded-2xl bg-brand-surface px-4 py-3 text-sm font-bold transition hover:bg-brand-accent-bg"><span>Admissions</span><span class="text-brand-blue">admissions@signupvisa.com</span></a>
+            <a href="mailto:processing@signupvisa.com" class="flex items-center justify-between rounded-2xl bg-brand-surface px-4 py-3 text-sm font-bold transition hover:bg-brand-accent-bg"><span>Processing</span><span class="text-brand-blue">processing@signupvisa.com</span></a>
           </div>
         </div>
-        <div class="rounded-3xl border border-brand-line bg-brand-surface p-6">
-          <h2 class="font-extrabold">What can we discuss?</h2>
-          <div class="mt-4 space-y-3">
-            {services.map((service) => <a href={`/services/${service.slug}`} class="flex items-center justify-between rounded-xl bg-white px-4 py-3 text-sm font-semibold transition hover:shadow-sm"><span>{service.icon} {service.name}</span><span>→</span></a>)}
+
+        <div class="rounded-3xl border border-brand-line bg-brand-surface p-7">
+          <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Other enquiries</span>
+          <div class="mt-4 grid gap-3 text-sm">
+            <a href="mailto:partners@signupvisa.com" class="rounded-xl bg-white px-4 py-3 font-bold">Partnerships →</a>
+            <a href="mailto:media@signupvisa.com" class="rounded-xl bg-white px-4 py-3 font-bold">Media →</a>
+            <a href="mailto:careers@signupvisa.com" class="rounded-xl bg-white px-4 py-3 font-bold">Careers →</a>
+            <a href="mailto:moulvibazar@signupvisa.com" class="rounded-xl bg-white px-4 py-3 font-bold">Moulvibazar enquiries →</a>
           </div>
         </div>
       </div>
 
-      <form id="lead-form" class="rounded-3xl border border-brand-line bg-white p-6 shadow-sm sm:p-8">
-        <h2 class="text-2xl font-extrabold">Request a consultation</h2>
-        <p class="mt-2 text-sm text-brand-muted">Fields marked required help us respond to your enquiry.</p>
-        <div class="mt-7 grid gap-5 sm:grid-cols-2">
-          <div class="sm:col-span-2"><label for="full_name" class="mb-1.5 block text-sm font-semibold">Full name <span aria-hidden="true">*</span></label><input id="full_name" name="full_name" required autocomplete="name" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
-          <div><label for="phone" class="mb-1.5 block text-sm font-semibold">Phone / WhatsApp <span aria-hidden="true">*</span></label><input id="phone" name="phone" type="tel" required autocomplete="tel" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
-          <div><label for="email" class="mb-1.5 block text-sm font-semibold">Email</label><input id="email" name="email" type="email" autocomplete="email" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
-          <div><label for="interested_service" class="mb-1.5 block text-sm font-semibold">Service</label><select id="interested_service" name="interested_service" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue">{services.map((service) => <option>{service.name}</option>)}<option>Not sure yet</option></select></div>
-          <div><label for="destination" class="mb-1.5 block text-sm font-semibold">Preferred destination</label><input id="destination" name="destination" placeholder="e.g. Australia" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
-          <div class="sm:col-span-2"><label for="message" class="mb-1.5 block text-sm font-semibold">Tell us about your plans</label><textarea id="message" name="message" rows="5" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue"></textarea></div>
-          <div class="sm:col-span-2"><button type="submit" class="w-full rounded-full bg-gradient-brand py-3.5 text-sm font-bold text-white transition-transform hover:-translate-y-0.5">Send Consultation Request →</button><p id="form-status" class="mt-3 text-sm" role="status" aria-live="polite"></p></div>
+      <form id="lead-form" class="rounded-[2rem] border border-brand-line bg-white p-6 shadow-xl sm:p-9">
+        <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Start an enquiry</span>
+            <h2 class="mt-2 text-2xl font-black sm:text-3xl">Request a consultation</h2>
+          </div>
+          <span class="text-xs font-medium text-brand-muted">Required: name + phone</span>
+        </div>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label for="full_name" class="mb-1.5 block text-sm font-bold">Full name <span aria-hidden="true">*</span></label>
+            <input id="full_name" name="full_name" required autocomplete="name" placeholder="Your full name" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+          </div>
+          <div>
+            <label for="phone" class="mb-1.5 block text-sm font-bold">Phone / WhatsApp <span aria-hidden="true">*</span></label>
+            <input id="phone" name="phone" type="tel" required autocomplete="tel" placeholder="Your phone number" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+          </div>
+          <div>
+            <label for="email" class="mb-1.5 block text-sm font-bold">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+          </div>
+          <div>
+            <label for="interested_service" class="mb-1.5 block text-sm font-bold">Service</label>
+            <select id="interested_service" name="interested_service" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none focus:border-brand-blue">
+              {services.map((service) => <option value={service.name}>{service.name}</option>)}
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+          <div>
+            <label for="interested_destination" class="mb-1.5 block text-sm font-bold">Preferred destination</label>
+            <select id="interested_destination" name="interested_destination" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none focus:border-brand-blue">
+              <option value="">Choose a destination</option>
+              {destinations.map((destination) => <option value={destination.name}>{destination.name}</option>)}
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="message" class="mb-1.5 block text-sm font-bold">Tell us about your plans</label>
+            <textarea id="message" name="message" rows="5" placeholder="For example: your current education/work background, intended destination and what you want to do abroad." class="w-full resize-y rounded-2xl border border-brand-line bg-brand-surface px-4 py-3.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white"></textarea>
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="w-full rounded-full bg-gradient-brand px-6 py-4 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Send Consultation Request →</button>
+            <p id="form-status" class="mt-3 min-h-5 text-sm" role="status" aria-live="polite"></p>
+            <p class="mt-2 text-xs leading-5 text-brand-muted">By submitting this form, you are asking SIGNUP to review your enquiry. A consultation does not guarantee a visa or migration outcome.</p>
+          </div>
         </div>
       </form>
     </div>
   </section>
 
-  <section class="border-t border-brand-line bg-brand-surface py-14">
-    <div class="mx-auto max-w-4xl px-5 text-center"><p class="text-xs leading-5 text-brand-muted">Visa and migration outcomes depend on the applicant's circumstances and the rules of the relevant immigration authority. A consultation does not guarantee approval.</p></div>
+  <section class="border-y border-brand-line bg-brand-surface py-14 sm:py-16">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="grid gap-5 sm:grid-cols-3">
+        <div class="rounded-3xl bg-white p-6"><span class="text-xs font-black tracking-[.16em] text-brand-accent-text">01</span><h3 class="mt-4 font-extrabold">Share your goal</h3><p class="mt-2 text-sm leading-6 text-brand-muted">Tell us your preferred service, destination and current situation.</p></div>
+        <div class="rounded-3xl bg-white p-6"><span class="text-xs font-black tracking-[.16em] text-brand-accent-text">02</span><h3 class="mt-4 font-extrabold">Understand the pathway</h3><p class="mt-2 text-sm leading-6 text-brand-muted">Use the conversation to clarify relevant requirements and next steps.</p></div>
+        <div class="rounded-3xl bg-white p-6"><span class="text-xs font-black tracking-[.16em] text-brand-accent-text">03</span><h3 class="mt-4 font-extrabold">Prepare responsibly</h3><p class="mt-2 text-sm leading-6 text-brand-muted">Move forward with the documents and application preparation relevant to your case.</p></div>
+      </div>
+    </div>
   </section>
 
   <script>
@@ -63,17 +109,17 @@ const settings = getSiteSettings();
       event.preventDefault();
       if (!status) return;
       status.textContent = 'Sending...';
-      status.className = 'mt-3 text-sm text-brand-muted';
+      status.className = 'mt-3 min-h-5 text-sm text-brand-muted';
       const data = Object.fromEntries(new FormData(form).entries());
       try {
         const response = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         if (!response.ok) throw new Error('Request failed');
         status.textContent = 'Thanks — your consultation request has been received.';
-        status.className = 'mt-3 text-sm font-semibold text-brand-success-text';
+        status.className = 'mt-3 min-h-5 text-sm font-semibold text-brand-success-text';
         form.reset();
       } catch {
         status.textContent = 'We could not send the request. Please email info@signupvisa.com directly.';
-        status.className = 'mt-3 text-sm font-semibold text-red-600';
+        status.className = 'mt-3 min-h-5 text-sm font-semibold text-red-600';
       }
     });
   </script>
