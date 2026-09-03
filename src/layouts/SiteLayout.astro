@@ -15,7 +15,7 @@ const companyName = settings.company_name || 'SIGNUP Visa & Migration';
 const siteUrl = 'https://signupvisa.com';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const isHome = Astro.url.pathname === '/';
-const ogImage = new URL('/images/logo/logo-header.svg', siteUrl).toString();
+const ogImage = new URL('/images/hero/homebanner.webp', siteUrl).toString();
 const sameAs = [settings.facebook_url, settings.instagram_url, settings.linkedin_url].filter(Boolean);
 const organizationSchema = {
   '@context': 'https://schema.org',
@@ -51,11 +51,11 @@ const websiteSchema = {
     <meta property="og:site_name" content={companyName} />
     <meta property="og:title" content={`${title} | ${companyName}`} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content={isHome ? 'website' : 'article'} />
+    <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={`${companyName} logo`} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image:alt" content={`${companyName} website`} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={`${title} | ${companyName}`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
