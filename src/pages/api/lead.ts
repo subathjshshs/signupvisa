@@ -12,14 +12,15 @@ export const POST: APIRoute = async ({ request }) => {
 
   await db
     .prepare(
-      `INSERT INTO leads (full_name, phone, email, interested_service, message)
-       VALUES (?, ?, ?, ?, ?)`
+      `INSERT INTO leads (full_name, phone, email, interested_service, interested_destination, message)
+       VALUES (?, ?, ?, ?, ?, ?)`
     )
     .bind(
       String(body.full_name).slice(0, 200),
       String(body.phone).slice(0, 50),
       body.email ? String(body.email).slice(0, 200) : null,
       body.interested_service ? String(body.interested_service).slice(0, 100) : null,
+      body.interested_destination ? String(body.interested_destination).slice(0, 100) : null,
       body.message ? String(body.message).slice(0, 2000) : null
     )
     .run();
