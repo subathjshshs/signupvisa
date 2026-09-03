@@ -1,81 +1,41 @@
-export async function getSettings(db: any) {
-  try {
-    if (!db) return {};
-    const { results } = await db.prepare('SELECT key, value FROM settings').all();
-    const map: Record<string, string> = {};
-    for (const row of results as any[]) map[row.key] = row.value;
-    return map;
-  } catch {
-    return {};
-  }
+import { getSiteSettings } from '../data/site-config';
+import { destinations, getDestination } from '../data/destinations';
+import { services, getService } from '../data/services';
+import { testimonials } from '../data/testimonials';
+
+/**
+ * Compatibility helpers for pages being migrated to the static content model.
+ * Site content is no longer read from D1. D1 remains reserved for lead capture.
+ */
+export function getSettings(): Record<string, string> {
+  return getSiteSettings();
 }
 
-export async function getServices(db?: any) {
-  try {
-    if (!db) return [];
-    const { results } = await db.prepare('SELECT * FROM services ORDER BY sort_order ASC').all();
-    return results || [];
-  } catch {
-    return [];
-  }
+export function getServices() {
+  return services;
 }
 
-export async function getServiceBySlug(db?: any, slug?: string) {
-  try {
-    if (!db || !slug) return null;
-    const item = await db.prepare("SELECT * FROM services WHERE slug = ?").bind(slug).first();
-    return item || null;
-  } catch {
-    return null;
-  }
+export function getServiceBySlug(_db: unknown, slug?: string) {
+  return slug ? getService(slug) ?? null : null;
 }
 
-export async function getDestinations(db?: any) {
-  try {
-    if (!db) return [];
-    const { results } = await db.prepare('SELECT * FROM destinations ORDER BY name ASC').all();
-    return results || [];
-  } catch {
-    return [];
-  }
+export function getDestinations() {
+  return destinations;
 }
 
-export async function getDestinationBySlug(db?: any, slug?: string) {
-  try {
-    if (!db || !slug) return null;
-    const item = await db.prepare("SELECT * FROM destinations WHERE slug = ?").bind(slug).first();
-    return item || null;
-  } catch {
-    return null;
-  }
+export function getDestinationBySlug(_db: unknown, slug?: string) {
+  return slug ? getDestination(slug) ?? null : null;
 }
 
-export async function getTestimonials(db?: any, limit?: number) {
-  try {
-    if (!db) return [];
-    const { results } = await db.prepare('SELECT * FROM testimonials LIMIT ?').bind(limit || 10).all();
-    return results || [];
-  } catch {
-    return [];
-  }
+export function getTestimonials(_db?: unknown, limit = 10) {
+  return testimonials.slice(0, limit);
 }
 
-export async function getPublishedPosts(db?: any) {
-  try {
-    if (!db) return [];
-    const { results } = await db.prepare("SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC").all();
-    return results || [];
-  } catch {
-    return [];
-  }
+// Blog content is intentionally not stored in D1. Blogger integration will own this data.
+export function getPublishedPosts() {
+  return [];
 }
 
-export async function getPostBySlug(db?: any, slug?: string) {
-  try {
-    if (!db || !slug) return null;
-    const post = await db.prepare("SELECT * FROM posts WHERE slug = ? AND status = 'published'").bind(slug).first();
-    return post || null;
-  } catch {
-    return null;
-  }
+export function getPostBySlug() {
+  return null;
 }
