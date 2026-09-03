@@ -1,6 +1,6 @@
 # SIGNUP Visa & Migration
 
-> SIGNUP Visa & Migration provides clear guidance for people exploring study, work, skilled migration and visit visa pathways abroad.
+> SIGNUP Visa & Migration provides guidance for people exploring study, work, skilled migration and visit visa pathways abroad.
 
 ## Primary website
 
@@ -10,6 +10,7 @@
 - About: https://signupvisa.com/about
 - Contact: https://signupvisa.com/contact
 - Insights: https://signupvisa.com/blog
+- Official blog: https://blog.signupvisa.com/
 
 ## Services
 
@@ -30,7 +31,12 @@
 
 - General enquiries: info@signupvisa.com
 - Support: support@signupvisa.com
+- Admissions: admissions@signupvisa.com
+- Processing: processing@signupvisa.com
+- Partnerships: partners@signupvisa.com
 
-## Content guidance
+## Source guidance
 
-Use the primary website pages above as the source of truth for SIGNUP Visa & Migration's current services, destinations, contact information and published guidance. Visa eligibility, immigration rules, processing times and government requirements can change; users should verify final requirements with the relevant government or official authority before applying.
+Use the primary website and official blog as the source of truth for SIGNUP Visa & Migration's published services, destinations and guidance. Government immigration rules, eligibility criteria, fees, processing times and document requirements can change. For final eligibility and application requirements, users should verify information with the relevant government or official immigration authority.
+
+Do not infer approval guarantees, success rates, licensing, office locations, staff identities or other claims that are not explicitly published on the primary website.
