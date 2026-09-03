@@ -1,102 +1,79 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { getSettings } from '../lib/content';
-import { OFFICE_MOULVIBAZAR } from '../lib/images';
-import { env } from 'cloudflare:workers';
+import { getSiteSettings } from '../data/site-config';
+import { services } from '../data/services';
 
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
+const settings = getSiteSettings();
 ---
-<SiteLayout title="Book a Consultation" settings={settings}>
-  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-    <div class="text-center">
+<SiteLayout title="Contact SIGNUP Visa & Migration" description="Contact SIGNUP Visa & Migration for student visa, work permit, skilled migration and visit visa guidance." settings={settings}>
+  <section class="relative overflow-hidden bg-brand-surface py-16 sm:py-20">
+    <div class="absolute -left-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-brand-accent-bg blur-3xl"></div>
+    <div class="relative mx-auto max-w-5xl px-5 text-center">
       <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Get in touch</span>
-      <h1 class="mt-3 text-3xl font-extrabold sm:text-4xl">Book a free consultation</h1>
-      <p class="mx-auto mt-3 max-w-lg text-sm text-brand-muted">Tell us a bit about your plans and we'll get back to you within one business day.</p>
+      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Let's discuss your <span class="text-gradient">next step</span></h1>
+      <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-brand-muted">Share your goals and preferred destination. We'll use your information to understand which pathway may be relevant.</p>
     </div>
+  </section>
 
-    <div class="mt-12 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-      <!-- LEFT: office + contact -->
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
       <div class="space-y-5">
-        <div class="group overflow-hidden rounded-2xl border border-brand-line bg-white shadow-sm transition-shadow hover:shadow-lg">
-          <div class="h-44 overflow-hidden">
-            <img src={OFFICE_MOULVIBAZAR} alt="Moulvibazar office" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.parentElement.style.display='none'" />
-          </div>
-          <div class="p-5">
-            <h3 class="text-sm font-bold">Moulvibazar Regional Desk</h3>
-            <p class="mt-1 text-sm text-brand-muted">{settings.address || 'Moulvibazar, Sylhet Division, Bangladesh'}</p>
-            <a href={`mailto:${settings.email_moulvibazar || 'moulvibazar@signupvisa.com'}`} class="mt-2 inline-block text-sm font-semibold text-brand-accent-text">{settings.email_moulvibazar || 'moulvibazar@signupvisa.com'}</a>
+        <div class="rounded-3xl border border-brand-line bg-white p-6 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Contact</span>
+          <h2 class="mt-3 text-xl font-extrabold">SIGNUP Visa & Migration</h2>
+          <p class="mt-2 text-sm leading-6 text-brand-muted">{settings.address || 'Moulvibazar, Sylhet Division, Bangladesh'}</p>
+          <div class="mt-5 space-y-3 text-sm">
+            <a href="mailto:info@signupvisa.com" class="block font-semibold text-brand-accent-text">info@signupvisa.com</a>
+            <a href="mailto:support@signupvisa.com" class="block font-semibold text-brand-accent-text">support@signupvisa.com</a>
+            <a href="mailto:moulvibazar@signupvisa.com" class="block font-semibold text-brand-accent-text">moulvibazar@signupvisa.com</a>
           </div>
         </div>
-
-        <div class="rounded-2xl border border-brand-line bg-white p-5">
-          <h3 class="text-sm font-bold">General Contact</h3>
-          <div class="mt-3 space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-brand-muted">Support</span><a href={`mailto:${settings.email_support || 'support@signupvisa.com'}`} class="font-semibold text-brand-accent-text">{settings.email_support || 'support@signupvisa.com'}</a></div>
-            <div class="flex justify-between"><span class="text-brand-muted">General Info</span><a href={`mailto:${settings.email_info || 'info@signupvisa.com'}`} class="font-semibold text-brand-accent-text">{settings.email_info || 'info@signupvisa.com'}</a></div>
-            {settings.phone && <div class="flex justify-between"><span class="text-brand-muted">Phone</span><span class="font-semibold">{settings.phone}</span></div>}
-            {settings.whatsapp && <div class="flex justify-between"><span class="text-brand-muted">WhatsApp</span><span class="font-semibold">{settings.whatsapp}</span></div>}
+        <div class="rounded-3xl border border-brand-line bg-brand-surface p-6">
+          <h2 class="font-extrabold">What can we discuss?</h2>
+          <div class="mt-4 space-y-3">
+            {services.map((service) => <a href={`/services/${service.slug}`} class="flex items-center justify-between rounded-xl bg-white px-4 py-3 text-sm font-semibold transition hover:shadow-sm"><span>{service.icon} {service.name}</span><span>→</span></a>)}
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: form -->
-      <form id="lead-form" class="rounded-2xl border border-brand-line bg-white p-7 shadow-sm">
-        <div class="space-y-4">
-          <div>
-            <label class="mb-1.5 block text-sm font-semibold">Full name</label>
-            <input type="text" id="full_name" name="full_name" required class="w-full rounded-lg border border-brand-line px-3.5 py-2.5 text-sm outline-none focus:border-brand-blue" />
-          </div>
-          <div>
-            <label class="mb-1.5 block text-sm font-semibold">Phone / WhatsApp</label>
-            <input type="tel" id="phone" name="phone" required class="w-full rounded-lg border border-brand-line px-3.5 py-2.5 text-sm outline-none focus:border-brand-blue" />
-          </div>
-          <div>
-            <label class="mb-1.5 block text-sm font-semibold">Email (optional)</label>
-            <input type="email" id="email" name="email" class="w-full rounded-lg border border-brand-line px-3.5 py-2.5 text-sm outline-none focus:border-brand-blue" />
-          </div>
-          <div>
-            <label class="mb-1.5 block text-sm font-semibold">I'm interested in</label>
-            <select id="interested_service" name="interested_service" class="w-full rounded-lg border border-brand-line px-3.5 py-2.5 text-sm outline-none focus:border-brand-blue">
-              <option>Student Visa</option>
-              <option>Work Visa</option>
-              <option>Skilled Migration</option>
-              <option>Visit Visa</option>
-              <option>Not sure yet</option>
-            </select>
-          </div>
-          <div>
-            <label class="mb-1.5 block text-sm font-semibold">Message (optional)</label>
-            <textarea id="message" name="message" rows="4" class="w-full rounded-lg border border-brand-line px-3.5 py-2.5 text-sm outline-none focus:border-brand-blue"></textarea>
-          </div>
-          <button type="submit" class="w-full rounded-full bg-gradient-brand py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">Send Request</button>
-          <p id="form-status" class="text-sm"></p>
+      <form id="lead-form" class="rounded-3xl border border-brand-line bg-white p-6 shadow-sm sm:p-8">
+        <h2 class="text-2xl font-extrabold">Request a consultation</h2>
+        <p class="mt-2 text-sm text-brand-muted">Fields marked required help us respond to your enquiry.</p>
+        <div class="mt-7 grid gap-5 sm:grid-cols-2">
+          <div class="sm:col-span-2"><label for="full_name" class="mb-1.5 block text-sm font-semibold">Full name <span aria-hidden="true">*</span></label><input id="full_name" name="full_name" required autocomplete="name" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
+          <div><label for="phone" class="mb-1.5 block text-sm font-semibold">Phone / WhatsApp <span aria-hidden="true">*</span></label><input id="phone" name="phone" type="tel" required autocomplete="tel" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
+          <div><label for="email" class="mb-1.5 block text-sm font-semibold">Email</label><input id="email" name="email" type="email" autocomplete="email" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
+          <div><label for="interested_service" class="mb-1.5 block text-sm font-semibold">Service</label><select id="interested_service" name="interested_service" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue">{services.map((service) => <option>{service.name}</option>)}<option>Not sure yet</option></select></div>
+          <div><label for="destination" class="mb-1.5 block text-sm font-semibold">Preferred destination</label><input id="destination" name="destination" placeholder="e.g. Australia" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue" /></div>
+          <div class="sm:col-span-2"><label for="message" class="mb-1.5 block text-sm font-semibold">Tell us about your plans</label><textarea id="message" name="message" rows="5" class="w-full rounded-xl border border-brand-line px-4 py-3 text-sm outline-none focus:border-brand-blue"></textarea></div>
+          <div class="sm:col-span-2"><button type="submit" class="w-full rounded-full bg-gradient-brand py-3.5 text-sm font-bold text-white transition-transform hover:-translate-y-0.5">Send Consultation Request →</button><p id="form-status" class="mt-3 text-sm" role="status" aria-live="polite"></p></div>
         </div>
       </form>
     </div>
   </section>
 
+  <section class="border-t border-brand-line bg-brand-surface py-14">
+    <div class="mx-auto max-w-4xl px-5 text-center"><p class="text-xs leading-5 text-brand-muted">Visa and migration outcomes depend on the applicant's circumstances and the rules of the relevant immigration authority. A consultation does not guarantee approval.</p></div>
+  </section>
+
   <script>
-    const form = document.getElementById('lead-form') as HTMLFormElement;
-    const status = document.getElementById('form-status') as HTMLParagraphElement;
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const form = document.getElementById('lead-form') as HTMLFormElement | null;
+    const status = document.getElementById('form-status') as HTMLParagraphElement | null;
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status) return;
       status.textContent = 'Sending...';
-      status.className = 'text-sm text-brand-muted';
+      status.className = 'mt-3 text-sm text-brand-muted';
       const data = Object.fromEntries(new FormData(form).entries());
       try {
-        const res = await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error();
-        status.textContent = "Thanks — we've received your request and will contact you soon.";
-        status.className = 'text-sm text-brand-success-text font-semibold';
+        const response = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        if (!response.ok) throw new Error('Request failed');
+        status.textContent = 'Thanks — your consultation request has been received.';
+        status.className = 'mt-3 text-sm font-semibold text-brand-success-text';
         form.reset();
       } catch {
-        status.textContent = 'Something went wrong. Please try again or email us directly.';
-        status.className = 'text-sm text-red-600 font-semibold';
+        status.textContent = 'We could not send the request. Please email info@signupvisa.com directly.';
+        status.className = 'mt-3 text-sm font-semibold text-red-600';
       }
     });
   </script>
