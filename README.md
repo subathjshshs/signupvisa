@@ -1,52 +1,51 @@
-# Visa & Migration — Website
+# SIGNUP Visa & Migration — Website
 
-Astro site + admin panel, built for Cloudflare Pages, D1 (database), and R2 (image storage).
+Astro website for SIGNUP Visa & Migration, built for Cloudflare with static site content and D1 reserved for contact/lead submissions.
 
-## 1. One-time setup after cloning
+## 1. Install
 
 ```bash
 npm install
 ```
 
-## 2. Point this project at YOUR Cloudflare resources
-
-Open `wrangler.toml` and:
-1. Replace `database_id` with your real D1 database ID. Find it with:
-   ```bash
-   npx wrangler d1 list
-   ```
-2. Replace `bucket_name` under `[[r2_buckets]]` with your exact R2 bucket name.
-
-## 3. Load the database schema (one-time, or after schema.sql changes)
-
-```bash
-npx wrangler d1 execute signupvisa --remote --file=./schema.sql
-```
-
-## 4. Local development
+## 2. Local development
 
 ```bash
 npm run dev
 ```
-(Note: D1/R2 bindings only work locally via `wrangler pages dev`, not plain `astro dev`. To test bindings locally: `npm run build && npx wrangler pages dev ./dist`)
 
-## 5. Deploy
+For testing the Cloudflare runtime and D1 lead endpoint locally:
 
-Easiest path: connect this GitHub repo to a Cloudflare Pages project (Dashboard -> Workers & Pages -> Create -> Pages -> Connect to Git). Build command: `npm run build`. Output directory: `dist`.
+```bash
+npm run build && npx wrangler pages dev ./dist
+```
 
-Every `git push` after that auto-deploys.
+## 3. Deploy
 
-## 6. Required Pages secrets/variables (Settings -> Environment Variables)
+Connect this GitHub repository to the Cloudflare project and use:
 
-- `ADMIN_PASSWORD` - the password you'll use to log into `/admin`
-- `SESSION_SECRET` - any long random string, used to sign admin login sessions
-- `PUBLIC_MEDIA_BASE_URL` - (optional) a public URL for your R2 bucket (r2.dev URL or custom domain). If left unset, images are served through `/media/...` on this site instead - works fine, just slightly slower.
+- Build command: `npm run build`
+- Output directory: `dist`
 
-## 7. Bindings (Settings -> Functions -> Bindings) - needed in addition to wrangler.toml for the dashboard-deployed project
+A push to the configured deployment branch can trigger the deployment automatically.
 
-- D1 database binding: variable name `DB` -> your `signupvisa` database
-- R2 bucket binding: variable name `MEDIA` -> your bucket
+## 4. Content architecture
 
-## Admin panel
+Public site content is maintained in `src/data/`:
 
-Visit `/admin/login` and log in with `ADMIN_PASSWORD`. From there you can manage services, destinations, testimonials, blog posts, leads, and site-wide settings (logo, hero image, contact info) - no code required.
+- `site-config.ts` — company identity, contact emails and social links
+- `services.ts` — service catalogue
+- `destinations.ts` — destination catalogue
+- `testimonials.ts` — verified testimonials only
+
+The public site does not depend on D1 for ordinary content rendering.
+
+## 5. Lead storage
+
+The D1 `DB` binding is retained for `src/pages/api/lead.ts`, which stores contact/consultation enquiries in the `leads` table.
+
+Do not remove or reset the existing production database as part of normal site development.
+
+## 6. Blog
+
+The website blog is being integrated with the separate Blogger publication at `https://blog.signupvisa.com/`. New Blogger articles will be surfaced automatically on the website; the Blogger publication remains independent.
