@@ -1,31 +1,76 @@
 ---
-import Layout from "../../layouts/SiteLayout.astro";
-import { getSettings, getDestinationBySlug } from '../../lib/content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getDestination } from '../../data/destinations';
+import { getSiteSettings } from '../../data/site-config';
 
 const { slug } = Astro.params;
-import { env } from 'cloudflare:workers';
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
-const destination = db && slug ? await getDestinationBySlug(db, slug) : null;
+const destination = slug ? getDestination(slug) : undefined;
+const settings = getSiteSettings();
 
 if (!destination) {
   return Astro.redirect('/destinations');
 }
 ---
-<Layout title={destination.country_name} settings={settings}>
-  <section class="section">
-    <div class="container narrow">
-      <span class="eyebrow">Destination</span>
-      <h1>{destination.flag_emoji} {destination.country_name}</h1>
-      <p class="tagline">{destination.summary}</p>
-      {destination.image_url && <img src={destination.image_url} alt={destination.country_name} class="hero-img" />}
-      <div class="prose"><p>{destination.description}</p></div>
-      <a href="/contact" class="btn btn-primary" style="margin-top:24px;">Ask About This Destination</a>
-    </div>
-  </section>
-</Layout>
-<style>
-  .narrow { max-width: 760px; }
-  .tagline { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; }
-  .hero-img { border-radius: var(--radius); margin: 28px 0; aspect-ratio: 16/9; object-fit: cover; }
-</style>
+<SiteLayout
+  title={destination.name}
+  description={`${destination.summary} Explore guidance for study, work, migration and visit pathways with SIGNUP Visa & Migration.`}
+  settings={settings}
+>
+  <main>
+    <section class="relative overflow-hidden bg-brand-surface">
+      <div class="mx-auto max-w-7xl px-5 py-10 sm:py-14">
+        <a href="/destinations" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-muted transition hover:text-brand-blue">← All destinations</a>
+
+        <div class="mt-8 grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full border border-brand-accent-text/15 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-accent-text">
+              <span aria-hidden="true">{destination.flag}</span> Destination
+            </span>
+            <h1 class="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">{destination.name}</h1>
+            <p class="mt-5 text-lg leading-8 text-brand-muted">{destination.summary}</p>
+            <p class="mt-4 max-w-xl text-sm leading-7 text-brand-muted">{destination.description}</p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Discuss Your Options</a>
+              <a href="/services" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-bold text-brand-ink transition hover:border-brand-blue">View Services</a>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden rounded-3xl border border-brand-line bg-white shadow-xl shadow-brand-blue/5">
+            <img src={destination.imageUrl} alt={`${destination.name} destination`} class="aspect-[16/11] w-full object-cover" loading="eager" decoding="async" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-brand-line bg-white">
+      <div class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+        <div class="grid gap-8 md:grid-cols-3">
+          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
+            <span class="text-2xl" aria-hidden="true">🎓</span>
+            <h2 class="mt-4 text-lg font-extrabold">Study pathways</h2>
+            <p class="mt-2 text-sm leading-6 text-brand-muted">Explore education options, institution choices and application preparation based on your academic goals.</p>
+          </article>
+          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
+            <span class="text-2xl" aria-hidden="true">💼</span>
+            <h2 class="mt-4 text-lg font-extrabold">Work & migration</h2>
+            <p class="mt-2 text-sm leading-6 text-brand-muted">Understand work permit and skilled migration pathways that may be relevant to your profile.</p>
+          </article>
+          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
+            <span class="text-2xl" aria-hidden="true">✈️</span>
+            <h2 class="mt-4 text-lg font-extrabold">Visit options</h2>
+            <p class="mt-2 text-sm leading-6 text-brand-muted">Prepare for eligible short-stay travel pathways with clear documentation and application guidance.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-5 py-16 sm:py-24">
+      <div class="mx-auto max-w-5xl rounded-3xl bg-brand-surface p-8 text-center sm:p-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Your next step</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Want to explore {destination.name}?</h2>
+        <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">Share your profile and goals with our team. We’ll help you understand which pathway may fit your situation.</p>
+        <a href="/contact" class="mt-7 inline-flex rounded-full bg-gradient-brand px-8 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">Get Started →</a>
+      </div>
+    </section>
+  </main>
+</SiteLayout>
