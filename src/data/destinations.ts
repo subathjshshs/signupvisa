@@ -29,13 +29,13 @@ export const destinations: Destination[] = [
     imageUrl: DESTINATION_IMAGES.uk,
   },
   {
-    slug: 'usa',
+    slug: 'united-states',
     name: 'United States',
     flag: '🇺🇸',
-    summary: 'Explore opportunities to study and visit the USA.',
+    summary: 'Explore opportunities to study and visit the United States.',
     description:
       'Explore eligible study and visit pathways for the United States with structured application and documentation guidance.',
-    imageUrl: DESTINATION_IMAGES.usa,
+    imageUrl: DESTINATION_IMAGES['united-states'],
   },
   {
     slug: 'canada',
