@@ -10,66 +10,62 @@ const settings = getSiteSettings();
 if (!destination) {
   return Astro.redirect('/destinations');
 }
+
+const pathways = [
+  { icon: '🎓', title: 'Study', eyebrow: 'Education pathway', text: 'Explore courses, institutions, application preparation and the student visa requirements relevant to your plans.' },
+  { icon: '💼', title: 'Work', eyebrow: 'Employment pathway', text: 'Understand work permit options, eligibility considerations and the documents you may need to prepare.' },
+  { icon: '🌍', title: 'Skilled migration', eyebrow: 'Long-term pathway', text: 'Review migration routes that may relate to your occupation, qualifications and professional experience.' },
+  { icon: '✈️', title: 'Visit', eyebrow: 'Short-stay pathway', text: 'Prepare an eligible visitor application with a clear view of supporting documents and next steps.' },
+];
+
+const journey = [
+  ['01', 'Tell us your goal', 'Share your destination, purpose and current situation.'],
+  ['02', 'Review your options', 'Understand the pathways and requirements that may apply.'],
+  ['03', 'Prepare the application', 'Organise the relevant documents and application details.'],
+  ['04', 'Move to the next stage', 'Follow the process with clearer expectations and communication.'],
+];
 ---
+
 <SiteLayout
-  title={destination.name}
-  description={`${destination.summary} Explore guidance for study, work, migration and visit pathways with SIGNUP Visa & Migration.`}
+  title={`${destination.name} Visa & Migration`}
+  description={`${destination.summary} Explore study, work, skilled migration and visit pathways for ${destination.name} with SIGNUP Visa & Migration.`}
   settings={settings}
 >
   <main>
-    <section class="relative overflow-hidden bg-brand-surface">
-      <div class="mx-auto max-w-7xl px-5 py-10 sm:py-14">
-        <a href="/destinations" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-muted transition hover:text-brand-blue">← All destinations</a>
-
-        <div class="mt-8 grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+    <section class="relative overflow-hidden bg-brand-ink text-white">
+      <div class="absolute inset-0 opacity-40"><img src={destination.imageUrl} alt="" class="h-full w-full object-cover" /></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-ink via-brand-ink/90 to-brand-ink/45"></div>
+      <div class="relative mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+        <a href="/destinations" class="inline-flex items-center gap-2 text-sm font-semibold text-white/60 transition hover:text-white">← All destinations</a>
+        <div class="grid items-end gap-10 pt-12 lg:grid-cols-[1fr_.72fr] lg:pt-16">
           <div>
-            <span class="inline-flex items-center gap-2 rounded-full border border-brand-accent-text/15 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-accent-text">
-              <span aria-hidden="true">{destination.flag}</span> Destination
-            </span>
-            <h1 class="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">{destination.name}</h1>
-            <p class="mt-5 text-lg leading-8 text-brand-muted">{destination.summary}</p>
-            <p class="mt-4 max-w-xl text-sm leading-7 text-brand-muted">{destination.description}</p>
-            <div class="mt-8 flex flex-wrap gap-3">
-              <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Discuss Your Options</a>
-              <a href="/services" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-bold text-brand-ink transition hover:border-brand-blue">View Services</a>
-            </div>
+            <div class="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[.18em] text-white/55"><span class="text-2xl" aria-hidden="true">{destination.flag}</span><span>{destination.name}</span><span class="h-px w-8 bg-white/20"></span><span>Visa & Migration pathways</span></div>
+            <h1 class="mt-5 max-w-4xl text-4xl font-extrabold leading-[1.03] tracking-[-.035em] sm:text-6xl lg:text-7xl">Explore your <span class="text-white/55">{destination.name}</span> pathway.</h1>
+            <p class="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{destination.summary} Start with your goal, then explore the pathway that makes sense for your situation.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row"><a href="/contact" class="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5">Discuss my options <span class="ml-2">→</span></a><a href="/services" class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-white/10">View services</a></div>
           </div>
-
-          <div class="relative overflow-hidden rounded-3xl border border-brand-line bg-white shadow-xl shadow-brand-blue/5">
-            <img src={destination.imageUrl} alt={`${destination.name} destination`} class="aspect-[16/11] w-full object-cover" loading="eager" decoding="async" />
-          </div>
+          <div class="hidden rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-sm lg:block"><p class="text-xs font-bold uppercase tracking-[.16em] text-white/45">What we can help you explore</p><div class="mt-5 grid grid-cols-2 gap-3">{pathways.map((pathway) => (<span class="rounded-xl bg-white/[.07] px-4 py-3 text-sm font-semibold text-white/80">{pathway.icon} {pathway.title}</span>))}</div></div>
         </div>
       </div>
     </section>
 
-    <section class="border-y border-brand-line bg-white">
-      <div class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
-        <div class="grid gap-8 md:grid-cols-3">
-          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
-            <span class="text-2xl" aria-hidden="true">🎓</span>
-            <h2 class="mt-4 text-lg font-extrabold">Study pathways</h2>
-            <p class="mt-2 text-sm leading-6 text-brand-muted">Explore education options, institution choices and application preparation based on your academic goals.</p>
-          </article>
-          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
-            <span class="text-2xl" aria-hidden="true">💼</span>
-            <h2 class="mt-4 text-lg font-extrabold">Work & migration</h2>
-            <p class="mt-2 text-sm leading-6 text-brand-muted">Understand work permit and skilled migration pathways that may be relevant to your profile.</p>
-          </article>
-          <article class="rounded-2xl border border-brand-line bg-brand-surface p-6">
-            <span class="text-2xl" aria-hidden="true">✈️</span>
-            <h2 class="mt-4 text-lg font-extrabold">Visit options</h2>
-            <p class="mt-2 text-sm leading-6 text-brand-muted">Prepare for eligible short-stay travel pathways with clear documentation and application guidance.</p>
-          </article>
-        </div>
+    <section class="border-b border-brand-line bg-white">
+      <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{pathways.map((pathway, index) => (<a href="/contact" class="group rounded-2xl border border-brand-line bg-brand-surface p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-lg"><span class="text-xs font-bold uppercase tracking-[.15em] text-brand-accent-text">0{index + 1} · {pathway.eyebrow}</span><h2 class="mt-3 text-xl font-extrabold">{pathway.icon} {pathway.title}</h2><p class="mt-2 text-sm leading-6 text-brand-muted">{pathway.text}</p><span class="mt-5 inline-flex text-xs font-bold uppercase tracking-wider text-brand-blue">Discuss this route →</span></a>))}</div>
       </div>
     </section>
 
-    <section class="px-5 py-16 sm:py-24">
-      <div class="mx-auto max-w-5xl rounded-3xl bg-brand-surface p-8 text-center sm:p-12">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Your next step</span>
-        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Want to explore {destination.name}?</h2>
-        <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">Share your profile and goals with our team. We’ll help you understand which pathway may fit your situation.</p>
-        <a href="/contact" class="mt-7 inline-flex rounded-full bg-gradient-brand px-8 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">Get Started →</a>
+    <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
+      <div class="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
+        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">About the destination</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Start with the facts that matter to your pathway.</h2><p class="mt-5 text-sm leading-7 text-brand-muted sm:text-base">{destination.description}</p><a href="/contact" class="mt-7 inline-flex rounded-full bg-brand-ink px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5">Talk through my situation →</a></div>
+        <div class="rounded-[2rem] border border-brand-line bg-brand-surface p-7 sm:p-9"><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">A clear process</p><div class="mt-4 divide-y divide-brand-line">{journey.map(([number, title, text]) => (<div class="grid gap-4 py-6 first:pt-2 sm:grid-cols-[60px_1fr]"><span class="font-mono text-xs font-semibold text-brand-accent-text">{number}</span><div><h3 class="text-lg font-extrabold">{title}</h3><p class="mt-1.5 text-sm leading-6 text-brand-muted">{text}</p></div></div>))}</div></div>
+      </div>
+    </section>
+
+    <section class="px-5 pb-20 sm:px-8 sm:pb-24 lg:px-10">
+      <div class="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] border border-brand-line bg-white lg:grid-cols-[.9fr_1.1fr]">
+        <div class="relative min-h-[330px] bg-brand-surface"><img src={destination.imageUrl} alt={`${destination.name} travel destination`} class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" /><div class="absolute inset-0 bg-gradient-to-t from-brand-ink/60 to-transparent"></div><div class="absolute bottom-6 left-6 text-white"><span class="text-2xl" aria-hidden="true">{destination.flag}</span><p class="mt-1 text-sm font-bold">{destination.name}</p></div></div>
+        <div class="flex flex-col justify-center p-8 sm:p-12"><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-accent-text">Ready to explore?</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Your destination is only the beginning.</h2><p class="mt-4 max-w-xl text-sm leading-7 text-brand-muted">Tell us what you want to achieve in {destination.name}. We’ll help you understand the relevant service and the practical next step.</p><a href="/contact" class="mt-7 inline-flex w-fit rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5">Start my consultation →</a></div>
       </div>
     </section>
   </main>
