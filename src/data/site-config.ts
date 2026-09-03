@@ -1,0 +1,50 @@
+export const siteConfig = {
+  companyName: 'SIGNUP Visa & Migration',
+  shortName: 'SIGNUP',
+  tagline: 'Clear guidance for visas, migration and international opportunities.',
+  description:
+    'SIGNUP Visa & Migration provides guidance for student visas, work permits, skilled migration and visit visas for international destinations.',
+  emailSupport: 'support@signupvisa.com',
+  emailInfo: 'info@signupvisa.com',
+  emailAdmissions: 'admissions@signupvisa.com',
+  emailProcessing: 'processing@signupvisa.com',
+  emailMoulvibazar: 'moulvibazar@signupvisa.com',
+  emailMedia: 'media@signupvisa.com',
+  emailFly: 'fly@signupvisa.com',
+  emailPartners: 'partners@signupvisa.com',
+  emailCareers: 'careers@signupvisa.com',
+  emailAdmin: 'admin@signupvisa.com',
+  phone: '',
+  whatsapp: '',
+  address: '',
+  social: {
+    linkedin: 'https://www.linkedin.com/company/signup-visa-migration/',
+    facebook: 'https://www.facebook.com/signupvisa',
+    instagram: 'https://www.instagram.com/signupvisa/',
+  },
+} as const;
+
+export function getSiteSettings(): Record<string, string> {
+  return {
+    company_name: siteConfig.companyName,
+    tagline: siteConfig.tagline,
+    description: siteConfig.description,
+    email_support: siteConfig.emailSupport,
+    email_info: siteConfig.emailInfo,
+    email_admissions: siteConfig.emailAdmissions,
+    email_processing: siteConfig.emailProcessing,
+    email_moulvibazar: siteConfig.emailMoulvibazar,
+    email_media: siteConfig.emailMedia,
+    email_fly: siteConfig.emailFly,
+    email_partners: siteConfig.emailPartners,
+    email_careers: siteConfig.emailCareers,
+    email_admin: siteConfig.emailAdmin,
+    phone: siteConfig.phone,
+    whatsapp: siteConfig.whatsapp,
+    address: siteConfig.address,
+    linkedin_url: siteConfig.social.linkedin,
+    facebook_url: siteConfig.social.facebook,
+    instagram_url: siteConfig.social.instagram,
+    blog_url: 'https://blog.signupvisa.com/',
+  };
+}
