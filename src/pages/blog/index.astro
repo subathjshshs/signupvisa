@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import { getSettings, getPublishedPosts } from '../../lib/content';
 import { env } from 'cloudflare:workers';
-
 const db = (env as any).DB;
 const settings = db ? await getSettings(db) : {};
 const posts = db ? await getPublishedPosts(db) : [];

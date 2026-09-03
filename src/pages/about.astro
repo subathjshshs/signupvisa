@@ -1,23 +1,65 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 import { getSettings } from '../lib/content';
+import { TEAM_IMAGES } from '../lib/images';
 import { env } from 'cloudflare:workers';
 
 const db = (env as any).DB;
 const settings = db ? await getSettings(db) : {};
 ---
-<Layout title="About Us" settings={settings}>
-  <section class="section">
-    <div class="container narrow">
-      <span class="eyebrow">About Us</span>
-      <h1>{settings.company_name || 'Visa & Migration'}</h1>
-      <p class="lead">
-        {settings.about_text || 'We help students and professionals take the next step of their lives abroad — with honest advice, careful paperwork, and a team that treats every case like it matters, because it does.'}
-      </p>
+<SiteLayout title="About Us" settings={settings}>
+
+  <!-- INTRO -->
+  <section class="mx-auto max-w-4xl px-5 py-16 text-center sm:py-20">
+    <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">About Us</span>
+    <h1 class="mt-3 text-3xl font-extrabold sm:text-4xl">{settings.company_name || 'Signup Visa & Migration'}</h1>
+    <p class="mx-auto mt-4 max-w-2xl text-base text-brand-muted">
+      {settings.about_text || 'We help students and professionals take the next step of their lives abroad — with honest advice, careful paperwork, and a team that treats every case like it matters, because it does.'}
+    </p>
+  </section>
+
+  <!-- TEAM -->
+  <section class="border-y border-brand-line bg-white py-16 sm:py-20">
+    <div class="mx-auto max-w-5xl px-5">
+      <div class="text-center">
+        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Our Team</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">The people behind your journey</h2>
+      </div>
+      <div class="mt-10 flex justify-center">
+        <div class="group w-64 overflow-hidden rounded-2xl border border-brand-line bg-brand-surface text-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="h-56 overflow-hidden">
+            <img src={TEAM_IMAGES.tanvir} alt="Md Tanvir" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display='none'" />
+          </div>
+          <div class="p-4">
+            <div class="font-bold">Md Tanvir</div>
+            <div class="text-xs text-brand-muted">Director</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
-</Layout>
-<style>
-  .narrow { max-width: 720px; }
-  .lead { font-size: 1.1rem; color: var(--text-muted); margin-top: 16px; }
-</style>
+
+  <!-- CAREERS / PARTNERS / MEDIA -->
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+    <div class="grid gap-5 sm:grid-cols-3">
+      <div class="rounded-2xl border border-brand-line bg-white p-6 transition-shadow hover:shadow-lg">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-lg">💼</div>
+        <h3 class="mt-4 text-base font-bold">Careers</h3>
+        <p class="mt-1 text-sm text-brand-muted">Want to join our team? We're always looking for people who care about getting this right.</p>
+        <a href={`mailto:${settings.email_careers || 'careers@signupvisa.com'}`} class="mt-3 inline-block text-sm font-semibold text-brand-accent-text">{settings.email_careers || 'careers@signupvisa.com'}</a>
+      </div>
+      <div class="rounded-2xl border border-brand-line bg-white p-6 transition-shadow hover:shadow-lg">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-lg">🤝</div>
+        <h3 class="mt-4 text-base font-bold">Partnerships</h3>
+        <p class="mt-1 text-sm text-brand-muted">Universities, agencies, and institutions — let's talk about working together.</p>
+        <a href={`mailto:${settings.email_partners || 'partners@signupvisa.com'}`} class="mt-3 inline-block text-sm font-semibold text-brand-accent-text">{settings.email_partners || 'partners@signupvisa.com'}</a>
+      </div>
+      <div class="rounded-2xl border border-brand-line bg-white p-6 transition-shadow hover:shadow-lg">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-lg">📰</div>
+        <h3 class="mt-4 text-base font-bold">Media & Press</h3>
+        <p class="mt-1 text-sm text-brand-muted">Journalists and media inquiries — we're happy to talk.</p>
+        <a href={`mailto:${settings.email_media || 'media@signupvisa.com'}`} class="mt-3 inline-block text-sm font-semibold text-brand-accent-text">{settings.email_media || 'media@signupvisa.com'}</a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

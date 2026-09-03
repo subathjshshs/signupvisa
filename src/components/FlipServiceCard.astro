@@ -1,4 +1,6 @@
 ---
+import { SERVICE_IMAGES, resolveImage } from '../lib/images';
+
 interface Props {
   slug: string;
   name: string;
@@ -8,18 +10,23 @@ interface Props {
   comingSoon?: boolean;
 }
 const { slug, name, tagline = '', description = '', emoji = '🎓', comingSoon = false } = Astro.props;
+const image = resolveImage(SERVICE_IMAGES, slug) || resolveImage(SERVICE_IMAGES, name);
 ---
 <a href={comingSoon ? '#' : `/services/${slug}`} class="group [perspective:1200px]" aria-disabled={comingSoon}>
   <div class="flip-card relative h-56 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
     <!-- Front -->
-    <div class="absolute inset-0 flex flex-col justify-between rounded-2xl border border-brand-line bg-white p-6 [backface-visibility:hidden]">
-      <div class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-xl">{emoji}</div>
-      <div>
-        <h3 class="text-base font-bold text-brand-ink">
-          {name}
-          {comingSoon && <span class="ml-2 rounded-full bg-brand-warning-bg px-2 py-0.5 text-[10px] font-bold text-brand-warning-text">Coming Soon</span>}
-        </h3>
-        <p class="mt-1 text-sm text-brand-muted">{tagline}</p>
+    <div class="absolute inset-0 overflow-hidden rounded-2xl border border-brand-line [backface-visibility:hidden]">
+      {image && <img src={image} alt={name} class="absolute inset-0 h-full w-full object-cover" />}
+      <div class={`absolute inset-0 ${image ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent' : 'bg-white'}`}></div>
+      <div class="relative flex h-full flex-col justify-between p-6">
+        <div class={`grid h-11 w-11 place-items-center rounded-xl text-xl ${image ? 'bg-white/20 backdrop-blur' : 'bg-gradient-brand'}`}>{emoji}</div>
+        <div>
+          <h3 class={`text-base font-bold ${image ? 'text-white' : 'text-brand-ink'}`}>
+            {name}
+            {comingSoon && <span class="ml-2 rounded-full bg-brand-warning-bg px-2 py-0.5 text-[10px] font-bold text-brand-warning-text">Coming Soon</span>}
+          </h3>
+          <p class={`mt-1 text-sm ${image ? 'text-white/85' : 'text-brand-muted'}`}>{tagline}</p>
+        </div>
       </div>
     </div>
     <!-- Back -->

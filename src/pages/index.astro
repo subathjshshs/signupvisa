@@ -4,6 +4,7 @@ import GlowSearch from '../components/GlowSearch.astro';
 import CountryCard from '../components/CountryCard.astro';
 import FlipServiceCard from '../components/FlipServiceCard.astro';
 import { getSettings, getServices, getDestinations, getTestimonials } from '../lib/content';
+import { HERO_IMAGE, TRUST_BADGE } from '../lib/images';
 import { env } from 'cloudflare:workers';
 
 const db = (env as any).DB;
@@ -30,6 +31,9 @@ const steps = [
 
   <!-- HERO -->
   <section class="relative overflow-hidden bg-brand-surface pt-16 pb-10 sm:pt-24">
+    <div class="pointer-events-none absolute inset-0">
+      <img src={HERO_IMAGE} alt="" class="h-full w-full object-cover opacity-[0.14]" onerror="this.style.display='none'" />
+    </div>
     <div class="pointer-events-none absolute -top-32 left-1/2 h-96 w-[60rem] -translate-x-1/2 rounded-full bg-gradient-brand opacity-20 blur-3xl"></div>
     <div class="relative mx-auto max-w-3xl px-5 text-center">
       <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-accent-text/20 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand-accent-text">
@@ -52,14 +56,15 @@ const steps = [
       </div>
     </div>
 
-    <!-- STATS -->
-    <div class="relative mt-14 flex flex-wrap justify-center gap-x-10 gap-y-4">
+    <!-- STATS + TRUST BADGE -->
+    <div class="relative mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
       {stats.map(([num, label]) => (
         <div class="text-center">
           <div class="text-2xl font-extrabold text-gradient">{num}</div>
           <div class="text-xs text-brand-muted">{label}</div>
         </div>
       ))}
+      <img src={TRUST_BADGE} alt="Trusted consultancy badge" class="h-14 w-auto transition-transform duration-300 hover:scale-110" onerror="this.style.display='none'" />
     </div>
   </section>
 

@@ -6,9 +6,8 @@ const companyName = settings.company_name || 'Signup Visa & Migration';
 <header class="sticky top-0 z-50 border-b border-brand-line/70 bg-white/80 backdrop-blur-xl">
   <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5">
     <a href="/" class="flex items-center gap-2">
-      {settings.logo_url
-        ? <img src={settings.logo_url} alt={companyName} class="h-9" />
-        : <span class="text-xl font-extrabold text-gradient">{companyName}</span>}
+      <img src="/images/logo/logo-header.svg" alt={companyName} class="h-9 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
+      <span class="hidden text-xl font-extrabold text-gradient">{companyName}</span>
     </a>
 
     <nav class="hidden items-center gap-7 text-sm font-medium text-brand-ink/80 md:flex">
