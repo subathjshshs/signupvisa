@@ -24,10 +24,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
+      # The repository currently has no committed npm lockfile, so npm install
+      # is used instead of npm ci. Once a lockfile is intentionally added,
+      # this can be changed back to npm ci for fully locked dependency installs.
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build production site
         run: npm run build
