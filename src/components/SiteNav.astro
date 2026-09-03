@@ -17,37 +17,23 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
 <header class="sticky top-0 z-50 border-b border-brand-line/60 bg-white/90 backdrop-blur-xl">
   <div class="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 lg:px-6">
     <a href="/" class="group flex shrink-0 items-center" aria-label={`${companyName} home`}>
-      <img
-        src="/images/logo/logo-header.svg"
-        alt={companyName}
-        width="180"
-        height="48"
-        class="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.02]"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"
-      />
+      <img src="/images/logo/logo-header.svg" alt={companyName} width="180" height="48" class="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.02]" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
       <span class="hidden text-xl font-extrabold tracking-tight text-brand-ink">{companyName}</span>
     </a>
 
     <nav class="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
       <div class="group relative">
-        <button
-          type="button"
-          class={`flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive('/destinations') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}
-          aria-haspopup="true"
-        >
+        <button type="button" class={`flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive('/destinations') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`} aria-haspopup="true">
           Destinations
           <svg class="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
         </button>
         <div class="invisible absolute left-1/2 top-full w-60 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
           <div class="overflow-hidden rounded-2xl border border-brand-line bg-white p-2 shadow-2xl shadow-brand-ink/10">
             <a href="/destinations" class="mb-1 block rounded-xl px-4 py-3 text-sm font-bold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">All destinations</a>
-            {destinations.map((destination) => (
-              <a href={destination.href} class="block rounded-xl px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>
-            ))}
+            {destinations.map((destination) => <a href={destination.href} class="block rounded-xl px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>)}
           </div>
         </div>
       </div>
-
       <a href="/services" class={`rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive('/services') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>Services</a>
       <a href="/success-stories" class={`rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive('/success-stories') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>Success Stories</a>
       <a href="/blog" class={`rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive('/blog') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>Blog</a>
@@ -55,9 +41,7 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
     </nav>
 
     <div class="flex items-center gap-2.5">
-      <a href="/contact" class="hidden rounded-full bg-gradient-brand px-5 py-2.75 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-blue/25 sm:inline-flex">
-        Get Started
-      </a>
+      <a href="/contact" class="hidden rounded-full bg-gradient-brand px-5 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-blue/25 sm:inline-flex">Get Started</a>
       <button id="mobile-menu-btn" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-brand-line bg-white text-brand-ink transition-colors hover:bg-brand-accent-bg md:hidden" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
         <svg id="menu-open-icon" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
         <svg id="menu-close-icon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" /></svg>
@@ -69,9 +53,7 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
     <nav class="mx-auto max-w-7xl px-5 py-4" aria-label="Mobile navigation">
       <div class="grid gap-1">
         <a href="/destinations" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Destinations</a>
-        {destinations.map((destination) => (
-          <a href={destination.href} class="ml-3 rounded-xl px-4 py-2.5 text-sm text-brand-ink/65 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>
-        ))}
+        {destinations.map((destination) => <a href={destination.href} class="ml-3 rounded-xl px-4 py-2.5 text-sm text-brand-ink/65 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>)}
         <a href="/services" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Services</a>
         <a href="/success-stories" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Success Stories</a>
         <a href="/blog" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Blog</a>
