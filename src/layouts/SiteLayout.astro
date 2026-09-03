@@ -8,10 +8,30 @@ interface Props {
   title: string;
   description?: string;
   settings?: Record<string, string>;
+  noindex?: boolean;
 }
-const { title, description = 'Clear guidance for visas and migration pathways abroad.', settings = {} } = Astro.props;
-const companyName = settings.company_name || 'Signup Visa & Migration';
+const { title, description = 'Clear guidance for visas and migration pathways abroad.', settings = {}, noindex = false } = Astro.props;
+const companyName = settings.company_name || 'SIGNUP Visa & Migration';
+const siteUrl = 'https://signupvisa.com';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const isHome = Astro.url.pathname === '/';
+const ogImage = new URL('/images/logo/logo-header.svg', siteUrl).toString();
+const sameAs = [settings.facebook_url, settings.instagram_url, settings.linkedin_url].filter(Boolean);
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: companyName,
+  url: siteUrl,
+  logo: ogImage,
+  email: settings.email_info || 'info@signupvisa.com',
+  sameAs,
+};
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: companyName,
+  url: siteUrl,
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -23,11 +43,24 @@ const isHome = Astro.url.pathname === '/';
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{title} | {companyName}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large'} />
+    <meta name="theme-color" content="#071426" />
+    <meta property="og:site_name" content={companyName} />
     <meta property="og:title" content={`${title} | ${companyName}`} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={isHome ? 'website' : 'article'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${companyName} logo`} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} | ${companyName}`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
   </head>
   <body class="font-sans antialiased">
     <SiteNav settings={settings} />
