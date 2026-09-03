@@ -72,7 +72,7 @@ function parseXmlFeed(xml: string, limit: number): BloggerPost[] {
 
 export async function getBloggerPosts(limit = 6): Promise<BloggerPost[]> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
+  const timeout = setTimeout(() => controller.abort(), 2500);
 
   try {
     const response = await fetch(FEED_URL, {
