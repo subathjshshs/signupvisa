@@ -4,8 +4,9 @@ import CountryCard from '../components/CountryCard.astro';
 import FlipServiceCard from '../components/FlipServiceCard.astro';
 import { getSettings, getServices, getDestinations, getTestimonials } from '../lib/content';
 import { HERO_IMAGE, TRUST_BADGE } from '../lib/images';
+import { env } from 'cloudflare:workers';
 
-const db = Astro.locals.runtime?.env?.DB;
+const db = (env as any)?.DB;
 const settings = await getSettings(db);
 const services = await getServices(db);
 const destinations = await getDestinations(db);
