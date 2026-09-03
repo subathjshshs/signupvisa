@@ -5,78 +5,110 @@ import { destinations } from '../data/destinations';
 import { services } from '../data/services';
 
 const settings = getSiteSettings();
+const principles = [
+  { number: '01', title: 'Understand first', text: 'We begin with your goal, profile and preferred destination before discussing a pathway.' },
+  { number: '02', title: 'Prepare clearly', text: 'We help organise the information and supporting documents relevant to your application.' },
+  { number: '03', title: 'Move step by step', text: 'You get a clearer view of what comes next rather than navigating the process alone.' },
+];
 ---
-<SiteLayout title="About SIGNUP Visa & Migration" description="Learn about SIGNUP Visa & Migration, our approach, pathways and commitment to clear visa and migration guidance." settings={settings}>
-  <section class="relative overflow-hidden bg-brand-surface py-16 sm:py-24">
-    <div class="absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-brand-accent-bg blur-3xl"></div>
-    <div class="relative mx-auto max-w-5xl px-5 text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">About SIGNUP</span>
-      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">A clearer way to plan your <span class="text-gradient">journey abroad</span></h1>
-      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-brand-muted sm:text-lg">{settings.about_text || 'SIGNUP Visa & Migration helps applicants explore international study, work, migration and visit visa pathways with practical guidance and organised application support.'}</p>
+<SiteLayout title="About SIGNUP Visa & Migration" description="Learn about SIGNUP Visa & Migration, our approach and the international visa and migration pathways we support." settings={settings}>
+  <section class="relative overflow-hidden bg-brand-ink text-white">
+    <div class="absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-brand-blue/20 blur-3xl"></div>
+    <div class="relative mx-auto max-w-7xl px-5 py-20 sm:py-28">
+      <div class="max-w-4xl">
+        <span class="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[.16em] text-white/80">About SIGNUP</span>
+        <h1 class="mt-6 text-4xl font-black tracking-tight sm:text-6xl">A clearer way to plan your <span class="text-gradient">next move abroad.</span></h1>
+        <p class="mt-6 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">{settings.description}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/contact" class="rounded-full bg-white px-6 py-3 text-sm font-extrabold text-brand-ink transition hover:-translate-y-0.5">Start an enquiry →</a>
+          <a href="/services" class="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white">Explore services</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-    <div class="grid gap-6 md:grid-cols-2">
-      <div class="rounded-3xl border border-brand-line bg-white p-7 shadow-sm sm:p-9">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Our Vision</span>
-        <h2 class="mt-3 text-2xl font-extrabold">Make international opportunities easier to understand.</h2>
-        <p class="mt-4 text-sm leading-7 text-brand-muted">We aim to make complex visa and migration journeys easier to navigate by presenting information clearly and helping applicants prepare thoughtfully.</p>
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Who we are</span>
+        <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Guidance built around the person, not just the visa.</h2>
       </div>
-      <div class="rounded-3xl border border-brand-line bg-white p-7 shadow-sm sm:p-9">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Our Mission</span>
-        <h2 class="mt-3 text-2xl font-extrabold">Guide each applicant around their actual goals.</h2>
-        <p class="mt-4 text-sm leading-7 text-brand-muted">Our approach starts with the applicant's profile, destination and objective rather than a one-size-fits-all pathway.</p>
+      <div class="space-y-5 text-sm leading-7 text-brand-muted sm:text-base">
+        <p>{settings.about_text || 'SIGNUP Visa & Migration helps applicants explore international study, work, skilled migration and visit visa pathways with practical guidance and organised application support.'}</p>
+        <p>International applications can involve different eligibility rules, documents and timelines. Our role is to make the journey easier to understand, help you prepare responsibly and point you toward the next relevant step.</p>
       </div>
     </div>
   </section>
 
   <section class="border-y border-brand-line bg-white py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-5">
-      <div class="text-center">
-        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">What we do</span>
-        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">One place for multiple pathways</h2>
+    <div class="mx-auto max-w-7xl px-5">
+      <div class="max-w-2xl">
+        <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Our approach</span>
+        <h2 class="mt-3 text-3xl font-black tracking-tight">Simple structure. Clearer decisions.</h2>
       </div>
-      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {services.map((service) => (
-          <a href={`/services/${service.slug}`} class="rounded-2xl border border-brand-line bg-brand-surface p-6 transition-all hover:-translate-y-1 hover:bg-white hover:shadow-lg">
-            <span class="text-2xl" aria-hidden="true">{service.icon}</span>
-            <h3 class="mt-4 font-bold">{service.name}</h3>
-            <p class="mt-2 text-sm leading-6 text-brand-muted">{service.tagline}</p>
-          </a>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {principles.map((item) => (
+          <div class="rounded-3xl border border-brand-line bg-brand-surface p-7">
+            <span class="text-xs font-black tracking-[.16em] text-brand-accent-text">{item.number}</span>
+            <h3 class="mt-5 text-xl font-extrabold">{item.title}</h3>
+            <p class="mt-3 text-sm leading-6 text-brand-muted">{item.text}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-6xl px-5 py-16 sm:py-20">
-    <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
       <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Where we help</span>
-        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Explore our destination pathways</h2>
-        <p class="mt-4 text-sm leading-7 text-brand-muted">Explore destination information first, then speak with us about the pathway that matches your circumstances.</p>
-        <a href="/destinations" class="mt-6 inline-flex rounded-full bg-gradient-brand px-6 py-3 text-sm font-bold text-white">Explore Destinations →</a>
+        <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">What we support</span>
+        <h2 class="mt-3 text-3xl font-black tracking-tight">Four pathways. One clear starting point.</h2>
       </div>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {destinations.map((destination) => (
-          <a href={`/destinations/${destination.slug}`} class="rounded-2xl border border-brand-line bg-white p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-            <img src={destination.imageUrl} alt={destination.name} loading="lazy" class="mx-auto h-24 w-full rounded-xl object-cover" />
-            <div class="mt-3 text-sm font-bold">{destination.name}</div>
-          </a>
-        ))}
+      <a href="/services" class="text-sm font-bold text-brand-blue">View all services →</a>
+    </div>
+    <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {services.map((service) => (
+        <a href={`/services/${service.slug}`} class="group rounded-3xl border border-brand-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <span class="text-2xl" aria-hidden="true">{service.icon}</span>
+          <h3 class="mt-5 font-extrabold">{service.name}</h3>
+          <p class="mt-2 text-sm leading-6 text-brand-muted">{service.tagline}</p>
+          <span class="mt-5 inline-flex text-sm font-bold text-brand-blue">Explore <span class="ml-2 transition group-hover:translate-x-1">→</span></span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-y border-brand-line bg-brand-surface py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-5">
+      <div class="grid gap-8 lg:grid-cols-[.7fr_1.3fr] lg:items-center">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Destinations</span>
+          <h2 class="mt-3 text-3xl font-black tracking-tight">Explore where your pathway could lead.</h2>
+          <p class="mt-4 text-sm leading-7 text-brand-muted">Start by exploring the destinations we currently feature, then discuss your preferred route with our team.</p>
+          <a href="/destinations" class="mt-6 inline-flex rounded-full bg-gradient-brand px-6 py-3 text-sm font-bold text-white">Explore destinations →</a>
+        </div>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          {destinations.map((destination) => (
+            <a href={`/destinations/${destination.slug}`} class="group overflow-hidden rounded-2xl border border-brand-line bg-white shadow-sm">
+              <img src={destination.imageUrl} alt={destination.name} loading="lazy" class="h-28 w-full object-cover transition duration-500 group-hover:scale-105" />
+              <div class="p-4 text-sm font-extrabold">{destination.name}</div>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="border-t border-brand-line bg-brand-surface py-16">
+  <section class="bg-brand-ink py-16 text-white sm:py-20">
     <div class="mx-auto max-w-5xl px-5 text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Work with us</span>
-      <h2 class="mt-4 text-2xl font-extrabold sm:text-3xl">Partnerships, media & careers</h2>
-      <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">For institutional partnerships, media enquiries or career opportunities, contact the relevant SIGNUP team.</p>
-      <div class="mt-7 flex flex-wrap justify-center gap-3">
-        <a href="mailto:partners@signupvisa.com" class="rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold">partners@signupvisa.com</a>
-        <a href="mailto:media@signupvisa.com" class="rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold">media@signupvisa.com</a>
-        <a href="mailto:careers@signupvisa.com" class="rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold">careers@signupvisa.com</a>
+      <span class="text-xs font-bold uppercase tracking-[.16em] text-white/60">Work with SIGNUP</span>
+      <h2 class="mt-4 text-3xl font-black tracking-tight sm:text-4xl">Looking for a pathway, partnership or conversation?</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/65">For applicant enquiries, institutional partnerships, media or career opportunities, use the relevant contact channel.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/contact" class="rounded-full bg-white px-6 py-3 text-sm font-extrabold text-brand-ink">Contact SIGNUP →</a>
+        <a href="mailto:partners@signupvisa.com" class="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold">Partnerships</a>
+        <a href="mailto:media@signupvisa.com" class="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold">Media</a>
+        <a href="mailto:careers@signupvisa.com" class="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold">Careers</a>
       </div>
     </div>
   </section>
