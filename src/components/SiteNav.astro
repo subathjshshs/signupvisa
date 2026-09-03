@@ -14,26 +14,19 @@ const destinations = [
 
 const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
-<header class="sticky top-0 z-50 border-b border-brand-line/70 bg-white/95 supports-[backdrop-filter]:bg-white/85 supports-[backdrop-filter]:backdrop-blur-md">
-  <div class="mx-auto grid h-[72px] max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:px-5 lg:px-6">
-    <a href="/" class="group flex shrink-0 items-center" aria-label={`${companyName} home`}>
-      <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand text-white shadow-md shadow-brand-blue/15 transition-transform duration-200 group-hover:scale-[1.03]" aria-hidden="true">
-        <svg class="h-6 w-6" viewBox="0 0 32 32" fill="none">
-          <path d="M7 20.5C8.9 24.4 12.7 27 17.2 27c4.1 0 7.7-2.1 9.8-5.3" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-          <path d="M25.3 21.7 27 15.8l-5.8 1.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M25 11.5C23.1 7.6 19.3 5 14.8 5 10.7 5 7.1 7.1 5 10.3" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-          <path d="M6.7 10.3 5 16.2l5.8-1.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
+<header class="sticky top-0 z-50 border-b border-brand-line/70 bg-white/95 supports-[backdrop-filter]:bg-white/90 supports-[backdrop-filter]:backdrop-blur-md">
+  <div class="mx-auto grid h-[72px] max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-5 lg:px-6">
+    <a href="/" class="group flex min-w-0 items-center gap-3 justify-self-start" aria-label={`${companyName} home`}>
+      <img src="/images/logo/signupvisaweb logo.svg" width="44" height="44" decoding="async" fetchpriority="high" class="h-10 w-auto max-w-[180px] object-contain transition-transform duration-200 group-hover:scale-[1.02] sm:h-11" alt={companyName} />
       <span class="sr-only">{companyName}</span>
     </a>
 
-    <a href="/" class="justify-self-center text-center leading-tight" aria-label={`${companyName} home`}>
-      <span class="block text-[15px] font-extrabold tracking-[-0.02em] text-brand-ink sm:text-base">SIGNUP <span class="font-semibold text-brand-blue">Visa &amp; Migration</span></span>
-      <span class="hidden text-[9px] font-semibold uppercase tracking-[0.22em] text-brand-muted sm:block">Your next move, clearly guided</span>
+    <a href="/" class="justify-self-center text-center leading-none" aria-label={`${companyName} home`}>
+      <span class="block whitespace-nowrap text-[14px] font-extrabold tracking-[-0.025em] text-brand-ink sm:text-[15px] lg:text-base">SIGNUP <span class="font-semibold text-brand-blue">Visa &amp; Migration</span></span>
+      <span class="mt-1 hidden text-[8px] font-bold uppercase tracking-[0.24em] text-brand-muted sm:block">Visa • Migration • Global Pathways</span>
     </a>
 
-    <div class="flex items-center justify-end gap-2.5">
+    <div class="flex items-center justify-end gap-2.5 justify-self-end">
       <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary navigation">
         <div class="group relative">
           <button type="button" class={`flex items-center gap-1.5 rounded-full px-3.5 py-2.5 text-sm font-semibold transition-colors ${isActive('/destinations') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`} aria-haspopup="true">
