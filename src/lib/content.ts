@@ -20,6 +20,16 @@ export async function getServices(db?: any) {
   }
 }
 
+export async function getServiceBySlug(db?: any, slug?: string) {
+  try {
+    if (!db || !slug) return null;
+    const item = await db.prepare("SELECT * FROM services WHERE slug = ?").bind(slug).first();
+    return item || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getDestinations(db?: any) {
   try {
     if (!db) return [];
@@ -27,6 +37,16 @@ export async function getDestinations(db?: any) {
     return results || [];
   } catch {
     return [];
+  }
+}
+
+export async function getDestinationBySlug(db?: any, slug?: string) {
+  try {
+    if (!db || !slug) return null;
+    const item = await db.prepare("SELECT * FROM destinations WHERE slug = ?").bind(slug).first();
+    return item || null;
+  } catch {
+    return null;
   }
 }
 
