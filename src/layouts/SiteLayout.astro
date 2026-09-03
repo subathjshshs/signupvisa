@@ -2,7 +2,6 @@
 import '../styles/brand.css';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import BloggerLatest from '../components/BloggerLatest.astro';
 
 interface Props {
   title: string;
@@ -86,7 +85,6 @@ const webpageSchema = {
     <main>
       <slot />
     </main>
-    {isHome && <BloggerLatest limit={6} />}
     <SiteFooter settings={settings} />
   </body>
 </html>
