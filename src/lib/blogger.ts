@@ -28,10 +28,17 @@ function imageFromHtml(html = ''): string {
 }
 
 export async function getBloggerPosts(limit = 6): Promise<BloggerPost[]> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
   try {
     const response = await fetch(FEED_URL, {
       headers: { Accept: 'application/json' },
-    });
+      signal: controller.signal,
+      cache: 'force-cache',
+      // Cloudflare keeps the external Blogger response hot instead of fetching it on every page request.
+      cf: { cacheTtl: 300, cacheEverything: false },
+    } as RequestInit & { cf: { cacheTtl: number; cacheEverything: boolean } });
     if (!response.ok) return [];
 
     const data = await response.json();
@@ -54,5 +61,7 @@ export async function getBloggerPosts(limit = 6): Promise<BloggerPost[]> {
     });
   } catch {
     return [];
+  } finally {
+    clearTimeout(timeout);
   }
 }
