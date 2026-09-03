@@ -1,34 +1,98 @@
 ---
-import Layout from "../../layouts/SiteLayout.astro";
-import { getSettings, getServiceBySlug } from '../../lib/content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { services, getService } from '../../data/services';
+import { getSiteSettings } from '../../data/site-config';
 
-const { slug } = Astro.params;
-import { env } from 'cloudflare:workers';
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
-const service = db && slug ? await getServiceBySlug(db, slug) : null;
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service: pathService } = Astro.props;
+const service = pathService ?? getService(Astro.params.slug ?? '');
+const settings = getSiteSettings();
 
 if (!service) {
   return Astro.redirect('/services');
 }
+
+const serviceDetails: Record<string, { eyebrow: string; intro: string; points: string[]; note: string }> = {
+  'student-visa': {
+    eyebrow: 'Study Abroad',
+    intro: 'Build a study pathway around your academic background, destination and long-term goals.',
+    points: ['Profile and study-goal assessment', 'Course and institution guidance', 'Application and supporting-document preparation', 'Student visa application readiness'],
+    note: 'Requirements and eligibility vary by destination and applicant. We help you understand the process and prepare your application accordingly.',
+  },
+  'work-visa': {
+    eyebrow: 'Work Abroad',
+    intro: 'Explore work permit pathways and understand the requirements before preparing an application.',
+    points: ['Initial profile and pathway review', 'Eligibility and document guidance', 'Application preparation support', 'Clear next-step guidance'],
+    note: 'Work authorization rules differ significantly between countries, employers and visa categories. Eligibility must be assessed against the applicable rules.',
+  },
+  'skilled-migration': {
+    eyebrow: 'Migration',
+    intro: 'Understand skilled migration options based on your occupation, qualifications and experience.',
+    points: ['Profile and pathway assessment', 'Occupation and eligibility review', 'Documentation planning', 'Application preparation guidance'],
+    note: 'Migration programs can change and may involve points, nomination, occupation or other eligibility criteria. We help you identify the relevant requirements.',
+  },
+  'visit-visa': {
+    eyebrow: 'Short Stay',
+    intro: 'Prepare a clear, well-organised visit visa application for your intended destination.',
+    points: ['Travel-purpose assessment', 'Document checklist guidance', 'Application preparation', 'Pre-submission readiness review'],
+    note: 'A visa outcome is never guaranteed. Applications are assessed by the relevant immigration authority under its current rules.',
+  },
+};
+
+const detail = serviceDetails[service.slug];
 ---
-<Layout title={service.name} settings={settings}>
-  <section class="section">
-    <div class="container narrow">
-      <span class="eyebrow">Service</span>
-      <h1>{service.name}</h1>
-      <p class="tagline">{service.tagline}</p>
-      {service.image_url && <img src={service.image_url} alt={service.name} class="hero-img" />}
-      <div class="prose">
-        <p>{service.description}</p>
+<SiteLayout title={`${service.name} Services`} description={`${service.tagline} ${service.description}`} settings={settings}>
+  <section class="relative overflow-hidden bg-brand-surface py-14 sm:py-20">
+    <div class="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-brand-accent-bg blur-3xl"></div>
+    <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-2">
+      <div>
+        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">{detail?.eyebrow ?? 'Service'}</span>
+        <h1 class="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">{service.name}</h1>
+        <p class="mt-4 text-lg font-semibold text-brand-accent-text">{service.tagline}</p>
+        <p class="mt-5 max-w-xl text-base leading-7 text-brand-muted">{detail?.intro ?? service.description}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20">Book a Consultation →</a>
+          <a href="/services" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-bold text-brand-ink">View All Services</a>
+        </div>
       </div>
-      <a href="/contact" class="btn btn-primary" style="margin-top:24px;">Book a Free Consultation</a>
+      <div class="overflow-hidden rounded-3xl border border-brand-line bg-white shadow-xl">
+        <img src={service.imageUrl} alt={service.name} class="aspect-[16/10] w-full object-cover" />
+      </div>
     </div>
   </section>
-</Layout>
-<style>
-  .narrow { max-width: 760px; }
-  .tagline { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; }
-  .hero-img { border-radius: var(--radius); margin: 28px 0; aspect-ratio: 16/9; object-fit: cover; }
-  .prose p { font-size: 1.05rem; }
-</style>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">What we help with</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">A structured approach from first assessment to application</h2>
+        <p class="mt-4 max-w-2xl text-sm leading-7 text-brand-muted">{service.description}</p>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          {detail?.points.map((point, index) => (
+            <div class="rounded-2xl border border-brand-line bg-white p-5 shadow-sm">
+              <div class="grid h-8 w-8 place-items-center rounded-lg bg-brand-accent-bg text-sm font-extrabold text-brand-accent-text">{index + 1}</div>
+              <h3 class="mt-4 text-sm font-bold">{point}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+      <aside class="h-fit rounded-3xl border border-brand-line bg-brand-surface p-6 sm:p-8">
+        <span class="text-2xl" aria-hidden="true">{service.icon}</span>
+        <h2 class="mt-4 text-xl font-extrabold">Before you apply</h2>
+        <p class="mt-3 text-sm leading-6 text-brand-muted">{detail?.note}</p>
+        <a href="/contact" class="mt-6 inline-flex rounded-full bg-gradient-brand px-6 py-3 text-sm font-bold text-white">Discuss Your Profile</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-y border-brand-line bg-white py-14">
+    <div class="mx-auto max-w-5xl px-5 text-center">
+      <h2 class="text-2xl font-extrabold sm:text-3xl">Ready to explore {service.name.toLowerCase()}?</h2>
+      <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">Start with a consultation so your next steps are based on your actual profile and destination.</p>
+      <a href="/contact" class="mt-6 inline-flex rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white">Get Started →</a>
+    </div>
+  </section>
+</SiteLayout>
