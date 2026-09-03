@@ -11,74 +11,46 @@ const destinations = [
   { label: 'Canada', href: '/destinations/canada' },
   { label: 'Europe', href: '/destinations/europe' },
 ];
-
 const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
-<header class="sticky top-0 z-50 border-b border-brand-line/70 bg-white/95 supports-[backdrop-filter]:bg-white/90 supports-[backdrop-filter]:backdrop-blur-md">
-  <div class="mx-auto grid h-[72px] max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-5 lg:px-6">
-    <a href="/" class="group flex min-w-0 items-center gap-3 justify-self-start" aria-label={`${companyName} home`}>
-      <img src="/images/logo/signupvisaweb logo.svg" width="44" height="44" decoding="async" fetchpriority="high" class="h-10 w-auto max-w-[180px] object-contain transition-transform duration-200 group-hover:scale-[1.02] sm:h-11" alt={companyName} />
-      <span class="sr-only">{companyName}</span>
+<header class="sticky top-0 z-50 bg-white shadow-[0_1px_0_rgba(15,23,42,.08)]">
+  <div class="border-b border-white/10 bg-brand-ink text-white">
+    <div class="mx-auto flex min-h-9 max-w-7xl items-center justify-between gap-4 px-4 text-[11px] font-medium sm:px-5 sm:text-xs lg:px-6">
+      <span class="truncate text-white/75">Visa &amp; Migration Guidance • Study • Work • Visit • Migration</span>
+      <div class="hidden items-center gap-5 sm:flex"><a href="mailto:info@signupvisa.com" class="text-white/80 hover:text-white">info@signupvisa.com</a><a href="/contact" class="font-semibold text-white hover:text-white/80">Start your enquiry →</a></div>
+    </div>
+  </div>
+  <div class="mx-auto flex min-h-[86px] max-w-7xl items-center gap-5 px-4 sm:px-5 lg:px-6">
+    <a href="/" class="flex min-w-0 shrink-0 items-center" aria-label={`${companyName} home`}>
+      <img src="/images/logo/signupvisaweb logo.svg" alt={companyName} width="220" height="82" class="h-[60px] w-auto max-w-[230px] object-contain object-left sm:h-[68px]" decoding="async" fetchpriority="high" />
     </a>
-
-    <a href="/" class="justify-self-center text-center leading-none" aria-label={`${companyName} home`}>
-      <span class="block whitespace-nowrap text-[14px] font-extrabold tracking-[-0.025em] text-brand-ink sm:text-[15px] lg:text-base">SIGNUP <span class="font-semibold text-brand-blue">Visa &amp; Migration</span></span>
-      <span class="mt-1 hidden text-[8px] font-bold uppercase tracking-[0.24em] text-brand-muted sm:block">Visa • Migration • Global Pathways</span>
-    </a>
-
-    <div class="flex items-center justify-end gap-2.5 justify-self-end">
-      <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary navigation">
-        <div class="group relative">
-          <button type="button" class={`flex items-center gap-1.5 rounded-full px-3.5 py-2.5 text-sm font-semibold transition-colors ${isActive('/destinations') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`} aria-haspopup="true">
-            Destinations
-            <svg class="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
-          </button>
-          <div class="invisible absolute right-0 top-full w-60 pt-3 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-            <div class="overflow-hidden rounded-2xl border border-brand-line bg-white p-2 shadow-2xl shadow-brand-ink/10">
-              <a href="/destinations" class="mb-1 block rounded-xl px-4 py-3 text-sm font-bold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">All destinations</a>
-              {destinations.map((destination) => <a href={destination.href} class="block rounded-xl px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>)}
-            </div>
-          </div>
-        </div>
-        <a href="/services" class={`rounded-full px-3.5 py-2.5 text-sm font-semibold transition-colors ${isActive('/services') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>Services</a>
-        <a href="/blog" class={`rounded-full px-3.5 py-2.5 text-sm font-semibold transition-colors ${isActive('/blog') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>Blog</a>
-        <a href="/about" class={`rounded-full px-3.5 py-2.5 text-sm font-semibold transition-colors ${isActive('/about') ? 'bg-brand-accent-bg text-brand-blue' : 'text-brand-ink/75 hover:bg-brand-accent-bg hover:text-brand-blue'}`}>About</a>
-      </nav>
-
-      <a href="/contact" class="hidden rounded-full bg-gradient-brand px-4.5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition-transform duration-200 hover:-translate-y-0.5 sm:inline-flex">Get Started</a>
-      <button id="mobile-menu-btn" type="button" class="grid h-10 w-10 place-items-center rounded-xl border border-brand-line bg-white text-brand-ink transition-colors hover:bg-brand-accent-bg lg:hidden" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+    <div class="min-w-0 flex-1 text-center">
+      <a href="/" class="hidden lg:inline-block" aria-label={`${companyName} home`}>
+        <span class="block text-[clamp(1.1rem,1.8vw,1.65rem)] font-extrabold uppercase tracking-[.04em] text-brand-ink">SIGNUP <span class="text-brand-blue">Visa &amp; Migration</span></span>
+        <span class="mt-1 block text-[10px] font-semibold uppercase tracking-[.24em] text-brand-muted">Clear guidance. Global pathways.</span>
+      </a>
+    </div>
+    <div class="flex shrink-0 items-center gap-2.5">
+      <a href="/contact" class="hidden rounded-lg bg-brand-ink px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-blue sm:inline-flex lg:px-5 lg:text-sm">Book a Consultation <span class="ml-2">→</span></a>
+      <button id="mobile-menu-btn" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-brand-line bg-white text-brand-ink hover:border-brand-blue hover:text-brand-blue lg:hidden" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
         <svg id="menu-open-icon" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
         <svg id="menu-close-icon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" /></svg>
       </button>
     </div>
   </div>
-
-  <div id="mobile-menu" class="hidden border-t border-brand-line/70 bg-white lg:hidden">
-    <nav class="mx-auto max-w-7xl px-4 py-4 sm:px-5" aria-label="Mobile navigation">
-      <div class="grid gap-1">
-        <a href="/destinations" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Destinations</a>
-        {destinations.map((destination) => <a href={destination.href} class="ml-3 rounded-xl px-4 py-2.5 text-sm text-brand-ink/65 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>)}
-        <a href="/services" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Services</a>
-        <a href="/blog" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Blog</a>
-        <a href="/about" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">About</a>
-        <a href="/contact" class="mt-3 rounded-full bg-gradient-brand px-5 py-3 text-center font-bold text-white shadow-lg shadow-brand-blue/20">Get Started</a>
-      </div>
+  <div class="border-t border-brand-line/70">
+    <nav class="mx-auto hidden h-12 max-w-7xl items-center justify-center gap-1 px-5 lg:flex lg:px-6" aria-label="Primary navigation">
+      <a href="/" class={`rounded-md px-4 py-2 text-sm font-semibold ${isActive('/') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`}>Home</a>
+      <a href="/about" class={`rounded-md px-4 py-2 text-sm font-semibold ${isActive('/about') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`}>About</a>
+      <div class="group relative"><button type="button" class={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-semibold ${isActive('/services') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`} aria-haspopup="true">Services <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg></button><div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"><div class="overflow-hidden rounded-xl border border-brand-line bg-white p-2 shadow-2xl shadow-brand-ink/10"><a href="/services" class="mb-1 block rounded-lg px-4 py-3 text-sm font-bold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">All services</a><a href="/services/student-visa" class="block rounded-lg px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">Student Visa</a><a href="/services/work-visa" class="block rounded-lg px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">Work Permit</a><a href="/services/skilled-migration" class="block rounded-lg px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">Skilled Migration</a><a href="/services/visit-visa" class="block rounded-lg px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">Visit Visa</a></div></div></div>
+      <div class="group relative"><button type="button" class={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-semibold ${isActive('/destinations') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`} aria-haspopup="true">Destinations <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01-.02-1.06z" clip-rule="evenodd" /></svg></button><div class="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"><div class="overflow-hidden rounded-xl border border-brand-line bg-white p-2 shadow-2xl shadow-brand-ink/10"><a href="/destinations" class="mb-1 block rounded-lg px-4 py-3 text-sm font-bold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">All destinations</a>{destinations.map((destination) => <a href={destination.href} class="block rounded-lg px-4 py-2.5 text-sm text-brand-ink/70 hover:bg-brand-accent-bg hover:text-brand-blue">{destination.label}</a>)}</div></div></div>
+      <a href="/blog" class={`rounded-md px-4 py-2 text-sm font-semibold ${isActive('/blog') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`}>Blog</a>
+      <a href="/contact" class={`rounded-md px-4 py-2 text-sm font-semibold ${isActive('/contact') ? 'text-brand-blue' : 'text-brand-ink/75 hover:text-brand-blue'}`}>Contact</a>
     </nav>
   </div>
+  <div id="mobile-menu" class="hidden border-t border-brand-line bg-white lg:hidden"><nav class="mx-auto max-w-7xl px-4 py-4 sm:px-5" aria-label="Mobile navigation"><div class="grid gap-1"><a href="/" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Home</a><a href="/about" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">About</a><a href="/services" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Services</a><a href="/destinations" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Destinations</a><a href="/blog" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Blog</a><a href="/contact" class="rounded-xl px-4 py-3 font-semibold text-brand-ink hover:bg-brand-accent-bg hover:text-brand-blue">Contact</a><a href="/contact" class="mt-3 rounded-lg bg-brand-ink px-5 py-3 text-center font-bold text-white">Book a Consultation →</a></div></nav></div>
 </header>
-
 <script>
-  const button = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  const openIcon = document.getElementById('menu-open-icon');
-  const closeIcon = document.getElementById('menu-close-icon');
-
-  button?.addEventListener('click', () => {
-    const isOpen = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!isOpen));
-    button.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
-    menu?.classList.toggle('hidden', isOpen);
-    openIcon?.classList.toggle('hidden', !isOpen);
-    closeIcon?.classList.toggle('hidden', isOpen);
-  });
+  const button = document.getElementById('mobile-menu-btn'); const menu = document.getElementById('mobile-menu'); const openIcon = document.getElementById('menu-open-icon'); const closeIcon = document.getElementById('menu-close-icon');
+  button?.addEventListener('click', () => { const isOpen = button.getAttribute('aria-expanded') === 'true'; button.setAttribute('aria-expanded', String(!isOpen)); button.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu'); menu?.classList.toggle('hidden', isOpen); openIcon?.classList.toggle('hidden', !isOpen); closeIcon?.classList.toggle('hidden', isOpen); });
 </script>
