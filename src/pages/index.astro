@@ -4,13 +4,12 @@ import CountryCard from '../components/CountryCard.astro';
 import FlipServiceCard from '../components/FlipServiceCard.astro';
 import { getSettings, getServices, getDestinations, getTestimonials } from '../lib/content';
 import { HERO_IMAGE, TRUST_BADGE } from '../lib/images';
-import { env } from 'cloudflare:workers';
 
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
-const services = db ? await getServices(db) : [];
-const destinations = db ? await getDestinations(db) : [];
-const testimonials = db ? await getTestimonials(db, 3) : [];
+const db = Astro.locals.runtime?.env?.DB;
+const settings = await getSettings(db);
+const services = await getServices(db);
+const destinations = await getDestinations(db);
+const testimonials = await getTestimonials(db, 3);
 
 const stats = [
   ['500+', 'Students placed'],
@@ -45,11 +44,7 @@ const steps = [
         {settings.tagline || 'From university shortlisting to visa approval — we handle every step so you arrive confident and prepared.'}
       </p>
 
-      <div class="mt-8">
-        <GlowSearch />
-      </div>
-
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:-translate-y-0.5">Book Free Consultation</a>
         <a href="/destinations" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-semibold text-brand-ink transition-colors hover:border-brand-blue">Explore Countries</a>
       </div>
