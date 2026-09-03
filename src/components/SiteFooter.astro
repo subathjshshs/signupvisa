@@ -14,7 +14,6 @@ const footerLinks = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'Destinations', href: '/destinations' },
-  { label: 'Success Stories', href: '/success-stories' },
   { label: 'Blog', href: '/blog' },
   { label: 'About Us', href: '/about' },
   { label: 'Contact', href: '/contact' },
@@ -24,16 +23,18 @@ const footerLinks = [
   <div class="mx-auto max-w-7xl px-5 py-14 lg:px-6 lg:py-16">
     <div class="grid gap-12 lg:grid-cols-[1.35fr_1fr_1fr]">
       <div>
-        <a href="/" class="inline-flex items-center" aria-label={`${companyName} home`}>
-          <img src="/images/logo/logo-footer.svg" alt={companyName} width="180" height="48" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
-          <span class="hidden text-xl font-extrabold text-white">{companyName}</span>
+        <a href="/" class="inline-flex items-center gap-3" aria-label={`${companyName} home`}>
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-white text-brand-blue" aria-hidden="true">
+            <svg class="h-6 w-6" viewBox="0 0 32 32" fill="none"><path d="M7 20.5C8.9 24.4 12.7 27 17.2 27c4.1 0 7.7-2.1 9.8-5.3" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="m25.3 21.7 1.7-5.9-5.8 1.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 11.5C23.1 7.6 19.3 5 14.8 5 10.7 5 7.1 7.1 5 10.3" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="m6.7 10.3-1.7 5.9 5.8-1.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="text-lg font-extrabold tracking-tight text-white">SIGNUP <span class="font-semibold text-white/75">Visa &amp; Migration</span></span>
         </a>
         <p class="mt-5 max-w-sm text-sm leading-7 text-white/60">
           {settings.tagline || 'Visa and migration guidance for study, work, visits and long-term pathways abroad.'}
         </p>
         <div class="mt-6 flex items-center gap-2.5">
           {socials.map((social) => (
-            <a href={social.url} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white" aria-label={social.name}>
+            <a href={social.url} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 transition-all duration-200 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white" aria-label={social.name}>
               <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.icon}></svg>
             </a>
           ))}
