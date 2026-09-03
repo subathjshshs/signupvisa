@@ -1,25 +1,25 @@
-# build output
+# Build output
 dist/
-# generated types
-.astro/
 
-# dependencies
+# Generated Astro and Cloudflare state
+.astro/
+.wrangler/
+
+# Dependencies
 node_modules/
 
-# logs
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
+# Environment variables
 .env
-.env.production
+.env.*
+!.env.example
 
-# macOS-specific files
+# Local/editor files
 .DS_Store
-
-# jetbrains setting folder
 .idea/
-.wrangler/
+.vscode/*.local.json
