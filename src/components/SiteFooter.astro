@@ -3,20 +3,14 @@ interface Props { settings?: Record<string, string> }
 const { settings = {} } = Astro.props;
 const companyName = settings.company_name || 'SIGNUP Visa & Migration';
 const year = new Date().getFullYear();
-
 const socials = [
   { name: 'Facebook', url: settings.facebook_url || 'https://www.facebook.com/signupvisa', icon: '<path fill="currentColor" d="M13.5 8.25V6.75c0-.621.504-1.125 1.125-1.125h1.5V3h-2.25A3.375 3.375 0 0010.5 6.375v1.875H8.25v2.625h2.25V18h3v-7.125h2.25l.375-2.625H13.5z"/>' },
   { name: 'Instagram', url: settings.instagram_url || 'https://www.instagram.com/signupvisa/', icon: '<rect width="16" height="16" x="4" y="4" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.8" r="1" fill="currentColor"/>' },
   { name: 'LinkedIn', url: settings.linkedin_url || 'https://www.linkedin.com/company/signup-visa-migration/', icon: '<path fill="currentColor" d="M6.4 8.1H3.6V18h2.8V8.1zM5 3.5a1.65 1.65 0 100 3.3 1.65 1.65 0 000-3.3zM9 8.1H6.3V18H9v-5.2c0-1.37.26-2.7 1.96-2.7 1.67 0 1.69 1.57 1.69 2.79V18h2.75v-5.68c0-2.79-.6-4.93-3.84-4.93-1.55 0-2.59.85-3.01 1.66h-.04V8.1z"/>' },
 ];
-
 const footerLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Destinations', href: '/destinations' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: '/' }, { label: 'Services', href: '/services' }, { label: 'Destinations', href: '/destinations' },
+  { label: 'Blog', href: '/blog' }, { label: 'About Us', href: '/about' }, { label: 'Contact', href: '/contact' },
 ];
 ---
 <footer class="border-t border-brand-line bg-brand-ink text-white/70">
@@ -24,49 +18,16 @@ const footerLinks = [
     <div class="grid gap-12 lg:grid-cols-[1.35fr_1fr_1fr]">
       <div>
         <a href="/" class="inline-flex items-center gap-3" aria-label={`${companyName} home`}>
-          <img src="/images/logo/signupvisaweb logo.svg" width="48" height="48" loading="lazy" decoding="async" class="h-11 w-auto max-w-[190px] object-contain rounded-lg bg-white p-1.5" alt={companyName} />
-          <span class="text-lg font-extrabold tracking-tight text-white">SIGNUP <span class="font-semibold text-white/75">Visa &amp; Migration</span></span>
+          <span class="grid h-12 w-40 place-items-center overflow-hidden rounded-lg bg-white p-1.5">
+            <img src="/images/logo/signupvisaweb logo.svg" alt={companyName} width="200" height="80" class="h-full w-full object-contain" loading="lazy" decoding="async" />
+          </span>
         </a>
-        <p class="mt-5 max-w-sm text-sm leading-7 text-white/60">
-          {settings.tagline || 'Visa and migration guidance for study, work, visits and long-term pathways abroad.'}
-        </p>
-        <div class="mt-6 flex items-center gap-2.5">
-          {socials.map((social) => (
-            <a href={social.url} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 transition-all duration-200 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white" aria-label={social.name}>
-              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.icon}></svg>
-            </a>
-          ))}
-        </div>
+        <p class="mt-5 max-w-sm text-sm leading-7 text-white/60">{settings.tagline || 'Visa and migration guidance for study, work, visits and long-term pathways abroad.'}</p>
+        <div class="mt-6 flex items-center gap-2.5">{socials.map((social) => <a href={social.url} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 transition-all duration-200 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white" aria-label={social.name}><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.icon}></svg></a>)}</div>
       </div>
-
-      <div>
-        <h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Explore</h2>
-        <nav class="grid grid-cols-2 gap-x-5 gap-y-3 text-sm" aria-label="Footer navigation">
-          {footerLinks.map((link) => <a href={link.href} class="transition-colors hover:text-white">{link.label}</a>)}
-        </nav>
-      </div>
-
-      <div>
-        <h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Contact</h2>
-        <div class="space-y-4 text-sm">
-          <div>
-            <p class="mb-1 text-xs text-white/35">General enquiries</p>
-            <a href="mailto:info@signupvisa.com" class="text-white/80 transition-colors hover:text-white">info@signupvisa.com</a>
-          </div>
-          <div>
-            <p class="mb-1 text-xs text-white/35">Support</p>
-            <a href="mailto:support@signupvisa.com" class="text-white/80 transition-colors hover:text-white">support@signupvisa.com</a>
-          </div>
-          <a href="/contact" class="inline-flex items-center gap-2 pt-1 font-semibold text-white transition-colors hover:text-brand-accent">
-            Contact our team <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
+      <div><h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Explore</h2><nav class="grid grid-cols-2 gap-x-5 gap-y-3 text-sm" aria-label="Footer navigation">{footerLinks.map((link) => <a href={link.href} class="transition-colors hover:text-white">{link.label}</a>)}</nav></div>
+      <div><h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Contact</h2><div class="space-y-4 text-sm"><div><p class="mb-1 text-xs text-white/35">General enquiries</p><a href="mailto:info@signupvisa.com" class="text-white/80 hover:text-white">info@signupvisa.com</a></div><div><p class="mb-1 text-xs text-white/35">Support</p><a href="mailto:support@signupvisa.com" class="text-white/80 hover:text-white">support@signupvisa.com</a></div><a href="/contact" class="inline-flex items-center gap-2 pt-1 font-semibold text-white hover:text-brand-accent">Contact our team <span aria-hidden="true">→</span></a></div></div>
     </div>
-
-    <div class="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
-      <span>© {year} {companyName}. All rights reserved.</span>
-      <span>Professional visa &amp; migration guidance.</span>
-    </div>
+    <div class="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between"><span>© {year} {companyName}. All rights reserved.</span><span>Professional visa &amp; migration guidance.</span></div>
   </div>
 </footer>
