@@ -3,6 +3,8 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import { services, getService } from '../../data/services';
 import { getSiteSettings } from '../../data/site-config';
 
+export const prerender = true;
+
 export function getStaticPaths() {
   return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
 }
@@ -15,29 +17,33 @@ if (!service) {
   return Astro.redirect('/services');
 }
 
-const serviceDetails: Record<string, { eyebrow: string; intro: string; points: string[]; note: string }> = {
+const serviceDetails: Record<string, { eyebrow: string; intro: string; points: string[]; questions: string[]; note: string }> = {
   'student-visa': {
     eyebrow: 'Study Abroad',
-    intro: 'Build a study pathway around your academic background, destination and long-term goals.',
+    intro: 'Build a study pathway around your academic background, preferred destination and long-term goals.',
     points: ['Profile and study-goal assessment', 'Course and institution guidance', 'Application and supporting-document preparation', 'Student visa application readiness'],
-    note: 'Requirements and eligibility vary by destination and applicant. We help you understand the process and prepare your application accordingly.',
+    questions: ['What do you want to study?', 'Which destination are you considering?', 'What is your academic background?', 'When do you want to start?'],
+    note: 'Admission and visa requirements vary by institution, destination and applicant. We help you understand the applicable process and prepare accordingly.',
   },
   'work-visa': {
     eyebrow: 'Work Abroad',
     intro: 'Explore work permit pathways and understand the requirements before preparing an application.',
     points: ['Initial profile and pathway review', 'Eligibility and document guidance', 'Application preparation support', 'Clear next-step guidance'],
-    note: 'Work authorization rules differ significantly between countries, employers and visa categories. Eligibility must be assessed against the applicable rules.',
+    questions: ['What is your occupation?', 'How much relevant experience do you have?', 'Which destination interests you?', 'Do you already have an employment offer?'],
+    note: 'Work authorization rules differ between countries, employers and visa categories. Eligibility must be assessed against the applicable rules.',
   },
   'skilled-migration': {
     eyebrow: 'Migration',
-    intro: 'Understand skilled migration options based on your occupation, qualifications and experience.',
+    intro: 'Understand skilled migration options based on your occupation, qualifications and professional experience.',
     points: ['Profile and pathway assessment', 'Occupation and eligibility review', 'Documentation planning', 'Application preparation guidance'],
-    note: 'Migration programs can change and may involve points, nomination, occupation or other eligibility criteria. We help you identify the relevant requirements.',
+    questions: ['What is your occupation?', 'What qualifications do you hold?', 'How much skilled experience do you have?', 'Which migration destination are you considering?'],
+    note: 'Migration programs can involve points, nomination, occupation and other eligibility criteria, and program settings can change. We help you identify the requirements relevant to your profile.',
   },
   'visit-visa': {
     eyebrow: 'Short Stay',
-    intro: 'Prepare a clear, well-organised visit visa application for your intended destination.',
+    intro: 'Prepare a clear, well-organised visit visa application for your intended destination and purpose of travel.',
     points: ['Travel-purpose assessment', 'Document checklist guidance', 'Application preparation', 'Pre-submission readiness review'],
+    questions: ['What is the purpose of your visit?', 'Which destination do you plan to visit?', 'How long do you intend to stay?', 'Who will support the trip financially?'],
     note: 'A visa outcome is never guaranteed. Applications are assessed by the relevant immigration authority under its current rules.',
   },
 };
@@ -45,54 +51,83 @@ const serviceDetails: Record<string, { eyebrow: string; intro: string; points: s
 const detail = serviceDetails[service.slug];
 ---
 <SiteLayout title={`${service.name} Services`} description={`${service.tagline} ${service.description}`} settings={settings}>
-  <section class="relative overflow-hidden bg-brand-surface py-14 sm:py-20">
-    <div class="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-brand-accent-bg blur-3xl"></div>
-    <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-2">
-      <div>
-        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">{detail?.eyebrow ?? 'Service'}</span>
-        <h1 class="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">{service.name}</h1>
-        <p class="mt-4 text-lg font-semibold text-brand-accent-text">{service.tagline}</p>
-        <p class="mt-5 max-w-xl text-base leading-7 text-brand-muted">{detail?.intro ?? service.description}</p>
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white shadow-lg shadow-brand-blue/20">Book a Consultation →</a>
-          <a href="/services" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-bold text-brand-ink">View All Services</a>
-        </div>
-      </div>
-      <div class="overflow-hidden rounded-3xl border border-brand-line bg-white shadow-xl">
-        <img src={service.imageUrl} alt={service.name} class="aspect-[16/10] w-full object-cover" />
-      </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
-    <div class="grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
-      <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">What we help with</span>
-        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">A structured approach from first assessment to application</h2>
-        <p class="mt-4 max-w-2xl text-sm leading-7 text-brand-muted">{service.description}</p>
-        <div class="mt-8 grid gap-4 sm:grid-cols-2">
-          {detail?.points.map((point, index) => (
-            <div class="rounded-2xl border border-brand-line bg-white p-5 shadow-sm">
-              <div class="grid h-8 w-8 place-items-center rounded-lg bg-brand-accent-bg text-sm font-extrabold text-brand-accent-text">{index + 1}</div>
-              <h3 class="mt-4 text-sm font-bold">{point}</h3>
+  <main>
+    <section class="relative overflow-hidden bg-brand-surface">
+      <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_85%_15%,rgba(26,86,219,0.14),transparent_36%),radial-gradient(circle_at_5%_85%,rgba(124,58,237,0.10),transparent_30%)]"></div>
+      <div class="relative mx-auto max-w-7xl px-5 py-10 sm:py-14">
+        <a href="/services" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-muted transition hover:text-brand-blue">← All services</a>
+        <div class="mt-8 grid items-center gap-10 lg:grid-cols-[.95fr_1.05fr] lg:gap-16">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full border border-brand-accent-text/15 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-accent-text"><span aria-hidden="true">{service.icon}</span>{detail?.eyebrow ?? 'Service'}</span>
+            <h1 class="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">{service.name}</h1>
+            <p class="mt-4 text-lg font-semibold text-brand-accent-text">{service.tagline}</p>
+            <p class="mt-5 max-w-xl text-base leading-7 text-brand-muted">{detail?.intro ?? service.description}</p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Book a Consultation →</a>
+              <a href="#process" class="rounded-full border border-brand-line bg-white px-7 py-3.5 text-sm font-bold text-brand-ink transition hover:border-brand-blue">How it works</a>
             </div>
-          ))}
+          </div>
+          <div class="relative overflow-hidden rounded-[2rem] border border-white bg-white shadow-xl shadow-brand-blue/10">
+            <img src={service.imageUrl} alt={service.name} class="aspect-[16/10] w-full object-cover" loading="eager" decoding="async" />
+            <div class="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/20 bg-black/35 p-4 text-white backdrop-blur-sm">
+              <p class="text-xs font-bold uppercase tracking-wider text-white/70">Your pathway starts here</p>
+              <p class="mt-1 text-sm font-semibold">Understand the route. Prepare with clarity. Take the next step.</p>
+            </div>
+          </div>
         </div>
       </div>
-      <aside class="h-fit rounded-3xl border border-brand-line bg-brand-surface p-6 sm:p-8">
-        <span class="text-2xl" aria-hidden="true">{service.icon}</span>
-        <h2 class="mt-4 text-xl font-extrabold">Before you apply</h2>
-        <p class="mt-3 text-sm leading-6 text-brand-muted">{detail?.note}</p>
-        <a href="/contact" class="mt-6 inline-flex rounded-full bg-gradient-brand px-6 py-3 text-sm font-bold text-white">Discuss Your Profile</a>
-      </aside>
-    </div>
-  </section>
+    </section>
 
-  <section class="border-y border-brand-line bg-white py-14">
-    <div class="mx-auto max-w-5xl px-5 text-center">
-      <h2 class="text-2xl font-extrabold sm:text-3xl">Ready to explore {service.name.toLowerCase()}?</h2>
-      <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-brand-muted">Start with a consultation so your next steps are based on your actual profile and destination.</p>
-      <a href="/contact" class="mt-6 inline-flex rounded-full bg-gradient-brand px-7 py-3 text-sm font-bold text-white">Get Started →</a>
-    </div>
-  </section>
+    <section id="process" class="border-y border-brand-line bg-white">
+      <div class="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+        <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">What we help with</span>
+            <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">A structured approach to your application.</h2>
+            <p class="mt-4 text-sm leading-7 text-brand-muted">{service.description}</p>
+            <div class="mt-7 rounded-2xl bg-brand-surface p-5">
+              <p class="text-sm font-bold">Good preparation starts with the right questions.</p>
+              <p class="mt-2 text-sm leading-6 text-brand-muted">Before preparing documents, we look at the purpose of your application and the pathway you are considering.</p>
+            </div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            {detail?.points.map((point, index) => (
+              <article class="rounded-2xl border border-brand-line bg-brand-surface p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between"><span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-accent-bg text-sm font-extrabold text-brand-accent-text">0{index + 1}</span><span class="text-brand-blue" aria-hidden="true">↗</span></div>
+                <h3 class="mt-5 text-sm font-extrabold leading-5">{point}</h3>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <div class="max-w-2xl">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-accent-text">Prepare for your consultation</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">The details that help us understand your situation.</h2>
+      </div>
+      <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {detail?.questions.map((question, index) => (
+          <div class="rounded-2xl border border-brand-line bg-white p-5 shadow-sm"><span class="text-xs font-bold text-brand-accent-text">0{index + 1}</span><p class="mt-3 text-sm font-bold leading-6">{question}</p></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="px-5 pb-16 sm:pb-24">
+      <div class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-brand-ink px-7 py-10 text-white sm:px-12 sm:py-14">
+        <div class="grid gap-8 lg:grid-cols-[1fr_.75fr] lg:items-center">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-white/60">Before you apply</span>
+            <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Start with your actual profile, not a generic checklist.</h2>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-white/70">{detail?.note}</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 p-5 ring-1 ring-white/10">
+            <p class="text-sm font-bold">Ready to discuss {service.name.toLowerCase()}?</p>
+            <a href="/contact" class="mt-4 inline-flex rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5">Start Your Enquiry →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </SiteLayout>
