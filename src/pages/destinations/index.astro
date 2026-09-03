@@ -1,153 +1,62 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
-import CountryCard from "../../components/CountryCard.astro";
-import FlipServiceCard from "../../components/FlipServiceCard.astro";
-import { getSettings, getServices, getDestinations, getTestimonials } from "../../lib/content";
-import { HERO_IMAGE, TRUST_BADGE } from "../../lib/images";
-import { env } from 'cloudflare:workers';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { destinations } from '../../data/destinations';
+import { getSiteSettings } from '../../data/site-config';
 
-const db = (env as any).DB;
-const settings = db ? await getSettings(db) : {};
-const services = db ? await getServices(db) : [];
-const destinations = db ? await getDestinations(db) : [];
-const testimonials = db ? await getTestimonials(db, 3) : [];
-
-const stats = [
-  ['500+', 'Students placed'],
-  ['98%', 'Visa success rate'],
-  ['12+', 'Countries'],
-  ['5★', 'Student rating'],
-];
-
-const steps = [
-  ['01', 'Free Consultation', 'We assess your profile, goals, and budget.'],
-  ['02', 'University Selection', 'Shortlist the best matched universities.'],
-  ['03', 'Visa Application', 'Full documentation prep and visa lodgement.'],
-  ['04', 'Departure Ready', 'Pre-departure briefing — and off you go.'],
-];
+const settings = getSiteSettings();
 ---
-<SiteLayout title="Home" settings={settings}>
-
-  <!-- HERO -->
-  <section class="relative overflow-hidden bg-brand-surface pt-16 pb-10 sm:pt-24">
-    <div class="pointer-events-none absolute inset-0">
-      <img src={HERO_IMAGE} alt="" class="h-full w-full object-cover opacity-[0.14]" onerror="this.style.display='none'" />
-    </div>
-    <div class="pointer-events-none absolute -top-32 left-1/2 h-96 w-[60rem] -translate-x-1/2 rounded-full bg-gradient-brand opacity-20 blur-3xl"></div>
-    <div class="relative mx-auto max-w-3xl px-5 text-center">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-accent-text/20 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand-accent-text">
-        🎓 Bangladesh's trusted study abroad partner
-      </span>
-      <h1 class="mt-6 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-        Your journey to <span class="text-gradient">study abroad</span> starts here
-      </h1>
-      <p class="mx-auto mt-5 max-w-xl text-base text-brand-muted sm:text-lg">
-        {settings.tagline || 'From university shortlisting to visa approval — we handle every step so you arrive confident and prepared.'}
-      </p>
-
-      <div class="mt-8">
-        <GlowSearch />
-      </div>
-
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-        <a href="/contact" class="rounded-full bg-gradient-brand px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:-translate-y-0.5">Book Free Consultation</a>
-        <a href="/destinations" class="rounded-full border border-brand-line bg-white px-7 py-3 text-sm font-semibold text-brand-ink transition-colors hover:border-brand-blue">Explore Countries</a>
-      </div>
-    </div>
-
-    <!-- STATS + TRUST BADGE -->
-    <div class="relative mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
-      {stats.map(([num, label]) => (
-        <div class="text-center">
-          <div class="text-2xl font-extrabold text-gradient">{num}</div>
-          <div class="text-xs text-brand-muted">{label}</div>
-        </div>
-      ))}
-      <img src={TRUST_BADGE} alt="Trusted consultancy badge" class="h-14 w-auto transition-transform duration-300 hover:scale-110" onerror="this.style.display='none'" />
-    </div>
-  </section>
-
-  <!-- DESTINATIONS -->
-  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
-    <div class="text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Destinations</span>
-      <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Where will you study?</h2>
-      <p class="mx-auto mt-2 max-w-md text-sm text-brand-muted">Choose from top study destinations — hover each card to explore</p>
-    </div>
-
-    {destinations.length > 0 ? (
-      <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {destinations.map((d: any) => (
-          <CountryCard slug={d.slug} name={d.country_name} flag={d.flag_emoji} summary={d.summary} imageUrl={d.image_url} />
-        ))}
-      </div>
-    ) : (
-      <p class="mt-10 text-center text-sm text-brand-muted">Add destinations from the admin panel — they'll appear here automatically.</p>
-    )}
-  </section>
-
-  <!-- PROCESS -->
-  <section class="border-y border-brand-line bg-white py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-5">
-      <div class="text-center">
-        <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">How it works</span>
-        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">4 steps to your student visa</h2>
-      </div>
-      <div class="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
-        {steps.map(([num, title, desc], i) => (
-          <div class="relative text-center">
-            <div class="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-gradient-brand text-lg font-bold text-white">{i + 1}</div>
-            <span class="mt-3 block font-mono text-[11px] font-semibold text-brand-accent-text">STEP {num}</span>
-            <h3 class="mt-1 text-sm font-bold">{title}</h3>
-            <p class="mt-1 text-xs text-brand-muted">{desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20">
-    <div class="text-center">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Services</span>
-      <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">What we offer</h2>
-    </div>
-    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
-      {services.length > 0 ? services.map((s: any) => (
-        <FlipServiceCard slug={s.slug} name={s.name} tagline={s.tagline} description={s.description} />
-      )) : (
-        <p class="text-center text-sm text-brand-muted sm:col-span-2">Add services from the admin panel — they'll appear here automatically.</p>
-      )}
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  {testimonials.length > 0 && (
-    <section class="bg-white py-16 sm:py-20 border-t border-brand-line">
-      <div class="mx-auto max-w-6xl px-5">
-        <div class="text-center">
-          <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Success Stories</span>
-          <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">What our students say</h2>
-        </div>
-        <div class="mt-10 grid gap-5 sm:grid-cols-3">
-          {testimonials.map((t: any) => (
-            <div class="rounded-2xl border border-brand-line bg-brand-surface p-6">
-              <p class="text-sm text-brand-ink">"{t.quote}"</p>
-              <div class="mt-4 text-sm font-bold">{t.student_name}</div>
-              {t.destination && <div class="text-xs text-brand-muted">{t.destination}</div>}
-            </div>
-          ))}
+<SiteLayout
+  title="Destinations"
+  description="Explore study, work, migration and visit pathways across Australia, the UK, USA, Canada and Europe."
+  settings={settings}
+>
+  <main>
+    <section class="relative overflow-hidden border-b border-brand-line bg-brand-surface">
+      <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_right,rgba(26,86,219,0.12),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(124,58,237,0.10),transparent_38%)]"></div>
+      <div class="relative mx-auto max-w-7xl px-5 py-20 sm:py-28">
+        <div class="max-w-3xl">
+          <span class="inline-flex rounded-full border border-brand-accent-text/15 bg-brand-accent-bg px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-accent-text">Global destinations</span>
+          <h1 class="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">Choose your <span class="text-gradient">next destination.</span></h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-brand-muted sm:text-lg">Explore international pathways for study, work, migration and visits. Start with the destination that matches your goals, then speak with our team about your options.</p>
         </div>
       </div>
     </section>
-  )}
 
-  <!-- CTA -->
-  <section class="px-5 py-16">
-    <div class="mx-auto max-w-5xl rounded-3xl bg-gradient-brand px-8 py-14 text-center text-white">
-      <h2 class="text-2xl font-extrabold sm:text-3xl">Ready to start your journey?</h2>
-      <p class="mx-auto mt-2 max-w-md text-sm text-white/80">Get a free consultation today — no commitment, just clarity on your next step abroad.</p>
-      <a href="/contact" class="mt-6 inline-block rounded-full bg-white px-8 py-3 text-sm font-bold text-brand-blue">Book Free Consultation →</a>
-    </div>
-  </section>
+    <section class="mx-auto max-w-7xl px-5 py-16 sm:py-24">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {destinations.map((destination, index) => (
+          <a
+            href={`/destinations/${destination.slug}`}
+            class={`group relative overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl ${index === 0 ? 'lg:col-span-2' : ''}`}
+          >
+            <div class="relative aspect-[16/10] overflow-hidden bg-brand-surface">
+              <img src={destination.imageUrl} alt={destination.name} loading={index > 1 ? 'lazy' : 'eager'} decoding="async" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white">
+                <div>
+                  <span class="text-2xl" aria-hidden="true">{destination.flag}</span>
+                  <h2 class="mt-1 text-2xl font-extrabold sm:text-3xl">{destination.name}</h2>
+                </div>
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-xl backdrop-blur transition group-hover:bg-white group-hover:text-brand-blue" aria-hidden="true">→</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-sm font-semibold text-brand-ink">{destination.summary}</p>
+              <p class="mt-2 text-sm leading-6 text-brand-muted">{destination.description}</p>
+              <span class="mt-5 inline-flex items-center text-sm font-bold text-brand-blue">Explore pathway <span class="ml-1 transition-transform group-hover:translate-x-1">→</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="px-5 pb-16 sm:pb-24">
+      <div class="mx-auto max-w-5xl overflow-hidden rounded-3xl bg-gradient-brand px-7 py-12 text-center text-white sm:px-12 sm:py-14">
+        <span class="text-xs font-bold uppercase tracking-wider text-white/70">Not sure where to begin?</span>
+        <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">Let’s find the right pathway for you.</h2>
+        <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/80">Tell us your goals and we’ll help you understand the available destination and visa options.</p>
+        <a href="/contact" class="mt-7 inline-flex rounded-full bg-white px-7 py-3 text-sm font-bold text-brand-blue transition hover:-translate-y-0.5">Book a Consultation →</a>
+      </div>
+    </section>
+  </main>
 </SiteLayout>
