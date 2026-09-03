@@ -1,60 +1,73 @@
 ---
 interface Props { settings?: Record<string, string> }
 const { settings = {} } = Astro.props;
-const companyName = settings.company_name || 'Signup Visa & Migration';
+const companyName = settings.company_name || 'SIGNUP Visa & Migration';
 const year = new Date().getFullYear();
 
 const socials = [
-  { name: 'LinkedIn', url: settings.linkedin_url || 'https://www.linkedin.com/company/signup-visa-migration/' },
-  { name: 'Facebook', url: settings.facebook_url || 'https://www.facebook.com/signupvisa' },
-  { name: 'Instagram', url: settings.instagram_url || 'https://www.instagram.com/signupvisa/' },
-  { name: 'Blog', url: settings.blog_url || 'https://signupvisa.blogspot.com/' },
+  { name: 'Facebook', url: settings.facebook_url || 'https://www.facebook.com/signupvisa', icon: '<path fill="currentColor" d="M13.5 8.25V6.75c0-.621.504-1.125 1.125-1.125h1.5V3h-2.25A3.375 3.375 0 0010.5 6.375v1.875H8.25v2.625h2.25V18h3v-7.125h2.25l.375-2.625H13.5z"/>' },
+  { name: 'Instagram', url: settings.instagram_url || 'https://www.instagram.com/signupvisa/', icon: '<rect width="16" height="16" x="4" y="4" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.8" r="1" fill="currentColor"/>' },
+  { name: 'LinkedIn', url: settings.linkedin_url || 'https://www.linkedin.com/company/signup-visa-migration/', icon: '<path fill="currentColor" d="M6.4 8.1H3.6V18h2.8V8.1zM5 3.5a1.65 1.65 0 100 3.3 1.65 1.65 0 000-3.3zM9 8.1H6.3V18H9v-5.2c0-1.37.26-2.7 1.96-2.7 1.67 0 1.69 1.57 1.69 2.79V18h2.75v-5.68c0-2.79-.6-4.93-3.84-4.93-1.55 0-2.59.85-3.01 1.66h-.04V8.1z"/>' },
+];
+
+const footerLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Destinations', href: '/destinations' },
+  { label: 'Success Stories', href: '/success-stories' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ];
 ---
-<footer class="border-t border-brand-line bg-brand-ink text-white/75">
-  <div class="mx-auto max-w-7xl px-5 py-14">
-    <div class="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr]">
+<footer class="border-t border-brand-line bg-brand-ink text-white/70">
+  <div class="mx-auto max-w-7xl px-5 py-14 lg:px-6 lg:py-16">
+    <div class="grid gap-12 lg:grid-cols-[1.35fr_1fr_1fr]">
       <div>
-        <div class="flex items-center gap-2">
-          <img src="/images/logo/logo-footer.svg" alt={companyName} class="h-8 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
-          <span class="hidden text-lg font-extrabold text-white">{companyName}</span>
-        </div>
-        <p class="mt-3 max-w-xs text-sm leading-relaxed">
-          {settings.tagline || 'Your trusted pathway to studying and working abroad.'}
+        <a href="/" class="inline-flex items-center" aria-label={`${companyName} home`}>
+          <img src="/images/logo/logo-footer.svg" alt={companyName} width="180" height="48" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
+          <span class="hidden text-xl font-extrabold text-white">{companyName}</span>
+        </a>
+        <p class="mt-5 max-w-sm text-sm leading-7 text-white/60">
+          {settings.tagline || 'Visa and migration guidance for study, work, visits and long-term pathways abroad.'}
         </p>
-        <div class="mt-5 flex gap-2">
-          {socials.map((s) => (
-            <a href={s.url} target="_blank" rel="noopener" class="group relative grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-gradient-brand hover:shadow-lg hover:shadow-brand-blue/30" aria-label={s.name}>
-              <span class="text-xs font-semibold">{s.name[0]}</span>
-              <span class="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white px-2 py-1 text-[11px] font-medium text-brand-ink opacity-0 shadow transition-opacity group-hover:opacity-100">{s.name}</span>
+        <div class="mt-6 flex items-center gap-2.5">
+          {socials.map((social) => (
+            <a href={social.url} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white" aria-label={social.name}>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.icon}></svg>
             </a>
           ))}
         </div>
       </div>
 
       <div>
-        <h3 class="mb-4 font-mono text-xs font-semibold uppercase tracking-wider text-white/50">Explore</h3>
-        <div class="flex flex-col gap-2.5 text-sm">
-          <a href="/services" class="hover:text-white">Services</a>
-          <a href="/destinations" class="hover:text-white">Destinations</a>
-          <a href="/blog" class="hover:text-white">Blog</a>
-          <a href="/about" class="hover:text-white">About Us</a>
-          <a href="/contact" class="hover:text-white">Contact</a>
-        </div>
+        <h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Explore</h2>
+        <nav class="grid grid-cols-2 gap-x-5 gap-y-3 text-sm" aria-label="Footer navigation">
+          {footerLinks.map((link) => <a href={link.href} class="transition-colors hover:text-white">{link.label}</a>)}
+        </nav>
       </div>
 
       <div>
-        <h3 class="mb-4 font-mono text-xs font-semibold uppercase tracking-wider text-white/50">Contact</h3>
-        <div class="flex flex-col gap-2.5 text-sm">
-          <a href={`mailto:${settings.email_support || 'support@signupvisa.com'}`} class="hover:text-white">{settings.email_support || 'support@signupvisa.com'}</a>
-          {settings.phone && <span>{settings.phone}</span>}
-          {settings.address && <span>{settings.address}</span>}
+        <h2 class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-white/40">Contact</h2>
+        <div class="space-y-4 text-sm">
+          <div>
+            <p class="mb-1 text-xs text-white/35">General enquiries</p>
+            <a href="mailto:info@signupvisa.com" class="text-white/80 transition-colors hover:text-white">info@signupvisa.com</a>
+          </div>
+          <div>
+            <p class="mb-1 text-xs text-white/35">Support</p>
+            <a href="mailto:support@signupvisa.com" class="text-white/80 transition-colors hover:text-white">support@signupvisa.com</a>
+          </div>
+          <a href="/contact" class="inline-flex items-center gap-2 pt-1 font-semibold text-white transition-colors hover:text-brand-accent">
+            Contact our team <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
     </div>
 
-    <div class="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+    <div class="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} {companyName}. All rights reserved.</span>
+      <span>Professional visa &amp; migration guidance.</span>
     </div>
   </div>
 </footer>
