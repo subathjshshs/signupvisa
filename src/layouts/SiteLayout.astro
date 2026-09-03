@@ -16,14 +16,16 @@ const siteUrl = 'https://signupvisa.com';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const isHome = Astro.url.pathname === '/';
 const ogImage = new URL('/images/hero/homebanner.webp', siteUrl).toString();
+const logoUrl = new URL('/images/logo/signupvisaweb%20logo.svg', siteUrl).toString();
 const sameAs = [settings.facebook_url, settings.instagram_url, settings.linkedin_url].filter(Boolean);
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: companyName,
   url: siteUrl,
-  logo: ogImage,
+  logo: logoUrl,
   email: settings.email_info || 'info@signupvisa.com',
+  description: 'Visa and migration guidance for study, work, visits and long-term pathways abroad.',
   sameAs,
 };
 const websiteSchema = {
@@ -31,7 +33,20 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: companyName,
   url: siteUrl,
+  description: 'Visa and migration guidance for study, work, visits and long-term pathways abroad.',
+  publisher: { '@id': `${siteUrl}/#organization` },
 };
+const webpageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: `${title} | ${companyName}`,
+  url: canonicalUrl,
+  description,
+  isPartOf: { '@id': `${siteUrl}/#website` },
+  about: { '@id': `${siteUrl}/#organization` },
+};
+organizationSchema['@id'] = `${siteUrl}/#organization`;
+websiteSchema['@id'] = `${siteUrl}/#website`;
 ---
 <!doctype html>
 <html lang="en">
@@ -44,6 +59,7 @@ const websiteSchema = {
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="canonical" href={canonicalUrl} />
+    <meta name="author" content={companyName} />
     <title>{title} | {companyName}</title>
     <meta name="description" content={description} />
     <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large'} />
@@ -61,6 +77,7 @@ const websiteSchema = {
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+    <script type="application/ld+json" set:html={JSON.stringify(webpageSchema)}></script>
   </head>
   <body class="font-sans antialiased">
     <SiteNav settings={settings} />
