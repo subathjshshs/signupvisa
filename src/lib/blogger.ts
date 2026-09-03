@@ -91,7 +91,7 @@ export async function getBloggerPosts(limit = 6): Promise<BloggerPost[]> {
         const posts = parseJsonFeed(JSON.parse(body), limit);
         if (posts.length) return posts;
       } catch {
-        // Fall through to XML parsing for hosts that return the feed with an unexpected content type.
+        // Continue to XML parsing if the feed is JSON-shaped but malformed.
       }
     }
 
