@@ -21,6 +21,7 @@ const sameAs = [settings.facebook_url, settings.instagram_url, settings.linkedin
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': `${siteUrl}/#organization`,
   name: companyName,
   url: siteUrl,
   logo: logoUrl,
@@ -31,6 +32,7 @@ const organizationSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
   name: companyName,
   url: siteUrl,
   description: 'Visa and migration guidance for study, work, visits and long-term pathways abroad.',
@@ -45,8 +47,6 @@ const webpageSchema = {
   isPartOf: { '@id': `${siteUrl}/#website` },
   about: { '@id': `${siteUrl}/#organization` },
 };
-organizationSchema['@id'] = `${siteUrl}/#organization`;
-websiteSchema['@id'] = `${siteUrl}/#website`;
 ---
 <!doctype html>
 <html lang="en">
