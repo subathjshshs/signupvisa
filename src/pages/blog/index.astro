@@ -1,30 +1,17 @@
 ---
-import Layout from '../../layouts/SiteLayout.astro';
-import { getSettings, getPublishedPosts } from '../../lib/content';
-import { env } from 'cloudflare:workers';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import BloggerLatest from '../../components/BloggerLatest.astro';
+import { getSiteSettings } from '../../data/site-config';
 
-const db = (env as any)?.DB;
-const settings = await getSettings(db);
-const posts = await getPublishedPosts(db);
+const settings = getSiteSettings();
 ---
-<Layout title="Blog" settings={settings}>
-  <section class="section">
-    <div class="container">
-      <span class="eyebrow">Blog</span>
-      <h1>News &amp; guidance</h1>
-      <div class="grid-3" style="margin-top:44px;">
-        {posts.map((p: any) => (
-          <a href={`/blog/${p.slug}`} class="card">
-            {p.cover_image_url && <img src={p.cover_image_url} alt={p.title} class="post-cover" />}
-            <h3>{p.title}</h3>
-            <p>{p.excerpt}</p>
-          </a>
-        ))}
-        {posts.length === 0 && <div class="card"><p>No posts published yet.</p></div>}
-      </div>
+<SiteLayout title="Blog" description="Visa, migration, study abroad and international travel insights from SIGNUP Visa & Migration." settings={settings}>
+  <section class="bg-brand-surface py-16 sm:py-20">
+    <div class="mx-auto max-w-5xl px-5 text-center sm:px-8">
+      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">SIGNUP Blog</span>
+      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Visa & migration insights</h1>
+      <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-brand-muted">Practical updates, guidance and international journey insights published on the SIGNUP blog.</p>
     </div>
   </section>
-</Layout>
-<style>
-  .post-cover { border-radius: var(--radius); aspect-ratio: 16/9; object-fit: cover; margin-bottom: 16px; }
-</style>
+  <BloggerLatest limit={12} heading="Latest articles" compact={true} />
+</SiteLayout>
