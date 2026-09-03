@@ -1,16 +1,9 @@
--- Visa & Migration — D1 schema
--- Run once with: npx wrangler d1 execute signupvisa --remote --file=./schema.sql
+-- SIGNUP Visa & Migration — D1 schema
+-- Lead storage is retained for website enquiries.
 
 CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,
   value TEXT
-);
-
-CREATE TABLE IF NOT EXISTS admin_users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
-  created_at TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS services (
@@ -62,7 +55,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   excerpt TEXT,
   cover_image_url TEXT,
   body_html TEXT,
-  status TEXT DEFAULT 'draft', -- draft | published
+  status TEXT DEFAULT 'draft',
   published_at TEXT,
   created_at TEXT DEFAULT (datetime('now')),
   updated_at TEXT DEFAULT (datetime('now'))
@@ -98,11 +91,10 @@ CREATE TABLE IF NOT EXISTS leads (
   interested_service TEXT,
   interested_destination TEXT,
   message TEXT,
-  status TEXT DEFAULT 'new', -- new | contacted | converted | closed
+  status TEXT DEFAULT 'new',
   created_at TEXT DEFAULT (datetime('now'))
 );
 
--- Seed sensible defaults so the site isn't empty on first deploy
 INSERT OR IGNORE INTO settings (key, value) VALUES
   ('company_name', 'Visa & Migration'),
   ('tagline', 'Your trusted pathway to studying and working abroad'),
