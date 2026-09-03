@@ -5,13 +5,16 @@ import { getSiteSettings } from '../../data/site-config';
 
 const settings = getSiteSettings();
 ---
-<SiteLayout title="Blog" description="Visa, migration, study abroad and international travel insights from SIGNUP Visa & Migration." settings={settings}>
-  <section class="bg-brand-surface py-16 sm:py-20">
-    <div class="mx-auto max-w-5xl px-5 text-center sm:px-8">
-      <span class="rounded-full bg-brand-accent-bg px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-accent-text">SIGNUP Blog</span>
-      <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Visa & migration insights</h1>
-      <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-brand-muted">Practical updates, guidance and international journey insights published on the SIGNUP blog.</p>
+<SiteLayout title="Visa & Migration Blog" description="Practical visa, migration, study abroad, work permit and international travel insights from SIGNUP Visa & Migration." settings={settings}>
+  <section class="relative overflow-hidden bg-brand-ink py-16 text-white sm:py-24">
+    <div class="absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-brand-blue/20 blur-3xl"></div>
+    <div class="relative mx-auto max-w-5xl px-5 text-center sm:px-8">
+      <span class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[.16em] text-white/80">SIGNUP Blog</span>
+      <h1 class="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">Visa & migration insights</h1>
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">Useful updates and practical information for people exploring study, work, migration and visit pathways overseas.</p>
+      <a href="https://blog.signupvisa.com/" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex rounded-full bg-white px-6 py-3 text-sm font-bold text-brand-ink transition hover:-translate-y-0.5">Open SIGNUP Blog ↗</a>
     </div>
   </section>
+
   <BloggerLatest limit={12} heading="Latest articles" compact={true} />
 </SiteLayout>
