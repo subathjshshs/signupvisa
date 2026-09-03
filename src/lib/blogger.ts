@@ -34,11 +34,6 @@ function xmlValue(block: string, tag: string): string {
   return match?.[1]?.trim() || '';
 }
 
-function xmlAttribute(block: string, tag: string, attribute: string): string {
-  const match = block.match(new RegExp(`<${tag}[^>]*\\s${attribute}=["']([^"']+)["'][^>]*\\/?\\s*>`, 'i'));
-  return match?.[1] || '';
-}
-
 function parseJsonFeed(data: any, limit: number): BloggerPost[] {
   const entries = Array.isArray(data?.feed?.entry) ? data.feed.entry : [];
   return entries.slice(0, limit).map((entry: any) => {
@@ -58,7 +53,7 @@ function parseJsonFeed(data: any, limit: number): BloggerPost[] {
 }
 
 function parseXmlFeed(xml: string, limit: number): BloggerPost[] {
-  const entries = [...xml.matchAll(/<entry[\\s\\S]*?<\\/entry>/gi)].map((match) => match[0]).slice(0, limit);
+  const entries = [...xml.matchAll(/<entry[\s\S]*?<\/entry>/gi)].map((match) => match[0]).slice(0, limit);
   return entries.map((entry, index) => {
     const title = stripHtml(xmlValue(entry, 'title')) || 'Untitled article';
     const content = xmlValue(entry, 'content') || xmlValue(entry, 'summary');
