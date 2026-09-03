@@ -1,6 +1,5 @@
-// Static asset paths — matches files manually placed under /public by the user.
-// Used as an override layer on top of whatever the database/admin panel has,
-// so real photography always wins over placeholder/DB image URLs.
+// Static asset paths for verified photography and brand assets stored under /public.
+// These assets are intentionally independent of the content/database layer.
 
 export const LOGO_HEADER = '/images/logo/logo-header.svg';
 export const LOGO_FOOTER = '/images/logo/logo-footer.svg';
