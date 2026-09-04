@@ -65,7 +65,7 @@ function formatDate(value: string) {
 {posts.length === 0 && (
   <script>
     const callbackName = `__signupBloggerFeed_${Math.random().toString(36).slice(2)}`;
-    const feedUrl = `https://blog.signupvisa.com/feeds/posts/default?alt=json-in-script&max-results=${Math.min(Number({limit}), 12)}&callback=${callbackName}`;
+    const feedUrl = `https://www.blogger.com/feeds/7169008174680734865/posts/default?alt=json-in-script&max-results=${Math.min(Number({limit}), 12)}&callback=${callbackName}`;
 
     function stripHtml(value = '') {
       const el = document.createElement('div');
