@@ -29,33 +29,170 @@ function formatDate(value: string) {
       <a href="https://blog.signupvisa.com/" class="inline-flex w-fit items-center rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold text-brand-ink transition hover:border-brand-blue hover:text-brand-blue">View all articles <span class="ml-2" aria-hidden="true">→</span></a>
     </div>
 
-    {posts.length > 0 ? (
-      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <a href={post.url} target="_blank" rel="noopener noreferrer" aria-label={`Read ${post.title}`}>
-              {post.imageUrl ? (
-                <img src={post.imageUrl} alt="" loading="lazy" decoding="async" class="aspect-[16/9] w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
-              ) : (
-                <div class="grid aspect-[16/9] w-full place-items-center bg-brand-ink text-white"><span class="text-xs font-bold uppercase tracking-[.2em] text-white/60">SIGNUP BLOG</span></div>
-              )}
-            </a>
-            <div class="flex flex-1 flex-col p-6">
-              {post.published && <time datetime={post.published} class="text-xs font-semibold uppercase tracking-wider text-brand-muted">{formatDate(post.published)}</time>}
-              <h3 class="mt-2 line-clamp-2 text-lg font-extrabold leading-6"><a href={post.url} target="_blank" rel="noopener noreferrer" class="hover:text-brand-blue">{post.title}</a></h3>
-              {post.excerpt && <p class="mt-3 line-clamp-3 text-sm leading-6 text-brand-muted">{post.excerpt}</p>}
-              <a href={post.url} target="_blank" rel="noopener noreferrer" class="mt-auto pt-5 text-sm font-bold text-brand-blue">Read article <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-        ))}
-      </div>
-    ) : (
-      <div class="mt-10 rounded-3xl border border-brand-line bg-white p-8 text-center shadow-sm">
-        <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand-accent-bg text-brand-accent-text" aria-hidden="true">✦</div>
-        <h3 class="mt-4 text-lg font-extrabold">Latest articles are on the SIGNUP blog</h3>
-        <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-brand-muted">If the live feed is temporarily unavailable, you can still open the official blog directly.</p>
-        <a href="https://blog.signupvisa.com/" class="mt-5 inline-flex rounded-full bg-brand-ink px-5 py-2.5 text-sm font-bold text-white">Visit the blog →</a>
-      </div>
-    )}
+    <div id="latest-blog-content" class="mt-10">
+      {posts.length > 0 ? (
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <a href={post.url} target="_blank" rel="noopener noreferrer" aria-label={`Read ${post.title}`}>
+                {post.imageUrl ? (
+                  <img src={post.imageUrl} alt="" loading="lazy" decoding="async" class="aspect-[16/9] w-full object-cover transition duration-700 group-hover:scale-[1.02]" />
+                ) : (
+                  <div class="grid aspect-[16/9] w-full place-items-center bg-brand-ink text-white"><span class="text-xs font-bold uppercase tracking-[.2em] text-white/60">SIGNUP BLOG</span></div>
+                )}
+              </a>
+              <div class="flex flex-1 flex-col p-6">
+                {post.published && <time datetime={post.published} class="text-xs font-semibold uppercase tracking-wider text-brand-muted">{formatDate(post.published)}</time>}
+                <h3 class="mt-2 line-clamp-2 text-lg font-extrabold leading-6"><a href={post.url} target="_blank" rel="noopener noreferrer" class="hover:text-brand-blue">{post.title}</a></h3>
+                {post.excerpt && <p class="mt-3 line-clamp-3 text-sm leading-6 text-brand-muted">{post.excerpt}</p>}
+                <a href={post.url} target="_blank" rel="noopener noreferrer" class="mt-auto pt-5 text-sm font-bold text-brand-blue">Read article <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div id="latest-blog-empty" class="rounded-3xl border border-brand-line bg-white p-8 text-center shadow-sm">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand-accent-bg text-brand-accent-text" aria-hidden="true">✦</div>
+          <h3 class="mt-4 text-lg font-extrabold">Latest articles are on the SIGNUP blog</h3>
+          <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-brand-muted">If the live feed is temporarily unavailable, you can still open the official blog directly.</p>
+          <a href="https://blog.signupvisa.com/" class="mt-5 inline-flex rounded-full bg-brand-ink px-5 py-2.5 text-sm font-bold text-white">Visit the blog →</a>
+        </div>
+      )}
+    </div>
   </div>
 </section>
+
+{posts.length === 0 && (
+  <script>
+    const callbackName = `__signupBloggerFeed_${Math.random().toString(36).slice(2)}`;
+    const feedUrl = `https://blog.signupvisa.com/feeds/posts/default?alt=json-in-script&max-results=${Math.min(Number({limit}), 12)}&callback=${callbackName}`;
+
+    function stripHtml(value = '') {
+      const el = document.createElement('div');
+      el.innerHTML = value;
+      return (el.textContent || el.innerText || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function imageFromHtml(html = '') {
+      const match = html.match(/<img[^>]+(?:src|data-src)=["']([^"']+)["']/i);
+      return match?.[1] || '';
+    }
+
+    function upgradeImage(url = '') {
+      return url
+        .replace(/\/s(\d+)(?:-c)?\//i, '/s1200/')
+        .replace(/=s\d+(?:-c)?(?:-[a-z]+)?$/i, '=s1200');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' }).format(date);
+    }
+
+    function renderPosts(data) {
+      const entries = Array.isArray(data?.feed?.entry) ? data.feed.entry : [];
+      const posts = entries.map((entry) => {
+        const html = entry?.content?.$t || entry?.summary?.$t || '';
+        const alternate = Array.isArray(entry?.link) ? entry.link.find((link) => link?.rel === 'alternate') : null;
+        return {
+          title: stripHtml(entry?.title?.$t || 'Untitled article'),
+          url: alternate?.href || 'https://blog.signupvisa.com/',
+          published: entry?.published?.$t || entry?.updated?.$t || '',
+          excerpt: stripHtml(html).slice(0, 180),
+          imageUrl: upgradeImage(entry?.media$thumbnail?.url || imageFromHtml(html)),
+        };
+      }).sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime()).slice(0, Number({limit}));
+
+      if (!posts.length) return;
+
+      const content = document.getElementById('latest-blog-content');
+      if (!content) return;
+
+      const grid = document.createElement('div');
+      grid.className = 'grid gap-5 md:grid-cols-2 lg:grid-cols-3';
+
+      posts.forEach((post) => {
+        const article = document.createElement('article');
+        article.className = 'group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl';
+
+        const imageLink = document.createElement('a');
+        imageLink.href = post.url;
+        imageLink.target = '_blank';
+        imageLink.rel = 'noopener noreferrer';
+        imageLink.setAttribute('aria-label', `Read ${post.title}`);
+
+        if (post.imageUrl) {
+          const image = document.createElement('img');
+          image.src = post.imageUrl;
+          image.alt = '';
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          image.className = 'aspect-[16/9] w-full object-cover transition duration-700 group-hover:scale-[1.02]';
+          imageLink.appendChild(image);
+        } else {
+          const fallback = document.createElement('div');
+          fallback.className = 'grid aspect-[16/9] w-full place-items-center bg-brand-ink text-white';
+          fallback.innerHTML = '<span class="text-xs font-bold uppercase tracking-[.2em] text-white/60">SIGNUP BLOG</span>';
+          imageLink.appendChild(fallback);
+        }
+
+        const body = document.createElement('div');
+        body.className = 'flex flex-1 flex-col p-6';
+
+        if (post.published) {
+          const time = document.createElement('time');
+          time.dateTime = post.published;
+          time.className = 'text-xs font-semibold uppercase tracking-wider text-brand-muted';
+          time.textContent = formatDate(post.published);
+          body.appendChild(time);
+        }
+
+        const title = document.createElement('h3');
+        title.className = 'mt-2 line-clamp-2 text-lg font-extrabold leading-6';
+        const titleLink = document.createElement('a');
+        titleLink.href = post.url;
+        titleLink.target = '_blank';
+        titleLink.rel = 'noopener noreferrer';
+        titleLink.className = 'hover:text-brand-blue';
+        titleLink.textContent = post.title;
+        title.appendChild(titleLink);
+        body.appendChild(title);
+
+        if (post.excerpt) {
+          const excerpt = document.createElement('p');
+          excerpt.className = 'mt-3 line-clamp-3 text-sm leading-6 text-brand-muted';
+          excerpt.textContent = post.excerpt;
+          body.appendChild(excerpt);
+        }
+
+        const readLink = document.createElement('a');
+        readLink.href = post.url;
+        readLink.target = '_blank';
+        readLink.rel = 'noopener noreferrer';
+        readLink.className = 'mt-auto pt-5 text-sm font-bold text-brand-blue';
+        readLink.innerHTML = 'Read article <span aria-hidden="true">→</span>';
+        body.appendChild(readLink);
+
+        article.append(imageLink, body);
+        grid.appendChild(article);
+      });
+
+      content.replaceChildren(grid);
+    }
+
+    window[callbackName] = renderPosts;
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    script.async = true;
+    script.onerror = () => {
+      try { delete window[callbackName]; } catch {}
+    };
+    document.head.appendChild(script);
+    window.setTimeout(() => {
+      try { delete window[callbackName]; } catch {}
+      script.remove();
+    }, 8000);
+  </script>
+)}
