@@ -75,11 +75,16 @@ export async function getBloggerPosts(limit = 6): Promise<BloggerPost[]> {
   const timeout = setTimeout(() => controller.abort(), 2500);
 
   try {
-    const response = await fetch(FEED_URL, {
+    // Rotate the feed URL once per minute so a newly published Blogger post
+    // cannot remain hidden behind a stale edge cache for the full old TTL.
+    const cacheBucket = Math.floor(Date.now() / 60000);
+    const feedUrl = `${FEED_URL}&_=${cacheBucket}`;
+
+    const response = await fetch(feedUrl, {
       headers: { Accept: 'application/json, application/atom+xml, application/xml;q=0.9, */*;q=0.8' },
       signal: controller.signal,
       cache: 'force-cache',
-      cf: { cacheTtl: 300, cacheEverything: false },
+      cf: { cacheTtl: 60, cacheEverything: false },
     } as RequestInit & { cf: { cacheTtl: number; cacheEverything: boolean } });
 
     if (!response.ok) return [];
