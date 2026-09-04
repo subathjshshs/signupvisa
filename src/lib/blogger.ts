@@ -7,7 +7,7 @@ export interface BloggerPost {
   imageUrl: string;
 }
 
-const FEED_URL = 'https://blog.signupvisa.com/feeds/posts/default?alt=json&max-results=12';
+const FEED_URL = 'https://www.blogger.com/feeds/7169008174680734865/posts/default?alt=json&max-results=12';
 const BLOG_HOME = 'https://blog.signupvisa.com/';
 
 function stripHtml(value = ''): string {
