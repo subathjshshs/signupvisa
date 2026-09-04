@@ -42,53 +42,55 @@ const settings = getSiteSettings();
         </div>
       </div>
 
-      <form id="lead-form" class="scroll-mt-[190px] rounded-[2rem] border border-brand-line bg-white p-5 shadow-xl sm:p-6">
-        <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-          <div>
-            <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Start an enquiry</span>
-            <h2 class="mt-1.5 text-2xl font-black sm:text-3xl">Request a consultation</h2>
+      <div id="enquiry" class="scroll-mt-[190px]">
+        <form id="lead-form" class="rounded-[2rem] border border-brand-line bg-white p-5 shadow-xl sm:p-6">
+          <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-[.16em] text-brand-accent-text">Start an enquiry</span>
+              <h2 class="mt-1.5 text-2xl font-black sm:text-3xl">Request a consultation</h2>
+            </div>
+            <span class="text-xs font-medium text-brand-muted">Required: name + phone</span>
           </div>
-          <span class="text-xs font-medium text-brand-muted">Required: name + phone</span>
-        </div>
-        <div class="mt-5 grid gap-3 sm:grid-cols-2">
-          <div class="sm:col-span-2">
-            <label for="full_name" class="mb-1 block text-sm font-bold">Full name <span aria-hidden="true">*</span></label>
-            <input id="full_name" name="full_name" required autocomplete="name" placeholder="Your full name" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+          <div class="mt-5 grid gap-3 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+              <label for="full_name" class="mb-1 block text-sm font-bold">Full name <span aria-hidden="true">*</span></label>
+              <input id="full_name" name="full_name" required autocomplete="name" placeholder="Your full name" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+            </div>
+            <div>
+              <label for="phone" class="mb-1 block text-sm font-bold">Phone / WhatsApp <span aria-hidden="true">*</span></label>
+              <input id="phone" name="phone" type="tel" required autocomplete="tel" placeholder="Your phone number" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+            </div>
+            <div>
+              <label for="email" class="mb-1 block text-sm font-bold">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
+            </div>
+            <div>
+              <label for="interested_service" class="mb-1 block text-sm font-bold">Service</label>
+              <select id="interested_service" name="interested_service" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none focus:border-brand-blue">
+                {services.map((service) => <option value={service.name}>{service.name}</option>)}
+                <option value="Not sure yet">Not sure yet</option>
+              </select>
+            </div>
+            <div>
+              <label for="interested_destination" class="mb-1 block text-sm font-bold">Preferred destination</label>
+              <select id="interested_destination" name="interested_destination" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none focus:border-brand-blue">
+                <option value="">Choose a destination</option>
+                {destinations.map((destination) => <option value={destination.name}>{destination.name}</option>)}
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="message" class="mb-1 block text-sm font-bold">Tell us about your plans</label>
+              <textarea id="message" name="message" rows="3" placeholder="For example: your current education/work background, intended destination and what you want to do abroad." class="w-full resize-y rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <button type="submit" class="w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Send Consultation Request →</button>
+              <p id="form-status" class="mt-2 min-h-5 text-sm" role="status" aria-live="polite"></p>
+              <p class="mt-1 text-xs leading-5 text-brand-muted">By submitting this form, you are asking SIGNUP to review your enquiry. A consultation does not guarantee a visa or migration outcome.</p>
+            </div>
           </div>
-          <div>
-            <label for="phone" class="mb-1 block text-sm font-bold">Phone / WhatsApp <span aria-hidden="true">*</span></label>
-            <input id="phone" name="phone" type="tel" required autocomplete="tel" placeholder="Your phone number" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
-          </div>
-          <div>
-            <label for="email" class="mb-1 block text-sm font-bold">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white" />
-          </div>
-          <div>
-            <label for="interested_service" class="mb-1 block text-sm font-bold">Service</label>
-            <select id="interested_service" name="interested_service" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none focus:border-brand-blue">
-              {services.map((service) => <option value={service.name}>{service.name}</option>)}
-              <option value="Not sure yet">Not sure yet</option>
-            </select>
-          </div>
-          <div>
-            <label for="interested_destination" class="mb-1 block text-sm font-bold">Preferred destination</label>
-            <select id="interested_destination" name="interested_destination" class="w-full rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none focus:border-brand-blue">
-              <option value="">Choose a destination</option>
-              {destinations.map((destination) => <option value={destination.name}>{destination.name}</option>)}
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <label for="message" class="mb-1 block text-sm font-bold">Tell us about your plans</label>
-            <textarea id="message" name="message" rows="3" placeholder="For example: your current education/work background, intended destination and what you want to do abroad." class="w-full resize-y rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white"></textarea>
-          </div>
-          <div class="sm:col-span-2">
-            <button type="submit" class="w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Send Consultation Request →</button>
-            <p id="form-status" class="mt-2 min-h-5 text-sm" role="status" aria-live="polite"></p>
-            <p class="mt-1 text-xs leading-5 text-brand-muted">By submitting this form, you are asking SIGNUP to review your enquiry. A consultation does not guarantee a visa or migration outcome.</p>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </section>
 
