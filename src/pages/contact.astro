@@ -84,7 +84,7 @@ const settings = getSiteSettings();
               <textarea id="message" name="message" rows="3" placeholder="For example: your current education/work background, intended destination and what you want to do abroad." class="w-full resize-y rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white"></textarea>
             </div>
             <div class="sm:col-span-2">
-              <button type="submit" class="w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5">Send Consultation Request →</button>
+              <button id="lead-submit" type="submit" class="group w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0"><span id="lead-submit-text">Send Consultation Request</span> <span id="lead-submit-arrow" class="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span></button>
               <p id="form-status" class="mt-2 min-h-5 text-sm" role="status" aria-live="polite"></p>
               <p class="mt-1 text-xs leading-5 text-brand-muted">By submitting this form, you are asking SIGNUP to review your enquiry. A consultation does not guarantee a visa or migration outcome.</p>
             </div>
@@ -107,11 +107,17 @@ const settings = getSiteSettings();
   <script>
     const form = document.getElementById('lead-form') as HTMLFormElement | null;
     const status = document.getElementById('form-status') as HTMLParagraphElement | null;
+    const submitButton = document.getElementById('lead-submit') as HTMLButtonElement | null;
+    const submitText = document.getElementById('lead-submit-text');
+    const submitArrow = document.getElementById('lead-submit-arrow');
     form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!status) return;
       status.textContent = 'Sending...';
       status.className = 'mt-3 min-h-5 text-sm text-brand-muted';
+      if (submitButton) submitButton.disabled = true;
+      if (submitText) submitText.textContent = 'Sending request';
+      if (submitArrow) submitArrow.classList.remove('group-hover:translate-x-1');
       const data = Object.fromEntries(new FormData(form).entries());
       try {
         const response = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
@@ -119,9 +125,14 @@ const settings = getSiteSettings();
         status.textContent = 'Thanks — your consultation request has been received.';
         status.className = 'mt-3 min-h-5 text-sm font-semibold text-brand-success-text';
         form.reset();
+        if (submitText) submitText.textContent = 'Request sent';
+        if (submitArrow) submitArrow.classList.add('group-hover:translate-x-1');
       } catch {
         status.textContent = 'We could not send the request. Please email info@signupvisa.com directly.';
         status.className = 'mt-3 min-h-5 text-sm font-semibold text-red-600';
+        if (submitButton) submitButton.disabled = false;
+        if (submitText) submitText.textContent = 'Send Consultation Request';
+        if (submitArrow) submitArrow.classList.add('group-hover:translate-x-1');
       }
     });
   </script>
