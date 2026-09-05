@@ -26,10 +26,10 @@ function formatDate(value: string) {
         <h2 id="latest-blog-heading" class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{heading}</h2>
         <p class="mt-3 max-w-xl text-sm leading-6 text-brand-muted">Practical visa, migration, study, work and travel information from the SIGNUP blog.</p>
       </div>
-      <a href="https://blog.signupvisa.com/" class="inline-flex w-fit items-center rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold text-brand-ink transition hover:border-brand-blue hover:text-brand-blue">View all articles <span class="ml-2" aria-hidden="true">→</span></a>
+      <a href="https://blog.signupvisa.com/" class="inline-flex w-fit items-center rounded-full border border-brand-line bg-white px-5 py-2.5 text-sm font-bold text-brand-ink transition hover:border-brand-blue hover:text-brand-blue">View all articles <span class="ml-2 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span></a>
     </div>
 
-    <div id="latest-blog-content" class="mt-10">
+    <div id="latest-blog-content" class="mt-10" aria-busy={posts.length === 0 ? 'true' : 'false'}>
       {posts.length > 0 ? (
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
@@ -45,17 +45,25 @@ function formatDate(value: string) {
                 {post.published && <time datetime={post.published} class="text-xs font-semibold uppercase tracking-wider text-brand-muted">{formatDate(post.published)}</time>}
                 <h3 class="mt-2 line-clamp-2 text-lg font-extrabold leading-6"><a href={post.url} target="_blank" rel="noopener noreferrer" class="hover:text-brand-blue">{post.title}</a></h3>
                 {post.excerpt && <p class="mt-3 line-clamp-3 text-sm leading-6 text-brand-muted">{post.excerpt}</p>}
-                <a href={post.url} target="_blank" rel="noopener noreferrer" class="mt-auto pt-5 text-sm font-bold text-brand-blue">Read article <span aria-hidden="true">→</span></a>
+                <a href={post.url} target="_blank" rel="noopener noreferrer" class="group/read mt-auto inline-flex items-center gap-1 pt-5 text-sm font-bold text-brand-blue">Read article <span class="inline-block transition-transform duration-200 group-hover/read:translate-x-1" aria-hidden="true">→</span></a>
               </div>
             </article>
           ))}
         </div>
       ) : (
-        <div id="latest-blog-empty" class="rounded-3xl border border-brand-line bg-white p-8 text-center shadow-sm">
-          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand-accent-bg text-brand-accent-text" aria-hidden="true">✦</div>
-          <h3 class="mt-4 text-lg font-extrabold">Latest articles are on the SIGNUP blog</h3>
-          <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-brand-muted">If the live feed is temporarily unavailable, you can still open the official blog directly.</p>
-          <a href="https://blog.signupvisa.com/" class="mt-5 inline-flex rounded-full bg-brand-ink px-5 py-2.5 text-sm font-bold text-white">Visit the blog →</a>
+        <div id="latest-blog-empty" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3" role="status" aria-live="polite" aria-label="Loading latest articles">
+          {Array.from({ length: Math.min(Number(limit), 3) }).map(() => (
+            <div class="overflow-hidden rounded-3xl border border-brand-line bg-white shadow-sm" aria-hidden="true">
+              <div class="aspect-[16/9] w-full animate-pulse bg-brand-surface"></div>
+              <div class="space-y-3 p-6">
+                <div class="h-3 w-20 animate-pulse rounded-full bg-brand-surface"></div>
+                <div class="h-5 w-11/12 animate-pulse rounded-full bg-brand-surface"></div>
+                <div class="h-4 w-full animate-pulse rounded-full bg-brand-surface"></div>
+                <div class="h-4 w-3/4 animate-pulse rounded-full bg-brand-surface"></div>
+                <div class="h-4 w-24 animate-pulse rounded-full bg-brand-accent-bg"></div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -171,8 +179,10 @@ function formatDate(value: string) {
         readLink.href = post.url;
         readLink.target = '_blank';
         readLink.rel = 'noopener noreferrer';
-        readLink.className = 'mt-auto pt-5 text-sm font-bold text-brand-blue';
-        readLink.innerHTML = 'Read article <span aria-hidden="true">→</span>';
+        readLink.className = 'group/read mt-auto inline-flex items-center gap-1 pt-5 text-sm font-bold text-brand-blue';
+        readLink.innerHTML = 'Read article <span aria-hidden="true" class="inline-block transition-transform duration-200">→</span>';
+        readLink.addEventListener('mouseenter', () => readLink.querySelector('span')?.classList.add('translate-x-1'));
+        readLink.addEventListener('mouseleave', () => readLink.querySelector('span')?.classList.remove('translate-x-1'));
         body.appendChild(readLink);
 
         article.append(imageLink, body);
@@ -180,6 +190,7 @@ function formatDate(value: string) {
       });
 
       content.replaceChildren(grid);
+      content.setAttribute('aria-busy', 'false');
     }
 
     window[callbackName] = renderPosts;
