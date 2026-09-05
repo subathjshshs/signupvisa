@@ -84,7 +84,8 @@ const settings = getSiteSettings();
               <textarea id="message" name="message" rows="3" placeholder="For example: your current education/work background, intended destination and what you want to do abroad." class="w-full resize-y rounded-2xl border border-brand-line bg-brand-surface px-4 py-2.5 text-sm outline-none transition focus:border-brand-blue focus:bg-white"></textarea>
             </div>
             <div class="sm:col-span-2">
-              <button id="lead-submit" type="submit" class="group w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0"><span id="lead-submit-text">Send Consultation Request</span> <span id="lead-submit-arrow" class="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span></button>
+              <button id="lead-submit" type="submit" class="group w-full rounded-full bg-gradient-brand px-6 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-blue/20 transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0"><span id="lead-submit-text">Send My Consultation Request</span> <span id="lead-submit-arrow" class="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span></button>
+              <p id="form-help" class="mt-2 text-xs leading-5 text-brand-muted">What happens next? Submit your enquiry and SIGNUP will review the information you provide. You'll see a confirmation on this page when your request has been successfully submitted. If there is a problem sending it, we'll let you know what to do next.</p>
               <p id="form-status" class="mt-2 min-h-5 text-sm" role="status" aria-live="polite"></p>
               <p class="mt-1 text-xs leading-5 text-brand-muted">By submitting this form, you are asking SIGNUP to review your enquiry. A consultation does not guarantee a visa or migration outcome.</p>
             </div>
@@ -106,17 +107,22 @@ const settings = getSiteSettings();
 
   <script>
     const form = document.getElementById('lead-form') as HTMLFormElement | null;
+    const help = document.getElementById('form-help') as HTMLParagraphElement | null;
     const status = document.getElementById('form-status') as HTMLParagraphElement | null;
     const submitButton = document.getElementById('lead-submit') as HTMLButtonElement | null;
     const submitText = document.getElementById('lead-submit-text');
     const submitArrow = document.getElementById('lead-submit-arrow');
+    const defaultButtonClasses = ['bg-gradient-brand', 'shadow-lg', 'shadow-brand-blue/20'];
+    const successButtonClasses = ['bg-emerald-600', 'shadow-lg', 'shadow-emerald-600/20'];
+
     form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!status) return;
       status.textContent = 'Sending...';
       status.className = 'mt-3 min-h-5 text-sm text-brand-muted';
+      if (help) help.textContent = 'Sending your enquiry now. Please wait for the submission to be confirmed.';
       if (submitButton) submitButton.disabled = true;
-      if (submitText) submitText.textContent = 'Sending request';
+      if (submitText) submitText.textContent = 'Sending Request…';
       if (submitArrow) submitArrow.classList.remove('group-hover:translate-x-1');
       const data = Object.fromEntries(new FormData(form).entries());
       try {
@@ -124,15 +130,29 @@ const settings = getSiteSettings();
         if (!response.ok) throw new Error('Request failed');
         status.textContent = 'Thanks — your consultation request has been received.';
         status.className = 'mt-3 min-h-5 text-sm font-semibold text-brand-success-text';
+        if (help) help.textContent = '✓ Your enquiry has been submitted successfully. SIGNUP can now review your details and follow up using the contact information you provided.';
         form.reset();
-        if (submitText) submitText.textContent = 'Request sent';
-        if (submitArrow) submitArrow.classList.add('group-hover:translate-x-1');
+        if (submitButton) {
+          submitButton.classList.remove(...defaultButtonClasses);
+          submitButton.classList.add(...successButtonClasses);
+          submitButton.disabled = true;
+        }
+        if (submitText) submitText.textContent = '✓ Request Submitted Successfully';
+        if (submitArrow) submitArrow.classList.add('hidden');
       } catch {
-        status.textContent = 'We could not send the request. Please email info@signupvisa.com directly.';
+        status.textContent = 'We could not send the request. Please try again.';
         status.className = 'mt-3 min-h-5 text-sm font-semibold text-red-600';
-        if (submitButton) submitButton.disabled = false;
-        if (submitText) submitText.textContent = 'Send Consultation Request';
-        if (submitArrow) submitArrow.classList.add('group-hover:translate-x-1');
+        if (help) help.textContent = 'Your enquiry was not submitted. Please try again. If the problem continues, email info@signupvisa.com directly.';
+        if (submitButton) {
+          submitButton.classList.remove(...successButtonClasses);
+          submitButton.classList.add(...defaultButtonClasses);
+          submitButton.disabled = false;
+        }
+        if (submitText) submitText.textContent = 'Send My Consultation Request';
+        if (submitArrow) {
+          submitArrow.classList.remove('hidden');
+          submitArrow.classList.add('group-hover:translate-x-1');
+        }
       }
     });
   </script>
